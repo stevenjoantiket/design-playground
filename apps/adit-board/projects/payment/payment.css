@@ -2169,3 +2169,7 @@ body:has(.pay-layout[data-embed]) {
 .alt-toggle__btn { min-width: 36px; height: 32px; border-radius: 8px; border: 1px solid #c4cad3; background: #fff; cursor: pointer; font-weight: 600; }
 .alt-toggle__btn[aria-pressed="true"] { background: #0770e3; border-color: #0770e3; color: #fff; }
 .alt-toggle__note { flex-basis: 100%; font-size: 12px; color: #6b7280; }
+
+/* The iPhone frame is always 412 × 917; a short window scales it (see --pay-scale in App.tsx) instead of squeezing its height. */
+.pay-frame[data-device="iphone"] { zoom: var(--pay-scale, 1); }
+.pay-frame[data-device="iphone"] > .pay { height: 917px; }

@@ -146,6 +146,17 @@ export function App() {
     revive: (v) => ({ ...v, ux: fresh(v.ux), from: v.from && { ...v.from, ux: fresh(v.from.ux) } }),
     fork: (anchor, label, experiment) => ({ id: label, label, experiment, ux: { ...anchor.ux }, from: { label: anchor.label, ux: anchor.ux } }),
   });
+  // The phone keeps its real 412 × 917 proportions: a short window scales it down (CSS `zoom` via --pay-scale) rather than squeezing its height.
+  useEffect(() => {
+    const fit = () => {
+      const room = window.innerHeight - 24 - 24; // stage padding + the frame's own margin
+      const scale = Math.max(0.5, Math.min(1, room / (917 + 24))); // 917 screen + 24 bezel
+      document.documentElement.style.setProperty("--pay-scale", String(scale));
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, []);
   const ux = active.ux;
   const setUx = (next: UxCase) => update((v) => ({ ...v, ux: next }));
   const [deadline, setDeadline] = useState(() => Date.now() + PAYMENT_WINDOW_MS);
