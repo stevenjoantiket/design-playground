@@ -516,7 +516,7 @@ export function App() {
                             </Button>
                           )}
                         </div>
-                        <hr className="pay-dash" />
+                        {downPay && cvvWait ? null : <hr className="pay-dash" />}
                         {downPay ? (
                           <>
                           <DpPayButtons

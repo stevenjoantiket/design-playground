@@ -103,7 +103,7 @@ export function CvvNudge({ show }: { show: boolean }) {
   return (
     <div className="pay-cvv-nudge" role="status">
       <div className="pay-cvv-nudge__strip">
-        <Text variant="body3" color="lowEmphasis">
+        <Text variant="body2" color="lowEmphasis">
           Enter your card’s CVV to pay
         </Text>
         <img src={infoOutlineSrc} alt="" width={12} height={12} />
