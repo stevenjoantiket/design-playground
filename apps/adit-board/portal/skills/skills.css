@@ -1,0 +1,47 @@
+/* Jobs & skills: one card per job, in the portal's style. */
+body {
+  margin: 0;
+}
+
+.sk-jobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sk-job__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sk-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Room for a whole SKILL.md, in a fixed-width face so its Markdown lines up. */
+.sk-edit__text {
+  min-height: 320px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: var(--portal-text-sm);
+  resize: vertical;
+}
+
+.sk-edit__actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 700px) {
+  .sk-jobs {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

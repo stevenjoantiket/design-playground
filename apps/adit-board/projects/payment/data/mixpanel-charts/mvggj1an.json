@@ -1,0 +1,64 @@
+{
+  "report": "https://mixpanel.com/project/3965186/view/4460945/app/boards#id=11373889&editor-card-id=%22report-93501430%22",
+  "addedAt": 1792487083343,
+  "title": "Payers by user type, monthly",
+  "kind": "line",
+  "unit": "count",
+  "range": "Oct 2025 – Oct 2026",
+  "syncedAt": "2026-10-20T16:05:08+07:00",
+  "note": "Unique users firing continuePayment each month, broken down by user type (Existing vs. not set); Oct 2026 is month to date.",
+  "x": [
+    "Oct",
+    "Nov",
+    "Dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct"
+  ],
+  "series": [
+    {
+      "name": "Existing",
+      "values": [
+        102088,
+        103479,
+        122274,
+        111330,
+        96241,
+        90764,
+        47375,
+        67787,
+        95499,
+        70960,
+        45656,
+        55539,
+        50282
+      ]
+    },
+    {
+      "name": "Not set",
+      "values": [
+        225505,
+        221895,
+        260647,
+        216513,
+        193875,
+        296783,
+        218101,
+        238219,
+        251637,
+        195431,
+        134298,
+        137038,
+        102960
+      ]
+    }
+  ],
+  "chart": "stacked-line"
+}

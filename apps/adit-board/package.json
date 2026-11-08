@@ -1,0 +1,25 @@
+{
+  "name": "@tiket-ds/adit-board",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "pnpm --filter @tiket-ds/adit-board^... run build && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tiket-ds/fonts": "workspace:*",
+    "@tiket-ds/tokens": "workspace:*",
+    "@tiket-ds/ui": "workspace:*",
+    "marked": "^15.0.12",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^8.2.0"
+  }
+}

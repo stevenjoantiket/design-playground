@@ -1,0 +1,18 @@
+{
+  "name": "@tiket-ds/fonts",
+  "version": "0.1.0",
+  "description": "Tiket Odyssey Text webfonts and @font-face declarations.",
+  "type": "module",
+  "exports": {
+    "./fonts.css": "./dist/fonts.css",
+    "./dist/*": "./dist/*"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "wawoff2": "^2.0.1"
+  }
+}

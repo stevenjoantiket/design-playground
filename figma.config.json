@@ -1,0 +1,15 @@
+{
+  "codeConnect": {
+    "parser": "react",
+    "include": ["packages/ui/src/**/*.figma.tsx"],
+    "exclude": ["**/node_modules/**", "**/dist/**"],
+    "importPaths": {
+      "packages/ui/src/components/*": "@tiket-ds/ui"
+    },
+    "documentUrlSubstitutions": {
+      "<TDS>": "https://www.figma.com/design/RwaA7bpig0BrC9kpFOvjzD/Passport-Tiket-Design-System--for-Claude",
+      "<TDS-2>": "https://www.figma.com/design/vGv44hAfDz2Va6NjhwEycd/Passport-Tiket-Design-System--for-Claude",
+      "<NFT>": "https://www.figma.com/design/sTCxrfPxsFz54bsjTmsKJO/-SSoT--NFT"
+    }
+  }
+}

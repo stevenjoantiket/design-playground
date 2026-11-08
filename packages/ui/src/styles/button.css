@@ -1,0 +1,348 @@
+/*
+ * Figma: Buttons - 01 Primary … 05 Alert.
+ *
+ * Pressed-state colors (B300, B200, R200) come from the primitive ramps because the
+ * semantic token table documents no pressed token. Everything else is semantic.
+ */
+
+.tds-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: 0;
+  font-family: var(--tds-font-family);
+  font-weight: var(--tds-font-weight-bold);
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--tds-duration-instant) var(--tds-ease-out),
+    color var(--tds-duration-instant) var(--tds-ease-out);
+}
+
+.tds-button[data-full-width="true"] {
+  width: 100%;
+}
+
+/* --- Size ------------------------------------------------------------------ */
+
+.tds-button[data-size="large"] {
+  min-height: 48px;
+  padding: 13px var(--tds-space-20);
+  gap: var(--tds-space-8);
+  border-radius: var(--tds-radius-md);
+  font-size: var(--tds-font-size-body2);
+  line-height: var(--tds-line-height-body2);
+}
+
+.tds-button[data-size="medium"] {
+  min-height: 36px;
+  padding: var(--tds-space-8) var(--tds-space-16);
+  gap: var(--tds-space-8);
+  border-radius: var(--tds-radius-sm);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+}
+
+.tds-button[data-size="small"] {
+  min-height: 32px;
+  padding: var(--tds-space-8) var(--tds-space-12);
+  gap: var(--tds-space-4);
+  border-radius: var(--tds-radius-sm);
+  font-size: var(--tds-font-size-small);
+  line-height: var(--tds-line-height-small);
+}
+
+/* --- Variant --------------------------------------------------------------- */
+
+.tds-button[data-variant="primary"] {
+  background: var(--tds-bg-high-blue);
+  color: var(--tds-text-invert);
+}
+.tds-button[data-variant="primary"]:not(:disabled):active {
+  background: var(--tds-color-blue-b300);
+}
+
+.tds-button[data-variant="secondary"] {
+  background: var(--tds-bg-low-blue);
+  color: var(--tds-text-active);
+}
+.tds-button[data-variant="secondary"]:not(:disabled):active {
+  background: var(--tds-color-blue-b200);
+}
+
+.tds-button[data-variant="tertiary"] {
+  background: transparent;
+  color: var(--tds-text-active);
+}
+.tds-button[data-variant="tertiary"]:not(:disabled):active {
+  background: var(--tds-bg-low-blue);
+}
+
+/*
+ * The invert button keeps a white fill in both themes, so its label must be a
+ * non-flipping dark value. `--tds-text-high-emphasis` would go near-white in dark mode
+ * and disappear; N800 is the literal value Figma draws.
+ */
+.tds-button[data-variant="invert"] {
+  background: var(--tds-bg-static-white);
+  color: var(--tds-color-neutral-n800);
+}
+.tds-button[data-variant="invert"]:not(:disabled):active {
+  background: var(--tds-bg-low-blue);
+}
+
+.tds-button[data-variant="alert"] {
+  background: var(--tds-bg-low-red);
+  color: var(--tds-text-alert);
+}
+.tds-button[data-variant="alert"]:not(:disabled):active {
+  background: var(--tds-color-red-r200);
+}
+
+/* --- Disabled -------------------------------------------------------------- */
+
+.tds-button:disabled {
+  background: var(--tds-bg-disabled-surface);
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}
+
+/* Tertiary has no fill at rest, so it keeps none when disabled. */
+.tds-button[data-variant="tertiary"]:disabled {
+  background: transparent;
+}
+
+/* --- Loading --------------------------------------------------------------- */
+
+/* Loading keeps the enabled fill: the button is busy, not unavailable. */
+.tds-button[data-loading="true"] {
+  cursor: progress;
+}
+.tds-button[data-variant="primary"][data-loading="true"] { background: var(--tds-bg-high-blue); }
+.tds-button[data-variant="secondary"][data-loading="true"] { background: var(--tds-bg-low-blue); }
+.tds-button[data-variant="tertiary"][data-loading="true"] { background: transparent; }
+.tds-button[data-variant="invert"][data-loading="true"] { background: var(--tds-bg-static-white); }
+.tds-button[data-variant="alert"][data-loading="true"] { background: var(--tds-bg-low-red); }
+
+/*
+ * The face takes the label's colour, so the variant rules above already cover it and there
+ * is nothing to say per variant. Figma sizes it inside a 24 / 32 / 40 square and the glyph
+ * fills 81.8% of that; the height follows from the viewBox.
+ */
+.tds-button__loader {
+  display: block;
+  height: auto;
+  animation: tds-loading-blink 1600ms var(--tds-ease-inOut) infinite;
+}
+
+.tds-button[data-size="large"] .tds-button__loader { width: 32.73px; }
+.tds-button[data-size="medium"] .tds-button__loader { width: 26.18px; }
+.tds-button[data-size="small"] .tds-button__loader { width: 19.64px; }
+
+/* A blink, because a still frame is all the design gives and a spin would be invented. */
+@keyframes tds-loading-blink {
+  0%, 44%, 56%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.55); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tds-button__loader {
+    animation: none;
+  }
+}
+
+/* --- Group ----------------------------------------------------------------- */
+
+.tds-button-group {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 839px;
+  min-width: 320px;
+  background: var(--tds-bg-base-surface);
+}
+
+.tds-button-group[data-sticky="true"] {
+  position: sticky;
+  bottom: 0;
+  box-shadow: var(--tds-elevation-e01);
+}
+
+/*
+ * The buttons, inside the padded row. Separate from the group's own box so the home
+ * indicator can sit below them on the same surface, which is how Figma draws `Show Inset`.
+ */
+.tds-button-group__row {
+  display: flex;
+  gap: var(--tds-space-12);
+  box-sizing: border-box;
+  padding: var(--tds-space-16) var(--tds-space-20);
+}
+
+.tds-button-group[data-layout="stacked"] .tds-button-group__row {
+  flex-direction: column;
+}
+
+.tds-button-group[data-layout="sideBySide"] .tds-button-group__row {
+  flex-direction: row;
+}
+
+.tds-button-group[data-layout="sideBySide"] .tds-button-group__row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Slide ----------------------------------------------------------------- */
+
+/*
+ * Figma: `Buttons - 07 Slide`. A 48px track — 40px handle inside 4px of padding — that the
+ * blue fill grows across as you drag. Progress is one custom property so the fill, the
+ * handle's position and the label's colour all read from the same number.
+ */
+.tds-slide-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 280px;
+  max-width: 839px;
+  height: 48px;
+  overflow: clip;
+  background: var(--tds-bg-low-blue);
+  border-radius: var(--tds-radius-md);
+  font-family: var(--tds-font-family);
+}
+
+.tds-slide-button[data-state="loading"] {
+  background: var(--tds-bg-high-blue);
+  color: var(--tds-text-invert);
+}
+
+.tds-slide-button[data-disabled="true"] {
+  background: var(--tds-bg-disabled-surface);
+}
+
+/*
+ * Under the fill, not over it: Figma's `On Drag half` shows the last few letters surviving
+ * to the right of the blue and the rest gone, and by `On Drag Full` there is nothing left.
+ */
+.tds-slide-button__label {
+  padding: 0 var(--tds-space-12);
+  overflow: hidden;
+  font-size: var(--tds-font-size-body2-bold);
+  line-height: var(--tds-line-height-body2-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-active);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tds-slide-button[data-disabled="true"] .tds-slide-button__label {
+  color: var(--tds-text-disabled);
+}
+
+.tds-slide-button[data-state="complete"] .tds-slide-button__label {
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-slide-button__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  /* 48px of track, plus however much of the rest has been dragged over. */
+  width: calc(48px + var(--tds-slide-progress, 0) * (100% - 48px));
+  padding: var(--tds-space-4);
+  background: var(--tds-bg-high-blue);
+  border-radius: var(--tds-radius-md);
+}
+
+/* Snaps back on release, and follows the finger exactly while it is down. */
+.tds-slide-button:not([data-dragging="true"]) .tds-slide-button__fill {
+  transition: width var(--tds-duration-fast) var(--tds-ease-out);
+}
+
+.tds-slide-button[data-disabled="true"] .tds-slide-button__fill {
+  background: none;
+}
+
+.tds-slide-button__handle {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: var(--tds-bg-high-blue);
+  border: 0;
+  border-radius: var(--tds-radius-sm);
+  color: var(--tds-icon-invert);
+  cursor: grab;
+  touch-action: none;
+}
+
+.tds-slide-button__handle:active {
+  cursor: grabbing;
+}
+
+.tds-slide-button__handle:disabled {
+  background: var(--tds-bg-base-surface);
+  color: var(--tds-icon-disabled);
+  cursor: not-allowed;
+}
+
+.tds-slide-button__arrow {
+  width: 20px;
+  height: 20px;
+}
+
+.tds-slide-button__loader {
+  width: 32.73px;
+  height: auto;
+  animation: tds-loading-blink 1600ms var(--tds-ease-inOut) infinite;
+}
+
+/*
+ * Figma draws a 48px band of the blue at 12% over the track, which is the hint that the
+ * thing is draggable at all. The 12% is `opacity` on the element rather than an alpha baked
+ * into the colour, so the colour itself stays a token.
+ */
+.tds-slide-button__shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--tds-bg-high-blue) 50%, transparent);
+  background-repeat: no-repeat;
+  background-size: 48px 100%;
+  opacity: 0.12;
+  animation: tds-slide-shimmer 2400ms var(--tds-ease-inOut) infinite;
+  pointer-events: none;
+}
+
+.tds-slide-button[data-disabled="true"] .tds-slide-button__shimmer,
+.tds-slide-button[data-dragging="true"] .tds-slide-button__shimmer {
+  display: none;
+}
+
+/* The band sweeps the track's own width, whatever that turns out to be. */
+@keyframes tds-slide-shimmer {
+  0% { background-position: -48px 0; }
+  100% { background-position: 100% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tds-slide-button__shimmer,
+  .tds-slide-button__loader {
+    animation: none;
+  }
+}

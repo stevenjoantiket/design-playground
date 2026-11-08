@@ -1,0 +1,359 @@
+{
+  "syncedAt": "2026-10-28T11:08:12+07:00",
+  "tasks": [
+    {
+      "key": "PPRO-316",
+      "summary": "[Price Display] Price Breakdown Component",
+      "status": "In Tech Solutioning",
+      "category": "indeterminate",
+      "priority": "High",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": [
+        "Adit Septian",
+        "christopher widyatmadja"
+      ]
+    },
+    {
+      "key": "PPRO-186",
+      "summary": "Dynamic Price Display: In App Download on Price Widget on Accom",
+      "status": "In Development",
+      "category": "indeterminate",
+      "priority": "High",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-495",
+      "summary": "Nudges Improvement",
+      "status": "In Requirement Gathering",
+      "category": "indeterminate",
+      "priority": "High",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": [
+        "Adit Septian",
+        "christopher widyatmadja"
+      ]
+    },
+    {
+      "key": "PPRO-371",
+      "summary": "[Flight] Dynamic Price Display",
+      "status": "In QA",
+      "category": "indeterminate",
+      "priority": "High",
+      "squads": [
+        "Promo"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-369",
+      "summary": "[Accommodation] Dynamic Price Display",
+      "status": "Blocked",
+      "category": "new",
+      "priority": "High",
+      "squads": [
+        "Promo"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-484",
+      "summary": "New Insurance Popup for Flight Delay Plus with Semi Auto Opt-In",
+      "status": "In Dependent Party",
+      "category": "indeterminate",
+      "priority": "High",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Adit Septian",
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-494",
+      "summary": "Support Average Price Display for Family",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "High",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-493",
+      "summary": "Enable Nudges in Booking Form",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "High",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-505",
+      "summary": "FDS Pop Up Improvement S89 - Half Leg Case & UI Improvement",
+      "status": "In UAT",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Adit Septian",
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-135",
+      "summary": "Improve Role & Privilege Handling in Kuber",
+      "status": "In Development",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-502",
+      "summary": "Cermati Claim to Blibli Tiket Points",
+      "status": "In QA",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-627",
+      "summary": "A/B Test CRM WA Postpurchase: Without Image vs With Image",
+      "status": "In Dependent Party",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-462",
+      "summary": "CRM Post Purchase Insurance: WA Blast & Push Notification A/B Test",
+      "status": "In Post Analysis",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-322",
+      "summary": "[Experiment] Paylater Banner - High-Demand Holiday Flight Routes",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-623",
+      "summary": "[Flight][Ancillary] Seat Selection Card in Booking Form A/B Test",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-621",
+      "summary": "[Flight][Ancillary] No-Baggage Warning Pop-up A/B Test",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-658",
+      "summary": "Train post purchase insurance",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-657",
+      "summary": "Hotel Post purchase insurance",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-391",
+      "summary": "One Tap Claim to Blibli Tiket Points via WhatsApp Notification",
+      "status": "In Product",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Adit Septian",
+        "Edward Gilang Syaputra",
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-626",
+      "summary": "CRM WA Postpurchase Rollout",
+      "status": "In Requirement Gathering",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Adit Septian",
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-503",
+      "summary": "Promo & GV System Refactor: Promo Landing Page Revamp (Inc. Campaign Page/Promo Detail Page)",
+      "status": "In Dependent Party",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Promo"
+      ],
+      "designers": [
+        "Adit Septian",
+        "M. Asad Al Balad"
+      ]
+    },
+    {
+      "key": "PPRO-529",
+      "summary": "Promo Suggestion Improvement [in Payment Page]",
+      "status": "In Dependent Party",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Promo"
+      ],
+      "designers": [
+        "Adit Septian",
+        "christopher widyatmadja"
+      ]
+    },
+    {
+      "key": "PPRO-243",
+      "summary": "Kuber: Integration with Live Activity",
+      "status": "In Dependent Party",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-588",
+      "summary": "Highlight Baggage Protection Coverage Amount in Green Bold on Flight Booking Form",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-506",
+      "summary": "Multi Pax Claim Process",
+      "status": "In Tech Team",
+      "category": "indeterminate",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-445",
+      "summary": "Post-purchase Landing Page Overhaul (Insurance)",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Adit Septian",
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-346",
+      "summary": "New Nudges on Accom (for Promo Extranet)",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Medium",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    },
+    {
+      "key": "PPRO-507",
+      "summary": "Insurance Feature Configuration at Insurance Dashboard",
+      "status": "In Requirement Gathering",
+      "category": "indeterminate",
+      "priority": "Low",
+      "squads": [
+        "Fintech"
+      ],
+      "designers": [
+        "Adit Septian",
+        "Vania Salsabila"
+      ]
+    },
+    {
+      "key": "PPRO-328",
+      "summary": "Extranet Promo / Campaign Nudge",
+      "status": "Backlog",
+      "category": "new",
+      "priority": "Low",
+      "squads": [
+        "Pricing"
+      ],
+      "designers": []
+    }
+  ]
+}

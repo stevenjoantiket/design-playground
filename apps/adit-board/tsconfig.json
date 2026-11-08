@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": false,
+    "outDir": "./dist-types",
+    "emitDeclarationOnly": true,
+    "resolveJsonModule": true,
+    "types": ["vite/client"]
+  },
+  "include": ["**/*", "projects/*/data/figma-files.json", "projects/*/data/mixpanel-cases.json", "portal/project/jira-tasks.json"],
+  "exclude": ["dist-types", "node_modules"],
+  "references": [{ "path": "../../packages/ui" }, { "path": "../../packages/tokens" }]
+}

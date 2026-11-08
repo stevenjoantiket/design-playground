@@ -1,0 +1,357 @@
+/* Research bank (ResearchPage.tsx), in the portal's style: a card per project, its files and drop zone, and the open file. */
+
+.rs-project__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rs-count {
+  min-width: 22px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border: 1px solid var(--portal-border);
+  border-radius: 999px;
+  color: var(--portal-text-muted);
+  font-size: var(--portal-text-xs);
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* Drive-style: the uploader and every file are tiles of one size, in a grid. */
+.rs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
+}
+
+.rs-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 148px;
+  padding: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-lg);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 150ms ease-out;
+}
+
+.rs-tile:hover {
+  border-color: var(--portal-border-strong);
+}
+
+/* A tile whose palette is open sits over its neighbours. */
+.rs-tile:focus-within {
+  z-index: 4;
+}
+
+.rs-tile[data-open] {
+  border-color: var(--portal-primary);
+  box-shadow: 0 0 0 1px var(--portal-primary);
+}
+
+.rs-tile:focus-visible,
+.rs-tile__open:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+/* A file's tile is one button that opens it, with the bin over its corner. */
+.rs-tile__open {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  padding: 14px 14px 16px;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.rs-tile__delete {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 2;
+  border: 1px solid var(--portal-border);
+  background: var(--portal-surface);
+  opacity: 0;
+}
+
+.rs-tile:hover .rs-tile__delete,
+.rs-tile:focus-within .rs-tile__delete {
+  opacity: 1;
+}
+
+/* A file's tile: its icon and kind on top, then its whole title. */
+.rs-tile__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--portal-text-muted);
+}
+
+.rs-tile[data-open] .rs-tile__top {
+  color: var(--portal-primary);
+}
+
+.rs-tile__kind {
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.rs-tile__kind[data-kind="md"] {
+  background: var(--portal-primary-soft);
+  color: var(--portal-primary);
+}
+
+.rs-tile__kind[data-kind="html"] {
+  background: var(--portal-warning-soft);
+  color: var(--portal-warning);
+}
+
+.rs-tile__title {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.rs-tile[data-open] .rs-tile__title {
+  color: var(--portal-primary);
+}
+
+/* The uploader: the same tile, dashed; tinted while a file is dragged over it. */
+.rs-tile--upload {
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px dashed var(--portal-border-strong);
+  background: var(--portal-surface);
+  color: var(--portal-primary);
+  text-align: center;
+}
+
+.rs-tile--upload:hover,
+.rs-tile--upload[data-over] {
+  border-color: var(--portal-primary);
+  background: var(--portal-primary-soft);
+}
+
+.rs-tile--upload:disabled {
+  cursor: progress;
+}
+
+.rs-msg {
+  grid-column: 1 / -1;
+}
+
+/* The open file: a wide popup in the middle of the screen, scrolling inside. */
+.rs-sheet {
+  width: min(960px, 100% - 32px);
+}
+
+/* An HTML file can't say how tall it is from its sandbox, so it scrolls inside a tall frame. */
+.rs-frame {
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - 48px);
+  height: 72vh;
+  margin: 16px 24px 24px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  background: #fff;
+}
+
+.rs-doc {
+  padding: 16px 24px 24px;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.rs-doc > :first-child {
+  margin-top: 0;
+}
+
+.rs-doc :is(h1, h2, h3, h4) {
+  margin: 24px 0 8px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.rs-doc h1 {
+  font-size: 22px;
+}
+
+.rs-doc h2 {
+  font-size: 18px;
+}
+
+.rs-doc :is(h3, h4) {
+  font-size: 15px;
+}
+
+.rs-doc :is(p, ul, ol, blockquote, pre, table) {
+  margin: 0 0 12px;
+}
+
+.rs-doc :is(ul, ol) {
+  padding-left: 24px;
+}
+
+.rs-doc a {
+  color: var(--portal-primary);
+  font-weight: 500;
+}
+
+.rs-doc blockquote {
+  padding: 8px 16px;
+  border-left: 3px solid var(--portal-primary);
+  border-radius: 4px;
+  background: var(--portal-primary-soft);
+}
+
+.rs-doc pre {
+  padding: 12px;
+  overflow-x: auto;
+  border-radius: var(--portal-radius);
+  background: var(--portal-bg);
+}
+
+.rs-doc pre code {
+  padding: 0;
+}
+
+/* Wide tables scroll inside the popup instead of the page. */
+.rs-doc table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--portal-text-base);
+}
+
+.rs-doc :is(th, td) {
+  padding: 8px 12px;
+  border: 1px solid var(--portal-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.rs-doc th {
+  background: var(--portal-bg);
+}
+
+.rs-doc img {
+  max-width: 100%;
+}
+
+.rs-doc hr {
+  margin: 24px 0;
+  border: 0;
+  border-top: 1px solid var(--portal-border);
+}
+
+/* A file's colour dot, top right of its tile, and the palette it opens. */
+.rs-dot-wrap {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 3;
+}
+
+.rs-dot,
+.rs-swatch {
+  display: block;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  box-sizing: border-box;
+  border: 2px solid var(--portal-border-strong);
+  border-radius: 50%;
+  background: var(--portal-surface);
+  cursor: pointer;
+}
+
+/* A dot that only shows (off the dev server) sits where the button would. */
+span.rs-dot {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  cursor: default;
+}
+
+.rs-dot:hover {
+  border-color: var(--portal-primary);
+}
+
+.rs-dot:focus-visible,
+.rs-swatch:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+.rs-palette {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  display: flex;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--portal-border);
+  border-radius: 999px;
+  background: var(--portal-surface);
+  box-shadow: var(--portal-shadow);
+}
+
+.rs-swatch {
+  width: 20px;
+  height: 20px;
+}
+
+.rs-swatch[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--portal-surface), 0 0 0 4px var(--portal-primary);
+}
+
+/* A picked colour fills the dot (and its swatch). */
+:is(.rs-dot, .rs-swatch)[data-color] {
+  border-color: transparent;
+}
+
+:is(.rs-dot, .rs-swatch)[data-color="red"] {
+  background: oklch(63.7% 0.237 25.331);
+}
+
+:is(.rs-dot, .rs-swatch)[data-color="orange"] {
+  background: oklch(70.5% 0.213 47.604);
+}
+
+:is(.rs-dot, .rs-swatch)[data-color="yellow"] {
+  background: oklch(85.2% 0.199 91.936);
+}
+
+:is(.rs-dot, .rs-swatch)[data-color="green"] {
+  background: oklch(72.3% 0.219 149.579);
+}
+
+:is(.rs-dot, .rs-swatch)[data-color="blue"] {
+  background: oklch(62.3% 0.214 259.815);
+}
+
+:is(.rs-dot, .rs-swatch)[data-color="purple"] {
+  background: oklch(62.7% 0.265 303.9);
+}

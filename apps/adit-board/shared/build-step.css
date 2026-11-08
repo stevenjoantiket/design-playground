@@ -1,0 +1,129 @@
+/* A build or sync step (BuildStep.tsx) and a handed-off task's progress, in the portal's style. */
+
+/* Marker beside the title and note; the action and anything it shows sit under the text. */
+.bs-step {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: start;
+  gap: 4px 10px;
+}
+
+.bs-step__dot {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--portal-border);
+  border-radius: 50%;
+  background: var(--portal-surface);
+  font-size: var(--portal-text-xs);
+}
+
+.bs-step[data-status="ready"] .bs-step__dot {
+  border-color: var(--portal-primary);
+  background: var(--portal-primary);
+  color: #fff;
+}
+
+.bs-step[data-status="done"] .bs-step__dot {
+  border-color: transparent;
+  background: var(--portal-success-soft);
+  color: var(--portal-success);
+}
+
+.bs-step__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bs-step__action,
+.bs-step__extra {
+  grid-column: 2;
+  justify-self: start;
+}
+
+.bs-step__extra {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* A text button inside a step: show or copy the command. */
+.bs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--portal-text-muted);
+  cursor: pointer;
+}
+
+.bs-link:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+/* A run's progress: its state, then the latest steps, oldest first, the newest marked. */
+.bs-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  background: var(--portal-bg);
+}
+
+.bs-progress__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bs-progress__list li {
+  padding-left: 8px;
+  border-left: 2px solid var(--portal-border);
+}
+
+.bs-progress__list li[data-latest] {
+  border-left-color: var(--portal-primary);
+}
+
+/* A handed-off task: spinner (or tick), headline and dismiss, then its latest steps. */
+.bs-task__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bs-task__close {
+  margin-left: auto;
+}
+
+.bs-cmd__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* The command to run, as written: a short scrolling box. */
+.bs-cmd {
+  max-height: 160px;
+  margin: 0;
+  padding: 8px 10px;
+  overflow: auto;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-sm);
+  background: var(--portal-surface);
+  font: var(--portal-text-xs) / 1.5 ui-monospace, "SF Mono", Menlo, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,14 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="127.657" height="127.657" viewBox="0 0 127.657 127.657" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Effect">
+<g id="Rays" filter="url(#filter0_f_0_486)">
+<line x1="104.828" y1="22.8284" x2="22.8284" y2="104.828" stroke="#FDFFE2" stroke-width="8"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f_0_486" x="-7.33595e-07" y="0" width="127.657" height="127.657" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur_0_486"/>
+</filter>
+</defs>
+</svg>

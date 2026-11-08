@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/tokens" },
+    { "path": "./packages/ui" },
+    { "path": "./apps/adit-board" }
+  ]
+}

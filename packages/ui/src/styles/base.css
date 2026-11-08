@@ -1,0 +1,112 @@
+/* Foundations shared by every component. */
+
+.tds-text {
+  margin: 0;
+  font-family: var(--tds-font-family);
+  color: var(--tds-text-high-emphasis);
+}
+
+.tds-text[data-clamped="true"] {
+  display: -webkit-box;
+  -webkit-line-clamp: var(--tds-line-clamp, 1);
+  line-clamp: var(--tds-line-clamp, 1);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tds-text[data-variant="heading1"] { font: var(--tds-font-weight-token-heading1) var(--tds-font-size-heading1) / var(--tds-line-height-heading1) var(--tds-font-family); }
+.tds-text[data-variant="heading2"] { font: var(--tds-font-weight-token-heading2) var(--tds-font-size-heading2) / var(--tds-line-height-heading2) var(--tds-font-family); }
+.tds-text[data-variant="heading3"] { font: var(--tds-font-weight-token-heading3) var(--tds-font-size-heading3) / var(--tds-line-height-heading3) var(--tds-font-family); }
+.tds-text[data-variant="body1"] { font: var(--tds-font-weight-token-body1) var(--tds-font-size-body1) / var(--tds-line-height-body1) var(--tds-font-family); }
+.tds-text[data-variant="body1-bold"] { font: var(--tds-font-weight-token-body1-bold) var(--tds-font-size-body1-bold) / var(--tds-line-height-body1-bold) var(--tds-font-family); }
+.tds-text[data-variant="body2"] { font: var(--tds-font-weight-token-body2) var(--tds-font-size-body2) / var(--tds-line-height-body2) var(--tds-font-family); }
+.tds-text[data-variant="body2-bold"] { font: var(--tds-font-weight-token-body2-bold) var(--tds-font-size-body2-bold) / var(--tds-line-height-body2-bold) var(--tds-font-family); }
+.tds-text[data-variant="body3"] { font: var(--tds-font-weight-token-body3) var(--tds-font-size-body3) / var(--tds-line-height-body3) var(--tds-font-family); }
+.tds-text[data-variant="body3-bold"] { font: var(--tds-font-weight-token-body3-bold) var(--tds-font-size-body3-bold) / var(--tds-line-height-body3-bold) var(--tds-font-family); }
+.tds-text[data-variant="small"] { font: var(--tds-font-weight-token-small) var(--tds-font-size-small) / var(--tds-line-height-small) var(--tds-font-family); }
+.tds-text[data-variant="small-regular"] { font: var(--tds-font-weight-token-small-regular) var(--tds-font-size-small-regular) / var(--tds-line-height-small-regular) var(--tds-font-family); }
+.tds-text[data-variant="small-bold"] { font: var(--tds-font-weight-token-small-bold) var(--tds-font-size-small-bold) / var(--tds-line-height-small-bold) var(--tds-font-family); }
+.tds-text[data-variant="slashprice"] { font: var(--tds-font-weight-token-slashprice) var(--tds-font-size-slashprice) / var(--tds-line-height-slashprice) var(--tds-font-family); text-decoration: line-through; }
+.tds-text[data-variant="extra-small"] { font: var(--tds-font-weight-token-extra-small) var(--tds-font-size-extra-small) / var(--tds-line-height-extra-small) var(--tds-font-family); }
+.tds-text[data-variant="extra-small-bold"] { font: var(--tds-font-weight-token-extra-small-bold) var(--tds-font-size-extra-small-bold) / var(--tds-line-height-extra-small-bold) var(--tds-font-family); }
+.tds-text[data-variant="extra-small-semibold"] { font: var(--tds-font-weight-token-extra-small-semibold) var(--tds-font-size-extra-small-semibold) / var(--tds-line-height-extra-small-semibold) var(--tds-font-family); }
+.tds-text[data-variant="extra-small-print"] { font: var(--tds-font-weight-token-extra-small-print) var(--tds-font-size-extra-small-print) / var(--tds-line-height-extra-small-print) var(--tds-font-family); }
+.tds-text[data-variant="extra-small-print-bold"] { font: var(--tds-font-weight-token-extra-small-print-bold) var(--tds-font-size-extra-small-print-bold) / var(--tds-line-height-extra-small-print-bold) var(--tds-font-family); }
+
+.tds-text[data-color="high-emphasis"] { color: var(--tds-text-high-emphasis); }
+.tds-text[data-color="low-emphasis"] { color: var(--tds-text-low-emphasis); }
+.tds-text[data-color="disabled"] { color: var(--tds-text-disabled); }
+.tds-text[data-color="invert"] { color: var(--tds-text-invert); }
+.tds-text[data-color="subtle-invert"] { color: var(--tds-text-subtle-invert); }
+.tds-text[data-color="light-invert"] { color: var(--tds-text-light-invert); }
+.tds-text[data-color="active"] { color: var(--tds-text-active); }
+.tds-text[data-color="alert"] { color: var(--tds-text-alert); }
+.tds-text[data-color="analytic"] { color: var(--tds-text-analytic); }
+.tds-text[data-color="cross-sell"] { color: var(--tds-text-cross-sell); }
+.tds-text[data-color="positive"] { color: var(--tds-text-positive); }
+.tds-text[data-color="price"] { color: var(--tds-text-price); }
+.tds-text[data-color="usp"] { color: var(--tds-text-usp); }
+.tds-text[data-color="static-white"] { color: var(--tds-text-static-white); }
+.tds-text[data-color="static-black"] { color: var(--tds-text-static-black); }
+
+.tds-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+}
+
+.tds-icon > svg,
+.tds-icon > img {
+  width: 100%;
+  height: 100%;
+}
+
+/* One rule per `IconColor`; `inherit` is the absence of a rule. */
+.tds-icon[data-color="high-emphasis"] { color: var(--tds-icon-high-emphasis); }
+.tds-icon[data-color="low-emphasis"] { color: var(--tds-icon-low-emphasis); }
+.tds-icon[data-color="disabled"] { color: var(--tds-icon-disabled); }
+.tds-icon[data-color="invert"] { color: var(--tds-icon-invert); }
+.tds-icon[data-color="subtle-invert"] { color: var(--tds-icon-subtle-invert); }
+.tds-icon[data-color="light-invert"] { color: var(--tds-icon-light-invert); }
+.tds-icon[data-color="active"] { color: var(--tds-icon-active); }
+.tds-icon[data-color="alert"] { color: var(--tds-icon-alert); }
+.tds-icon[data-color="analytic"] { color: var(--tds-icon-analytic); }
+.tds-icon[data-color="cross-sell"] { color: var(--tds-icon-cross-sell); }
+.tds-icon[data-color="positive"] { color: var(--tds-icon-positive); }
+.tds-icon[data-color="price"] { color: var(--tds-icon-price); }
+.tds-icon[data-color="usp"] { color: var(--tds-icon-usp); }
+.tds-icon[data-color="static-white"] { color: var(--tds-icon-static-white); }
+.tds-icon[data-color="static-black"] { color: var(--tds-icon-static-black); }
+
+/*
+ * One focus treatment for the whole library. :focus-visible only, so a pointer press
+ * never leaves a ring behind, but every keyboard user always gets one.
+ */
+.tds-button:focus-visible,
+.tds-chip:focus-visible,
+.tds-segmented__item:focus-visible,
+.tds-tabs__tab:focus-visible,
+.tds-accordion__header:focus-visible,
+.tds-search-box__clear:focus-visible,
+.tds-quantity__step:focus-visible,
+.tds-search-form__swap:focus-visible,
+button.tds-search-form__control:focus-visible,
+.tds-wheel__option:focus-visible,
+.tds-pagination__arrow:focus-visible,
+.tds-pagination__page:focus-visible,
+.tds-bottom-nav__link:focus-visible,
+.tds-calendar__cell:focus-visible,
+.tds-calendar-summary__dismiss:focus-visible,
+.tds-toggle__input:focus-visible + .tds-toggle__track,
+.tds-radio__input:focus-visible + .tds-radio__control {
+  outline: var(--tds-focus-ring-width) solid var(--tds-stroke-active);
+  outline-offset: var(--tds-focus-ring-offset);
+}
+
+/* Form fields are the exception: the design already turns the border blue on focus,
+   so a second ring would double up. */
+.tds-field__box:focus-within {
+  outline: none;
+}

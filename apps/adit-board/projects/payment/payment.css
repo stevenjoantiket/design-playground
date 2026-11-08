@@ -1,0 +1,2171 @@
+/*
+ * Payment Landing Page — Figma KmlgsiVixQ8uGYW5yfhxpM, node 11957:6868.
+ * Figma's panel fill #F4F7FE has no token; --tds-bg-sunken-surface (#F8F9FD) is the nearest.
+ */
+
+/*
+ * Prototype frame: 917 tall, width picked in the sidebar (App.tsx sets it, capped at the
+ * window), centred in the window both ways. It fills the screen on anything smaller.
+ */
+body {
+  margin: 0;
+  background: var(--tds-color-neutral-n200);
+}
+
+/* Frame on the left, the UX case panel pinned on the right. */
+.pay-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  min-height: 100vh;
+  align-items: start;
+  gap: 0 16px;
+  padding-right: 16px;
+}
+
+.pay-layout[data-page="experiments"],
+.pay-layout:not(:has(> .pay-side-col)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pay-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  grid-column: 1;
+  align-self: stretch;
+  min-width: 0;
+  padding: var(--tds-space-12) 0;
+}
+
+/* Stretches down the page so the sidebar can stay in view while the page scrolls. */
+.pay-side-col {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: stretch;
+}
+
+/* Two cards in one column that stays in view; it scrolls inside itself if both outgrow the window. */
+.pay-side {
+  position: sticky;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: calc(100vh - 24px);
+  margin-top: 12px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+/* Below a laptop width the panel drops under the frame instead of squeezing it. */
+@media (max-width: 760px) {
+  .pay-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    padding: 0 16px 16px;
+  }
+
+  .pay-side-col {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .pay-side {
+    position: static;
+    max-height: none;
+  }
+}
+
+.pay {
+  display: flex;
+  flex-direction: column;
+  /* Leaves room for the tabs row (12px margin + 55px bar), the stage's padding (2 × 12px) and the phone's bezel (24px) so it never clips. */
+  height: min(917px, calc(100vh - 3 * var(--tds-space-12) - var(--tds-space-24) - 55px));
+  overflow-y: auto;
+  scrollbar-width: none;
+  box-shadow: var(--tds-elevation-e02);
+  background: var(--tds-bg-sunken-surface);
+  font-family: var(--tds-font-family);
+  color: var(--tds-text-high-emphasis);
+}
+
+.pay p {
+  margin: 0;
+}
+
+.pay a {
+  color: var(--tds-text-active);
+  text-decoration: none;
+}
+
+/* The top bar stays pinned while the page scrolls under it; the steps scroll away. */
+.pay > .tds-top-bar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--tds-bg-base-surface);
+}
+
+.pay > .tds-progress {
+  background: var(--tds-bg-base-surface);
+  padding-bottom: var(--tds-space-8);
+}
+
+.pay-content {
+  position: relative;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: var(--tds-space-16);
+  padding: var(--tds-space-12) var(--tds-space-20) var(--tds-space-24);
+}
+
+/* Figma's white band behind the top of the first card. */
+.pay-content::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 71px;
+  border-radius: 0 0 var(--tds-radius-md) var(--tds-radius-md);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-16);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+.pay-card h2 {
+  margin: 0;
+}
+
+.pay-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tds-space-8);
+  min-width: 0;
+}
+
+.pay-row--start {
+  justify-content: flex-start;
+}
+
+.pay-gap-4 {
+  gap: var(--tds-space-4);
+}
+
+.pay-countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-4);
+  font-size: var(--tds-font-size-small);
+  line-height: var(--tds-line-height-small);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-alert);
+}
+
+/* Figma's DS-Countdown boxes are a fixed 20px (three in 84px); same-width digits keep them from jumping as they tick. */
+.pay-countdown span {
+  box-sizing: border-box;
+  width: 20px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  padding: var(--tds-space-2) 0;
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-color-red-r400);
+  color: var(--tds-text-static-white);
+}
+
+.pay-trip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  padding: var(--tds-space-8);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.pay-route {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+}
+
+.pay-airline {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-pax {
+  padding: var(--tds-space-2) var(--tds-space-4);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-dot {
+  flex: none;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--tds-radius-full);
+  background: var(--tds-color-neutral-n400);
+}
+
+.pay-dot--small {
+  width: 2px;
+  height: 2px;
+}
+
+.pay-methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  border-radius: var(--tds-radius-xs);
+  overflow: hidden;
+}
+
+.pay-recommended {
+  overflow: hidden;
+  border-radius: var(--tds-radius-md);
+}
+
+.pay-method {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-12);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.pay-method-group {
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.pay-method-group > .pay-method {
+  background: transparent;
+}
+
+/* A chosen card's tenor and CVV: Figma "Cicilan List", 12 in from the row's edges, 10 apart. */
+.pay-method__below {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-10);
+  padding: 0 var(--tds-space-12) var(--tds-space-12);
+}
+
+.pay-method__body {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--tds-space-8);
+  min-width: 0;
+  cursor: pointer;
+}
+
+.pay-method__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-2);
+  min-width: 0;
+}
+
+.pay-logo {
+  position: relative;
+  flex: none;
+  width: 41px;
+  height: 21px;
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-logo span {
+  position: absolute;
+}
+
+.pay-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pay-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-8) var(--tds-space-12);
+  background: var(--tds-bg-low-blue);
+}
+
+.pay-switch > span {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-2);
+}
+
+/* Matches the Text component's own [data-color] specificity, so it wins by source order. */
+.pay-benefit,
+.pay-benefit.tds-text,
+.pay-benefit .tds-text {
+  color: var(--tds-color-green-g500);
+}
+
+.pay-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-4);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.pay-see-all {
+  align-self: center;
+}
+
+.pay-box {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  padding: 14px var(--tds-space-16);
+  border: 1px solid var(--tds-color-neutral-n200);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-box__label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--tds-space-8);
+  cursor: pointer;
+}
+
+.pay-box__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--tds-space-2);
+}
+
+.pay-icon-button {
+  display: inline-flex;
+}
+
+/* At 839 (the top and bottom bars' own max width) the mobile layout stays centred instead of stretching. */
+.pay[data-tds-platform="mobile"] > * {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 839px;
+  margin-inline: auto;
+}
+
+.pay-bar {
+  position: sticky;
+  bottom: 0;
+  min-width: 0;
+}
+
+.pay-bar__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-16);
+}
+
+.pay-total {
+  gap: var(--tds-space-2);
+  white-space: nowrap;
+}
+
+/* Version D: crossed-out price, total, then the saving, stacked beside Pay now. */
+.pay-total-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.pay-now {
+  width: 156px;
+}
+
+/* tiketDP: the banner under "You Can Save More!", a pale turquoise strip with the DownPay swoosh. */
+.pay-dp-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  width: 100%;
+  min-height: 56px;
+  padding: var(--tds-space-12);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--tds-radius-md);
+  background: linear-gradient(270deg, var(--tds-color-turquoise-t100), var(--tds-bg-base-surface));
+  box-shadow: var(--tds-elevation-e01);
+  color: var(--tds-color-turquoise-t600);
+  text-align: left;
+  cursor: pointer;
+}
+
+.pay-dp-banner__text {
+  flex: 1;
+}
+
+.pay-dp-banner__swoosh {
+  position: absolute;
+  top: -9.29px;
+  left: -95.55px;
+  transform: scaleX(-1);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* tiketDP's two ways to pay, side by side under the total (stacked on desktop). */
+.pay-dp-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--tds-space-8);
+  width: 100%;
+}
+
+.pay-dp-actions[data-stacked] {
+  grid-template-columns: 1fr;
+  width: 240px;
+}
+
+.pay-dp-actions[data-stacked] .tds-button {
+  min-height: 48px;
+}
+
+.pay-dp-actions .tds-button {
+  height: auto;
+}
+
+/* "Pay in full" carries version B's ribbon on its top-right corner, half above the button. */
+.pay-dp-full {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.pay-dp-full > .tds-button {
+  flex: 1;
+}
+
+.pay-dp-full > .tds-label.pay-ribbon[data-kind="ribbon"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* Stacked, the ribbon needs room above "Pay in full" so it clears the upfront button. */
+.pay-dp-actions[data-stacked]:has(.pay-ribbon) {
+  row-gap: var(--tds-space-24);
+}
+
+.pay-dp-actions[data-stacked] .pay-dp-full > .tds-label.pay-ribbon[data-kind="ribbon"] {
+  padding: var(--tds-space-4) var(--tds-space-8);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+}
+
+.pay-dp-hint {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.pay-dp-pay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--tds-space-4) var(--tds-space-16) var(--tds-space-6);
+  border: 0;
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-gradient-dark-blue);
+  color: var(--tds-text-static-white);
+  cursor: pointer;
+}
+
+/* Active: a soft light sweeps across the gradient, text kept above it. */
+.pay-dp-pay:not(:disabled) {
+  position: relative;
+  overflow: hidden;
+}
+
+.pay-dp-pay:not(:disabled)::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, var(--tds-bg-static-white), transparent);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: pay-shimmer 2800ms var(--tds-ease-symmetric) infinite;
+}
+
+.pay-dp-pay:not(:disabled) > .tds-text {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pay-dp-pay::after {
+    display: none;
+  }
+}
+
+.pay-dp-pay:disabled {
+  background: var(--tds-bg-disabled-surface);
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}
+
+.pay-dp-pay:focus-visible,
+.pay-dp-banner:focus-visible {
+  outline: 2px solid var(--tds-stroke-active);
+  outline-offset: 2px;
+}
+
+.pay-dash {
+  width: 100%;
+  margin: 0 0 calc(var(--tds-space-8) * -1);
+  border: 0;
+  border-top: 1px dashed var(--tds-color-neutral-n200);
+}
+
+.pay-center {
+  text-align: center;
+}
+
+.pay-center .tds-text {
+  color: var(--tds-text-high-emphasis);
+}
+
+/* --- Desktop (840 and up) — Figma 12044:20454 ------------------------------ */
+
+.pay[data-tds-platform="desktop"] {
+  container-type: inline-size;
+}
+
+.payd-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--tds-space-24);
+  padding: var(--tds-space-16) clamp(var(--tds-space-20), 8.33cqi, 120px) var(--tds-space-12);
+  background: var(--tds-bg-base-surface);
+}
+
+.payd-content {
+  display: grid;
+  /* Figma's 796 : 384 split; the order card stops at 308 and the methods give way first. */
+  grid-template-columns: minmax(0, 796fr) minmax(308px, 384fr);
+  align-items: start;
+  gap: var(--tds-space-20);
+  padding: var(--tds-space-32) clamp(var(--tds-space-20), 8.33cqi, 120px);
+}
+
+.payd-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-20);
+  min-width: 0;
+}
+
+.payd-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-20);
+  padding: var(--tds-space-20);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-base-surface);
+}
+
+.payd-card h2 {
+  margin: 0;
+}
+
+.payd-countdown {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 10px;
+}
+
+.payd-methods {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-20);
+  padding: 0 var(--tds-space-12);
+}
+
+.payd-method {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-20);
+}
+
+.payd-method__body {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--tds-space-12);
+  min-width: 0;
+  cursor: pointer;
+}
+
+/* Only the last line of a method gives way, so "OVO" survives and its balance truncates. */
+.payd-method__body .tds-text {
+  flex: none;
+  white-space: nowrap;
+}
+
+.payd-method__body .tds-text:last-child {
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.payd-logo {
+  position: relative;
+  flex: none;
+  width: 56px;
+  height: 28px;
+  box-sizing: border-box;
+  border: 1px solid var(--tds-color-neutral-n200);
+  border-radius: var(--tds-radius-xs);
+}
+
+.payd-logo span {
+  position: absolute;
+  overflow: hidden;
+}
+
+.payd-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.payd-dash {
+  margin: 0;
+}
+
+.payd-order {
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-16);
+}
+
+.payd-trip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  margin-bottom: var(--tds-space-8);
+  padding: var(--tds-space-12) var(--tds-space-8);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.payd-dot {
+  background: var(--tds-color-neutral-n300);
+}
+
+.payd-box {
+  gap: var(--tds-space-12);
+  border-radius: var(--tds-radius-md);
+  cursor: pointer;
+}
+
+.payd-box__grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.payd-lpg {
+  align-self: flex-start;
+  padding: var(--tds-space-4) var(--tds-space-8);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-gradient-violet);
+}
+
+.payd-lpg.tds-text {
+  color: var(--tds-text-static-white);
+}
+
+.payd-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tds-space-8);
+  margin-bottom: var(--tds-space-4);
+}
+
+/* Beside the price while the button can keep Figma's 120px minimum, below it once it can't. */
+.payd-price > div {
+  flex: none;
+}
+
+.payd-pay {
+  flex: 1 0 120px;
+}
+
+/* --- Select Payment Method sheet — Figma 11987:5505 ------------------------- */
+
+/* The sheet lives inside the phone frame, so the frame anchors it. */
+.pay-frame {
+  position: relative;
+}
+
+.pay-sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: var(--tds-font-family);
+}
+
+/*
+ * The scrim fades on its own layer so the sheet isn't faded with it, and the handle and panel
+ * travel together as one stack. `--pay-exit` is set from MethodSheet.tsx, which waits that
+ * long before unmounting.
+ */
+.pay-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--tds-bg-overlay);
+  animation: pay-fade var(--tds-duration-slow) var(--tds-ease-out) backwards;
+}
+
+.pay-sheet__stack {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 0;
+  max-height: 100%;
+  animation: pay-rise var(--tds-duration-slow) var(--tds-ease-out) backwards;
+  transition: transform var(--tds-duration-slow) var(--tds-ease-out);
+}
+
+/* A sheet opened on top of this one: this one recedes a little instead of staying flat. */
+.pay-sheet__stack[data-under] {
+  transform: scale(0.96) translateY(-8px);
+  transform-origin: 50% 100%;
+}
+
+.pay-sheet[data-state="closing"]::before {
+  animation: pay-unfade var(--pay-exit) var(--tds-ease-in) forwards;
+}
+
+.pay-sheet[data-state="closing"] .pay-sheet__stack {
+  animation: pay-sink var(--pay-exit) var(--tds-ease-in) forwards;
+}
+
+.pay-sheet__handle {
+  flex: none;
+  width: 40px;
+  height: 4px;
+  margin: 17px 0 12px;
+  border-radius: var(--tds-radius-full);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-sheet__panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  min-height: 0;
+  border-radius: var(--tds-radius-xl) var(--tds-radius-xl) 0 0;
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-sheet__header {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--tds-space-16);
+  padding: var(--tds-space-16) var(--tds-space-20) var(--tds-space-8);
+}
+
+.pay-sheet__header h2 {
+  margin: 0;
+}
+
+.pay-sheet__body {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.pay-sheet__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-16) var(--tds-space-20);
+}
+
+/* Figma's 6px sunken bar between groups. */
+.pay-sheet__group + .pay-sheet__group {
+  border-top: 6px solid var(--tds-bg-sunken-surface);
+}
+
+.pay-sheet__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.pay-sheet__logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-8);
+}
+
+@keyframes pay-fade {
+  from { opacity: 0; }
+}
+
+@keyframes pay-rise {
+  from { transform: translateY(100%); }
+}
+
+@keyframes pay-unfade {
+  to { opacity: 0; }
+}
+
+@keyframes pay-sink {
+  to { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pay-sheet::before,
+  .pay-sheet__stack {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* --- Order card cases — Figma Tcbh3pgh68ioCj5Yive0ac, 5282:91506 ------------ */
+
+.pay-nowrap {
+  flex: none;
+  white-space: nowrap;
+}
+
+.pay-ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pay-route {
+  min-width: 0;
+}
+
+/* Cross-sell: product icons overlap by 8px on white discs, last one may be a "+n" count. */
+.pay-stack {
+  display: flex;
+  flex: none;
+}
+
+.pay-stack__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-right: -8px;
+}
+
+.pay-stack__icon:last-child {
+  margin-right: 0;
+}
+
+.pay-stack__icon::before {
+  content: "";
+  position: absolute;
+  inset: 0.8px;
+  box-sizing: border-box;
+  border: 1.2px solid var(--tds-bg-sunken-surface);
+  border-radius: var(--tds-radius-full);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-stack__icon img {
+  position: relative;
+  width: 24px;
+  height: 24px;
+}
+
+.pay-stack__more {
+  font-size: var(--tds-font-size-extra-small-semibold);
+  line-height: var(--tds-line-height-extra-small-semibold);
+  font-weight: var(--tds-font-weight-semibold);
+  color: var(--tds-text-high-emphasis);
+}
+
+.pay-stack__more::before {
+  border-color: var(--tds-bg-base-surface);
+  background: var(--tds-color-neutral-n200);
+}
+
+.pay-stack__more {
+  isolation: isolate;
+}
+
+.pay-stack__more::before {
+  z-index: -1;
+}
+
+/* The green strip sits 8px under the card, which takes a 2px green border to meet it. */
+.pay-nudge {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: calc(var(--tds-space-8) * -1);
+  padding: var(--tds-space-8) var(--tds-space-12) var(--tds-space-16);
+  border-radius: var(--tds-radius-md) var(--tds-radius-md) 0 0;
+  background: var(--tds-color-green-g500);
+}
+
+.pay-nudge__shine {
+  position: absolute;
+  top: -10.2px;
+  left: -55.4px;
+  transform: rotate(124.42deg);
+  pointer-events: none;
+}
+
+.pay-card--refund {
+  border: 2px solid var(--tds-color-green-g500);
+}
+
+.pay-ux__trigger {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* --- iPhone mockup (412 only) ---------------------------------------------- */
+
+/*
+ * A 15 Pro–style body around the 412 × 917 screen: 12px titanium bezel, 55px display
+ * corners, and the action, volume and power buttons on the sides.
+ */
+.pay-frame[data-device="iphone"] {
+  box-sizing: content-box;
+  padding: 12px;
+  border-radius: 67px;
+  background: var(--tds-color-neutral-n900);
+  box-shadow:
+    inset 0 0 0 2px var(--tds-color-neutral-n700),
+    inset 0 0 0 5px var(--tds-color-neutral-n900),
+    var(--tds-elevation-e02);
+}
+
+.pay-frame[data-device="iphone"] > .pay {
+  border-radius: 55px;
+  box-shadow: none;
+}
+
+/* Sheets and the tiketDP screens sit on the glass, not the bezel. */
+.pay-frame[data-device="iphone"] > .pay-sheet,
+.pay-frame[data-device="iphone"] > .dp-layer > .pay-sheet,
+.pay-frame[data-device="iphone"] > .dp-layer > .dp-page {
+  inset: 12px;
+  overflow: hidden;
+  border-radius: 55px;
+}
+
+/* Left: action button, then volume up and down. Right: the side (power) button. */
+.pay-frame[data-device="iphone"]::before,
+.pay-frame[data-device="iphone"]::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--tds-color-neutral-n800);
+}
+
+/* One strip, three buttons: action (32px), volume up and down (64px each), with gaps between. */
+.pay-frame[data-device="iphone"]::before {
+  top: 150px;
+  left: -4px;
+  height: 216px;
+  border-radius: 2px 0 0 2px;
+  background: linear-gradient(
+    var(--tds-color-neutral-n800) 0 32px,
+    transparent 32px 72px,
+    var(--tds-color-neutral-n800) 72px 136px,
+    transparent 136px 152px,
+    var(--tds-color-neutral-n800) 152px 216px
+  );
+}
+
+.pay-frame[data-device="iphone"]::after {
+  top: 236px;
+  right: -4px;
+  height: 100px;
+  border-radius: 0 2px 2px 0;
+}
+
+/* --- Experiments ------------------------------------------------------------ */
+
+.pay-xp-sheet .tds-bottom-sheet__sheet {
+  max-width: min(640px, 100% - 32px);
+  max-height: 90vh;
+  border-radius: var(--tds-radius-xl);
+}
+
+.tds-bottom-sheet.pay-xp-sheet {
+  align-items: center;
+}
+
+.pay-xp-sheet .tds-bottom-sheet__body:focus {
+  outline: none;
+}
+
+.pay-xp {
+  display: flex;
+  flex-direction: column;
+}
+
+/* One question per block, divided like the sheet's groups. */
+.pay-xp__q {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  min-width: 0;
+  margin: 0;
+  padding: var(--tds-space-16) var(--tds-space-20);
+  border: 0;
+  border-top: 1px solid var(--tds-color-neutral-n200);
+}
+
+.pay-xp__q:first-child {
+  border-top: 0;
+}
+
+.pay-xp__q legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--tds-space-4);
+}
+
+.pay-xp__q legend + * {
+  clear: both;
+}
+
+/* Sits straight in the panel's Experiment card, which draws the box. */
+.pay-xp__summary {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+}
+
+.pay-xp__fact {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Metric, ticket, brief: terms in one narrow column, values beside them. */
+.pay-xp__facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--tds-space-4) var(--tds-space-12);
+  margin: 0;
+}
+
+.pay-xp__facts dd {
+  min-width: 0;
+  margin: 0;
+}
+
+/* Build: the version's steps, code then Figma, under a hairline. */
+.pay-xp__build {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding-top: var(--tds-space-12);
+  border-top: 1px solid var(--tds-stroke-light);
+}
+
+.pay-xp__steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Marker beside the title and note; the action and the command sit under the text. */
+.pay-xp__step {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--tds-space-8);
+}
+
+.pay-xp__step > .tds-button {
+  grid-column: 2;
+  justify-self: start;
+}
+
+/* A done step's note: its status, then where its result is. */
+.pay-xp__done {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+}
+
+/* The attached Markdown brief, as written: a short scrolling box rather than the whole file. */
+.pay-xp__md {
+  max-height: 160px;
+  margin: var(--tds-space-2) 0 0;
+  padding: var(--tds-space-8);
+  overflow: auto;
+  border: 1px solid var(--tds-color-neutral-n200);
+  border-radius: var(--tds-radius-sm);
+  background: var(--tds-bg-base-surface);
+  color: var(--tds-text-high-emphasis);
+  font: var(--tds-font-weight-regular) var(--tds-font-size-small-regular) / var(--tds-line-height-small-regular) var(--tds-font-family);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.pay-xp__file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-8) var(--tds-space-12);
+  border: 1px solid var(--tds-color-neutral-n200);
+  border-radius: var(--tds-radius-md);
+}
+
+/* Long answers (hypothesis, requested change) wrap and can be pulled taller. */
+.pay-xp__area {
+  display: block;
+  resize: vertical;
+  min-height: calc(var(--tds-line-height-body2) * 3);
+}
+
+/* --- Experiment "Button ribbon" (version B) --------------------------------- */
+
+/* Half of the ribbon's 20px height: how far it reaches down over the Pay now button. */
+.pay {
+  --ribbon-half: calc(var(--tds-space-8) + var(--tds-space-2));
+}
+
+/* The ribbon is decoration: taps go through it to the button underneath. */
+.pay-ribbon {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/*
+ * Figma "Ribbon / Red · tail left" (Button ribbon file): rounded flag, no notch, that runs
+ * 5px past the button's right edge, where a darker tail folds down behind it. (The more
+ * specific selector beats the library's notched `.tds-label[data-kind="ribbon"]`.)
+ */
+.tds-label.pay-ribbon[data-kind="ribbon"] {
+  --ribbon-tail: 5px;
+  margin-right: calc(-1 * var(--ribbon-tail));
+  padding: var(--tds-space-2) var(--tds-space-8);
+  border-radius: 4px 4px 0 4px;
+  clip-path: none;
+}
+
+.tds-label.pay-ribbon[data-kind="ribbon"]::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: var(--ribbon-tail);
+  height: 4px;
+  border-bottom-right-radius: 4px;
+  background: var(--tds-color-red-r600);
+}
+
+/* Mobile: the row pulls the price row up by the bar's gap plus half a ribbon, so the ribbon straddles the button's top edge. */
+.pay-ribbon-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: calc(-1 * (var(--tds-space-16) + var(--ribbon-half)));
+}
+
+/* Desktop: the ribbon and the button become one column, where the button was. */
+.payd-price > .payd-pay-col {
+  display: flex;
+  flex: 1 0 120px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--tds-space-8);
+  min-width: 176px;
+}
+
+.payd-pay-col > .payd-pay {
+  flex: none;
+  min-width: 0;
+}
+
+/* Desktop: Figma's larger ribbon (14px text, 28px tall), right-aligned, pulled up by the column's gap plus half its height. */
+.payd-pay-col > .tds-label.pay-ribbon[data-kind="ribbon"] {
+  align-self: flex-end;
+  margin-bottom: calc(-1 * (var(--tds-space-8) + 14px));
+  padding: var(--tds-space-4) var(--tds-space-8);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+}
+
+/* --- Experiment "Promo nudge banner shimer effect" (version C) ---------------- */
+
+/* A soft highlight sweeps across the green strip, then rests before the next pass. */
+.pay-nudge[data-shimmer]::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, var(--tds-bg-static-white), transparent);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: pay-shimmer 2800ms var(--tds-ease-symmetric) infinite;
+}
+
+/* The text stays above the highlight so it never loses contrast. */
+.pay-nudge[data-shimmer] > .tds-text {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes pay-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  40%,
+  to {
+    transform: translateX(240%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pay-nudge[data-shimmer]::after {
+    display: none;
+  }
+}
+
+/* --- Experiment "Animated CTA button" (version F) --------------------------- */
+
+/* The same sweep as version C, across the blue pay button ("Pay now" or "Pay in full"). */
+[data-cta-shimmer] .tds-button[data-variant="primary"]:not(:disabled) {
+  position: relative;
+  overflow: hidden;
+}
+
+[data-cta-shimmer] .tds-button[data-variant="primary"]:not(:disabled)::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, var(--tds-bg-static-white), transparent);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: pay-shimmer 2800ms var(--tds-ease-symmetric) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cta-shimmer] .tds-button[data-variant="primary"]::after {
+    display: none;
+  }
+}
+
+/* --- Experiment "Change button color" (version G) --------------------------- */
+
+/* The blue pay button ("Pay now" or "Pay in full") takes the design system's Blue gradient (GB). */
+[data-cta-gradient] .tds-button[data-variant="primary"]:not(:disabled) {
+  background: var(--tds-gradient-blue);
+}
+
+/* Pressed keeps the button's own pressed blue, so the tap still reads. */
+[data-cta-gradient] .tds-button[data-variant="primary"]:not(:disabled):active {
+  background: var(--tds-color-blue-b300);
+}
+
+/* --- Category sheet — Figma "Payment Group" 11957:6927 -------------------- */
+
+/* The whole group (title, chevron and logo tiles) is one tap target: the title button stretches over it. */
+.pay-sheet__group {
+  position: relative;
+}
+
+.pay-sheet__title::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+}
+
+/* Stacked over the full list: it adds its own scrim and rests on the bottom edge, as tall as its content. */
+.pay-sheet--detail {
+  z-index: 2;
+  justify-content: flex-end;
+}
+
+/* As tall as its content, resting on the bottom edge; the panel shrinks and scrolls if it can't fit. */
+.pay-sheet--detail .pay-sheet__stack {
+  flex: 0 1 auto;
+}
+
+.pay-sheet__panel--detail {
+  flex: 0 1 auto;
+}
+
+.pay-detail__intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-8) var(--tds-space-20) var(--tds-space-8);
+}
+
+.pay-detail__intro > p {
+  margin: 0;
+}
+
+.pay-switchcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-16);
+  border: 1px solid var(--tds-color-neutral-n200);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-base-surface);
+}
+
+.pay-switchcard__text {
+  max-width: 204px;
+  margin: 0;
+}
+
+.pay-switchcard__cta {
+  align-self: flex-end;
+  gap: var(--tds-space-8);
+}
+
+/* Blue flag across the card's top-right corner, with a folded tail past its end. */
+.pay-switchcard__ribbon {
+  position: absolute;
+  top: 15px;
+  right: -10px;
+  display: flex;
+  padding: var(--tds-space-2) 3px var(--tds-space-2) var(--tds-space-8);
+  border-radius: var(--tds-radius-xs) 0 0 var(--tds-radius-xs);
+  background: var(--tds-bg-high-blue);
+}
+
+.pay-switchcard__ribbon::before,
+.pay-switchcard__ribbon::after {
+  content: "";
+  position: absolute;
+  right: -5px;
+  width: 5px;
+}
+
+.pay-switchcard__ribbon::before {
+  top: -4px;
+  height: 4px;
+  border-radius: 0 var(--tds-radius-xs) var(--tds-radius-xs) 0;
+  background: var(--tds-color-blue-b600);
+}
+
+.pay-switchcard__ribbon::after {
+  top: 0;
+  bottom: 0;
+  border-radius: 0 0 var(--tds-radius-xs) 0;
+  background: var(--tds-bg-high-blue);
+}
+
+.pay-banks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pay-bank {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--tds-space-16) var(--tds-space-20);
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pay-bank > .tds-text {
+  flex: 1;
+}
+
+/* A 20px-inset hairline between rows, not above the first. */
+.pay-banks li + li .pay-bank::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: var(--tds-space-20);
+  left: var(--tds-space-20);
+  height: 1px;
+  background: var(--tds-bg-sunken-surface);
+}
+
+/* Copy brief: an icon in the summary card's top-right corner. The lead lines keep clear of it. */
+.pay-xp__copy {
+  position: absolute;
+  top: var(--tds-space-4);
+  right: var(--tds-space-4);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--tds-radius-sm);
+  background: none;
+  cursor: pointer;
+}
+
+.pay-xp__copy:hover {
+  background: var(--tds-bg-base-surface);
+}
+
+/* The ⋯ menu in the summary card's corner, and the list it opens. */
+.pay-xp__menu-root {
+  position: absolute;
+  top: var(--tds-space-4);
+  right: var(--tds-space-4);
+  z-index: 2;
+}
+
+.pay-xp__menu-root > .pay-xp__copy {
+  position: static;
+}
+
+.pay-xp__menu {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  max-height: calc(100vh - var(--tds-space-24));
+  overflow-y: auto;
+  flex-direction: column;
+  width: 240px;
+  padding: var(--tds-space-4);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e02);
+}
+
+.pay-xp__menu button,
+.pay-xp__menu a {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  min-height: 36px;
+  padding: 0 var(--tds-space-8);
+  border: 0;
+  border-radius: var(--tds-radius-sm);
+  background: none;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pay-xp__menu button:hover:not(:disabled),
+.pay-xp__menu a:hover {
+  background: var(--tds-bg-sunken-surface);
+}
+
+.pay-xp__menu button:disabled {
+  cursor: not-allowed;
+}
+
+.pay-xp__menu button:focus-visible,
+.pay-xp__menu a:focus-visible {
+  outline: 2px solid var(--tds-stroke-active);
+  outline-offset: -2px;
+}
+
+.pay-xp__menu-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--tds-space-4);
+  padding-top: var(--tds-space-8);
+  border-top: 1px solid var(--tds-stroke-disabled);
+}
+
+.pay-xp__menu-group > .tds-text {
+  padding: 0 var(--tds-space-8) var(--tds-space-4);
+}
+
+.pay-xp__menu hr {
+  width: 100%;
+  margin: var(--tds-space-4) 0;
+  border: 0;
+  border-top: 1px solid var(--tds-stroke-disabled);
+}
+
+/* A code version: pick it on the left, delete it with the bin on the right. */
+.pay-xp__menu-row {
+  display: flex;
+  align-items: center;
+}
+
+.pay-xp__menu-row > button:first-child {
+  flex: 1;
+}
+
+.pay-xp__menu .pay-xp__menu-delete {
+  justify-content: center;
+  width: 36px;
+  padding: 0;
+}
+
+.pay-xp__menu .pay-xp__menu-delete:hover {
+  background: var(--tds-bg-low-red);
+}
+
+.pay-xp__note {
+  margin: 0;
+}
+
+/* Version, name and the detail link; clear of the ⋯ button in the corner. */
+.pay-xp__lead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-2);
+  padding-right: var(--tds-space-32);
+}
+
+.pay-xp__lead p {
+  margin: 0;
+}
+
+/* --- Embed (?embed=1): only the phone, sized for an iframe of 436 × 965 ------- */
+
+body:has(.pay-layout[data-embed]) {
+  background: transparent;
+}
+
+.pay-layout[data-embed] {
+  display: block;
+  min-height: 0;
+  padding: 0;
+}
+
+.pay-layout[data-embed] .pay-stage {
+  padding: var(--tds-space-12) 0;
+}
+
+.pay-layout[data-embed] .pay {
+  height: 917px;
+}
+
+.pay-xp__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-4);
+  align-self: flex-start;
+}
+
+/* ---- tiketDP screens (DownPay.tsx) ---- */
+
+/* The provider around the screens adds no box of its own; the sheets fill the frame. */
+.dp-layer {
+  display: contents;
+}
+
+/* Figma's "downpay text main": the DownPay teal, readable on white. */
+.tds-text.dp-teal,
+.dp-teal {
+  color: var(--tds-color-turquoise-t600);
+}
+
+.dp-alert {
+  color: var(--tds-text-alert);
+}
+
+/* Figma's 22/28 bold title; heading3 is 28px on every platform. */
+.tds-text.dp-title {
+  font-size: 22px;
+  line-height: 1.27;
+}
+
+/* The tiketDP sheets hug their content at the bottom, unlike the full-height method list. */
+.dp-sheet .pay-sheet__stack {
+  flex: 0 1 auto;
+  margin-top: auto;
+}
+
+.dp-sheet .pay-sheet__panel {
+  flex: 0 1 auto;
+}
+
+.dp-sheet__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-16) var(--tds-space-20);
+}
+
+.dp-sheet__footer {
+  flex: none;
+  padding: var(--tds-space-16) var(--tds-space-20) var(--tds-space-24);
+}
+
+/* Desktop: the same sheet as a centred dialog. */
+.dp-sheet[data-desktop] {
+  justify-content: center;
+  padding: var(--tds-space-40);
+}
+
+.dp-sheet[data-desktop] .pay-sheet__stack {
+  max-width: 800px;
+  margin-block: auto;
+}
+
+.dp-sheet[data-desktop] .pay-sheet__panel {
+  border-radius: var(--tds-radius-xl);
+}
+
+/* Today → due → departure. Each step but the last draws its piece of the line down to the next. */
+.dp-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dp-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.dp-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: calc(var(--tds-space-16) * -1 - 8px);
+  left: 8px;
+  width: 8px;
+  background: var(--tds-color-turquoise-t200);
+}
+
+.dp-step.dp-step--today::before {
+  top: 1px;
+  background: linear-gradient(90deg, var(--tds-color-turquoise-t100), var(--tds-bg-base-surface));
+}
+
+/* On the DownPay page the first piece is Figma's dotted texture, washed out to half. */
+.dp-steps[data-page] .dp-step--today::before {
+  background: linear-gradient(color-mix(in srgb, var(--tds-bg-base-surface) 50%, transparent), color-mix(in srgb, var(--tds-bg-base-surface) 50%, transparent)), var(--dp-line) center / cover;
+}
+
+.dp-step__icon {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.dp-step__icon img {
+  display: block;
+}
+
+.dp-step__glyph {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.dp-step__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  min-width: 0;
+}
+
+.dp-step--today .dp-step__body > p {
+  margin: 0 0 var(--tds-space-8);
+}
+
+.dp-step__body--tight {
+  gap: var(--tds-space-4);
+}
+
+.dp-method {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  padding: var(--tds-space-12);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-color-neutral-n50);
+}
+
+.dp-method__row {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+}
+
+.dp-method .tds-field {
+  margin-top: var(--tds-space-8);
+}
+
+.dp-upgrade {
+  overflow: hidden;
+  border-radius: var(--tds-radius-md);
+}
+
+.dp-upgrade p {
+  margin: 0;
+}
+
+.dp-upgrade__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  padding: var(--tds-space-8) var(--tds-space-12);
+  background: linear-gradient(270deg, var(--tds-color-turquoise-t100), var(--tds-bg-low-blue));
+}
+
+.dp-upgrade__foot {
+  padding: var(--tds-space-8) var(--tds-space-12);
+  background: var(--tds-bg-sunken-surface);
+}
+
+/* Instalments: the info note, then one row per tenor. */
+.dp-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tds-space-8);
+  margin: 0;
+  padding: var(--tds-space-8) var(--tds-space-12);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-low-blue);
+}
+
+.dp-tenors {
+  display: flex;
+  flex-direction: column;
+}
+
+.dp-tenor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-16) 0;
+}
+
+.dp-tenor__label {
+  flex: 1;
+  cursor: pointer;
+}
+
+.dp-tenor + .dp-tenor {
+  border-top: 1px solid var(--tds-color-neutral-n200);
+}
+
+/* "Pay 30% upfront": a full page over the phone, a tall dialog over the desktop page. */
+.dp-page {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  font-family: var(--tds-font-family);
+}
+
+.dp-page__panel {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--tds-bg-base-surface);
+  animation: pay-rise var(--tds-duration-slow) var(--tds-ease-out) backwards;
+}
+
+.dp-page[data-desktop] {
+  align-items: center;
+  justify-content: center;
+  padding: var(--tds-space-40);
+}
+
+.dp-page[data-desktop]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--tds-bg-overlay);
+}
+
+.dp-page[data-desktop] .dp-page__panel {
+  flex: 0 1 auto;
+  width: min(800px, 100%);
+  max-height: 100%;
+  border-radius: var(--tds-radius-xl);
+}
+
+.dp-page__status {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.dp-page__scroll {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  padding-bottom: var(--tds-space-16);
+  overflow: hidden auto;
+  scrollbar-width: none;
+}
+
+/* Figma's header art: a dark-blue to teal shape with a swoosh and an arrow, behind the title. */
+.dp-hero {
+  position: absolute;
+  top: -135px;
+  right: -58px;
+  left: -58px;
+  height: 1036px;
+  pointer-events: none;
+}
+
+.dp-hero img {
+  position: absolute;
+  display: block;
+}
+
+.dp-hero__ellipse {
+  top: 40px;
+  left: 0;
+  width: 100%;
+  height: 377px;
+}
+
+.dp-hero__swoosh {
+  top: 194.7px;
+  left: calc(50% + 0.54px);
+  width: 376.914px;
+  height: 177.293px;
+  transform: translateX(-50%) scaleX(-1);
+  mix-blend-mode: overlay;
+}
+
+.dp-hero__vector {
+  top: 0;
+  left: calc(50% - 55.79px);
+  width: 260.423px;
+  height: 283px;
+  transform: translateX(-50%);
+}
+
+.dp-page__close {
+  position: absolute;
+  top: 56px;
+  left: var(--tds-space-20);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--tds-radius-full);
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+  cursor: pointer;
+}
+
+.dp-page[data-desktop] .dp-page__close {
+  top: var(--tds-space-24);
+  right: var(--tds-space-24);
+  left: auto;
+}
+
+.dp-page__close:focus-visible,
+.dp-cta:focus-visible {
+  outline: 2px solid var(--tds-stroke-active);
+  outline-offset: 2px;
+}
+
+.dp-page__title {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding: 108px var(--tds-space-20) var(--tds-space-16);
+  text-align: center;
+}
+
+.dp-page[data-desktop] .dp-page__title {
+  padding: var(--tds-space-40) var(--tds-space-40) var(--tds-space-16);
+  text-align: left;
+}
+
+.dp-page[data-desktop] .tds-text.dp-title {
+  font-size: 34px;
+  line-height: 1.2;
+}
+
+.dp-page__title h2 {
+  margin: 0;
+}
+
+.dp-page__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  margin: 0 var(--tds-space-20);
+  padding: var(--tds-space-16);
+  border-radius: var(--tds-radius-lg);
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+.dp-page[data-desktop] .dp-page__card,
+.dp-page[data-desktop] .dp-terms {
+  margin-inline: var(--tds-space-40);
+}
+
+.dp-terms {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  margin: var(--tds-space-24) var(--tds-space-20) 0;
+}
+
+.dp-terms h3 {
+  margin: 0;
+}
+
+.dp-terms ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  margin: 0;
+  padding: var(--tds-space-16) var(--tds-space-8) var(--tds-space-8) 26px;
+  border-radius: var(--tds-radius-sm) var(--tds-radius-sm) 0 0;
+  background: linear-gradient(180deg, var(--tds-bg-low-orange), var(--tds-bg-base-surface));
+  color: var(--tds-text-low-emphasis);
+}
+
+.dp-page__bar {
+  flex: none;
+  padding: var(--tds-space-16) var(--tds-space-20) 34px;
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+.dp-page[data-desktop] .dp-page__bar {
+  padding: var(--tds-space-16) var(--tds-space-40) var(--tds-space-24);
+}
+
+.dp-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--tds-radius-lg);
+  background: var(--tds-gradient-dark-blue);
+  cursor: pointer;
+}
+
+.dp-cta__effect {
+  position: absolute;
+  top: -41px;
+  left: -98px;
+  width: 128px;
+  height: 128px;
+  pointer-events: none;
+}
+
+/* Price details: the order, add-ons, deductions and fees, then the total and the DownPay bills. */
+.dp-price {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-20);
+  padding: var(--tds-space-12) 0 var(--tds-space-20);
+}
+
+.dp-price__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  padding: 0 var(--tds-space-20);
+}
+
+.dp-price__group--rule {
+  padding-top: var(--tds-space-20);
+  border-top: 6px solid var(--tds-bg-sunken-surface);
+}
+
+/* Version H: the cheapest fare banner, under the route. Green, as the sheet's deductions are. */
+.dp-cheapest {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-8) var(--tds-space-12);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-low-green);
+  color: var(--tds-text-positive);
+}
+
+.dp-price__box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-12);
+  border: 1px solid var(--tds-color-neutral-n200);
+  border-radius: var(--tds-radius-md);
+}
+
+.dp-price__box hr {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--tds-color-neutral-n200);
+}
+
+.dp-price__total {
+  padding: var(--tds-space-12) var(--tds-space-20);
+  border-block: 1px solid var(--tds-color-neutral-n200);
+}
+
+.dp-line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tds-space-8);
+}
+
+.dp-line > :first-child {
+  flex: 1;
+}
+
+.dp-line > :last-child {
+  text-align: right;
+}
+
+/* Version E, "Import blibli card": the CTA under the payment methods, and its consent sheet. */
+.blibli-cta {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-12);
+  width: 100%;
+  padding: var(--tds-space-12);
+  border: 1px dashed var(--tds-color-blue-b500);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-low-blue);
+  cursor: pointer;
+  text-align: left;
+}
+
+.blibli-cta[data-desktop] {
+  padding: var(--tds-space-16);
+}
+
+.blibli-cta__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--tds-space-2);
+  min-width: 0;
+}
+
+.blibli-points {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  margin: 0;
+  padding-left: var(--tds-space-20);
+}
+
+.blibli-agree {
+  width: 100%;
+}
+
+/* Version I, Alternative B: a grey strip slides up from behind the bottom bar while the card's CVV is missing. */
+.pay-bar { z-index: 2; }
+.pay-cvv-nudge { position: absolute; left: 0; right: 0; bottom: 100%; overflow: hidden; pointer-events: none; }
+.pay-cvv-nudge__strip {
+  display: flex; align-items: center; justify-content: center; gap: var(--tds-space-4);
+  padding: var(--tds-space-8) var(--tds-space-16);
+  background: var(--tds-color-background-medium, #e5e7eb);
+  animation: pay-cvv-nudge-up 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes pay-cvv-nudge-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .pay-cvv-nudge__strip { animation: none; } }
+
+/* Alternative C: the helper line carries a small info icon. */
+.pay-dp-hint { display: flex; align-items: center; justify-content: center; gap: var(--tds-space-4); }
+
+/* The Alternative A / B / C toggle in the side panel. */
+.alt-toggle { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px 16px; border: 1px solid #d9dde3; border-radius: 12px; background: #fff; }
+.alt-toggle__label { font-weight: 600; font-size: 14px; margin-right: 4px; }
+.alt-toggle__btn { min-width: 36px; height: 32px; border-radius: 8px; border: 1px solid #c4cad3; background: #fff; cursor: pointer; font-weight: 600; }
+.alt-toggle__btn[aria-pressed="true"] { background: #0770e3; border-color: #0770e3; color: #fff; }
+.alt-toggle__note { flex-basis: 100%; font-size: 12px; color: #6b7280; }

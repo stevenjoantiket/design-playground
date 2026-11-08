@@ -1,0 +1,20 @@
+# Odyssey is licensed Tiket type and this repository may end up mirrored somewhere
+# public, so no font binary is ever committed — not the drop in `tds library/tds font/`,
+# and not the woff2 that `pnpm fonts:build` generates from it. Anyone who needs the real
+# typeface builds it from their own copy of the drop; everyone else gets the system-font
+# fallback, which is deliberate. See packages/fonts/README.md.
+#
+# This matters most for `tds library/`: the icons in there are committed, so an
+# unqualified `git add` on that directory would otherwise pick the fonts up with them.
+*.ttf
+*.otf
+*.woff
+*.woff2
+
+# Progress the Claude Code hooks log for a run started from the prototype sidebar.
+briefs/*.progress.jsonl
+
+node_modules/
+dist/
+.DS_Store
+.vercel

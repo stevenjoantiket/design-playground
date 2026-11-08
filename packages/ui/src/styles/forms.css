@@ -1,0 +1,366 @@
+/* TextField, Dropdown and SearchBox. Figma: Forms - 01/02, Search Box - Grey. */
+
+.tds-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  font-family: var(--tds-font-family);
+}
+
+.tds-field__box {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 52px;
+  padding: var(--tds-space-8) var(--tds-space-16);
+  gap: var(--tds-space-12);
+  background: var(--tds-bg-base-surface);
+  border: 1px solid var(--tds-stroke-disabled);
+  border-radius: var(--tds-radius-md);
+  transition: border-color var(--tds-duration-instant) var(--tds-ease-out);
+}
+
+.tds-field__box:focus-within {
+  border-color: var(--tds-stroke-active);
+}
+
+.tds-field__content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * The floating label is driven entirely by :placeholder-shown. Empty field: the label
+ * sits at 16px where the placeholder would be. Filled or focused: it shrinks to 12px
+ * and moves above the value. No JavaScript, so it cannot desync from the real value.
+ */
+.tds-field__label {
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-low-emphasis);
+  transform-origin: left top;
+  transition:
+    font-size var(--tds-duration-instant) var(--tds-ease-out),
+    line-height var(--tds-duration-instant) var(--tds-ease-out);
+  cursor: text;
+}
+
+.tds-field__input {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-body2);
+  line-height: var(--tds-line-height-body2);
+  color: var(--tds-text-high-emphasis);
+  outline: none;
+}
+
+.tds-field__input::placeholder {
+  color: transparent;
+}
+
+.tds-field__input:placeholder-shown:not(:focus) {
+  /* Collapse the value row so the label alone fills the 52px box. */
+  height: 0;
+  line-height: 0;
+}
+
+.tds-field__content:has(.tds-field__input:placeholder-shown:not(:focus)) .tds-field__label {
+  font-size: var(--tds-font-size-body2);
+  line-height: var(--tds-line-height-body2);
+}
+
+.tds-field__helper {
+  font-size: var(--tds-font-size-small);
+  line-height: var(--tds-line-height-small);
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-field[data-error="true"] .tds-field__box {
+  border-color: var(--tds-stroke-alert);
+}
+
+.tds-field[data-error="true"] .tds-field__helper {
+  color: var(--tds-text-alert);
+}
+
+.tds-field[data-disabled="true"] .tds-field__box {
+  background: var(--tds-bg-disabled-surface);
+  border-color: var(--tds-stroke-light);
+}
+
+.tds-field[data-disabled="true"] .tds-field__label,
+.tds-field[data-disabled="true"] .tds-field__input {
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}
+
+/* --- Dropdown -------------------------------------------------------------- */
+
+.tds-field--select .tds-field__input {
+  appearance: none;
+  cursor: pointer;
+}
+
+/* `tds_ic_chevron_down`, drawn by `ChevronDownIcon`. The glyph is 24px in the drop and
+   sits in a 20px slot here, which is the size the field is drawn at in Figma. */
+.tds-field__chevron {
+  display: inline-flex;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--tds-icon-high-emphasis);
+}
+
+.tds-field__chevron > svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tds-field[data-disabled="true"] .tds-field__chevron {
+  color: var(--tds-icon-disabled);
+}
+
+/* --- Search form ----------------------------------------------------------- */
+
+.tds-search-form {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 759px;
+  background: var(--tds-bg-sunken-surface);
+  border-radius: var(--tds-radius-md);
+  font-family: var(--tds-font-family);
+}
+
+.tds-search-form__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-12);
+  box-sizing: border-box;
+  padding: var(--tds-space-12);
+}
+
+/* Keeps the text clear of the swap button floating over the right edge. */
+.tds-search-form[data-swap="true"] .tds-search-form__field {
+  padding-right: 56px;
+}
+
+/*
+ * Figma puts a `Divider - Horizontal` instance between the rows, inset by the card's own
+ * 12px padding — which a border-top on the row could not be.
+ */
+.tds-search-form__field + .tds-search-form__field::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: var(--tds-space-12);
+  left: var(--tds-space-12);
+  height: 1px;
+  background: var(--tds-bg-disabled-surface);
+}
+
+.tds-search-form__control {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--tds-space-12);
+  min-width: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+}
+
+button.tds-search-form__control {
+  cursor: pointer;
+}
+
+button.tds-search-form__control:disabled {
+  cursor: not-allowed;
+}
+
+.tds-search-form__icon {
+  display: inline-flex;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--tds-icon-low-emphasis);
+}
+
+.tds-search-form__icon > svg,
+.tds-search-form__icon > img {
+  width: 100%;
+  height: 100%;
+}
+
+.tds-search-form__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  overflow: clip;
+}
+
+.tds-search-form__label {
+  font-size: var(--tds-font-size-small-regular);
+  line-height: var(--tds-line-height-small-regular);
+  font-weight: var(--tds-font-weight-regular);
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-search-form__value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-4);
+  font-size: var(--tds-font-size-body2);
+  line-height: var(--tds-line-height-body2);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+  word-break: break-word;
+}
+
+.tds-search-form__field[data-filled="false"] .tds-search-form__value {
+  color: var(--tds-text-low-emphasis);
+}
+
+/*
+ * An empty field under a label reads as placeholder text and drops to regular weight
+ * (`- 01 General`). Without a label the same line is the row's title and stays bold even
+ * while it is a prompt (`- 02 With Subtitle`, `- 03 With Toggle`).
+ */
+.tds-search-form__field[data-filled="false"][data-labelled="true"] .tds-search-form__value {
+  font-weight: var(--tds-font-weight-regular);
+}
+
+.tds-search-form__subtitle {
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-search-form__piece {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--tds-space-4);
+  font-size: var(--tds-font-size-body2);
+  line-height: var(--tds-line-height-body2);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+  white-space: nowrap;
+}
+
+.tds-search-form__field[data-disabled="true"] .tds-search-form__value,
+.tds-search-form__field[data-disabled="true"] .tds-search-form__label,
+.tds-search-form__field[data-disabled="true"] .tds-search-form__piece {
+  color: var(--tds-text-disabled);
+}
+
+.tds-search-form__field[data-disabled="true"] .tds-search-form__icon {
+  color: var(--tds-icon-disabled);
+}
+
+/*
+ * Centred on the card, which is the seam when there are two rows — the only arrangement
+ * Figma marks reversible.
+ */
+.tds-search-form__swap {
+  position: absolute;
+  top: 50%;
+  right: var(--tds-space-12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--tds-space-6);
+  background: var(--tds-bg-base-surface);
+  border: 0;
+  border-radius: var(--tds-radius-md);
+  box-shadow: var(--tds-elevation-e01);
+  color: var(--tds-icon-high-emphasis);
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.tds-search-form__swap > svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* --- Search box ------------------------------------------------------------ */
+
+.tds-search-box {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  gap: var(--tds-space-8);
+  background: var(--tds-bg-sunken-surface);
+  border-radius: var(--tds-radius-full);
+  font-family: var(--tds-font-family);
+}
+
+.tds-search-box[data-size="small"] {
+  min-height: 32px;
+  padding: var(--tds-space-6) var(--tds-space-12);
+}
+
+.tds-search-box[data-size="medium"] {
+  min-height: 40px;
+  padding: var(--tds-space-10) var(--tds-space-12);
+}
+
+.tds-search-box__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--tds-icon-low-emphasis);
+}
+
+.tds-search-box__input {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-high-emphasis);
+  outline: none;
+}
+
+.tds-search-box__input::placeholder {
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-search-box__input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.tds-search-box__clear {
+  display: inline-flex;
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tds-icon-high-emphasis);
+  cursor: pointer;
+}
+
+.tds-search-box[data-disabled="true"] {
+  background: var(--tds-bg-disabled-surface);
+}
+
+.tds-search-box[data-disabled="true"] .tds-search-box__input {
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}

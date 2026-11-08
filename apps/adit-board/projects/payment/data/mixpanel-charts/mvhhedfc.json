@@ -1,0 +1,60 @@
+{
+  "report": "https://mixpanel.com/project/3965186/view/4460945/app/boards#id=11373889&editor-card-id=%22report-93503336%22",
+  "addedAt": 1792549011576,
+  "title": "Adit test PDP to Purchase Funnel",
+  "kind": "line",
+  "unit": "count",
+  "range": "21 Sep – 21 Oct 2026",
+  "syncedAt": "2026-10-21T09:17:20+07:00",
+  "note": "Weekly unique users at each PDP-to-purchase step (pageVisit, choosePackage, purchase (final)); Other folds in bookPackage and bookProduct uniques plus total purchase events, and the week of 19 Oct is to date.",
+  "x": [
+    "21 Sep",
+    "28 Sep",
+    "5 Oct",
+    "12 Oct",
+    "19 Oct"
+  ],
+  "series": [
+    {
+      "name": "pageVisit",
+      "values": [
+        499440,
+        561028,
+        412923,
+        489213,
+        163055
+      ]
+    },
+    {
+      "name": "choosePackage",
+      "values": [
+        62607,
+        79725,
+        67838,
+        66699,
+        19889
+      ]
+    },
+    {
+      "name": "Purchase (final)",
+      "values": [
+        26342,
+        33691,
+        25857,
+        23708,
+        4681
+      ]
+    },
+    {
+      "name": "Other",
+      "values": [
+        125442,
+        158295,
+        125819,
+        116431,
+        27304
+      ]
+    }
+  ],
+  "chart": "bar"
+}

@@ -1,0 +1,282 @@
+/* Badge, Chip and Label. Figma: Badges - *, Chips - *, Labels - *. */
+
+/* --- Badge ----------------------------------------------------------------- */
+
+.tds-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 18px;
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-extra-small);
+  line-height: var(--tds-line-height-extra-small);
+  font-weight: var(--tds-font-weight-semibold);
+  color: var(--tds-text-static-white);
+  /* The 2px ring is what lifts a badge off whatever it is pinned to. Gradient
+     variants drop it — Figma removes the stroke when the fill is a gradient. */
+  border: 2px solid var(--tds-bg-static-white);
+}
+
+.tds-badge[data-kind="indicator"] {
+  width: 18px;
+  height: 18px;
+  border-radius: var(--tds-radius-full);
+}
+
+.tds-badge[data-kind="number"],
+.tds-badge[data-kind="text"] {
+  padding: var(--tds-space-2) var(--tds-space-6);
+  border-radius: var(--tds-radius-lg);
+}
+
+/* Single digits render as a circle, not a stadium. */
+.tds-badge[data-kind="number"][data-single-digit="true"] {
+  width: 18px;
+  padding: 0;
+}
+
+.tds-badge[data-variant="red"] { background: var(--tds-bg-high-red); }
+.tds-badge[data-variant="green"] { background: var(--tds-bg-high-green); }
+.tds-badge[data-variant="grey"] { background: var(--tds-color-neutral-n400); }
+
+.tds-badge[data-gradient="true"] { border-color: transparent; }
+.tds-badge[data-variant="red"][data-gradient="true"] { background: var(--tds-gradient-red); }
+.tds-badge[data-variant="green"][data-gradient="true"] { background: var(--tds-gradient-green); }
+
+/* --- Chip ------------------------------------------------------------------ */
+
+.tds-chip {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: var(--tds-space-4);
+  padding: var(--tds-space-6) var(--tds-space-12);
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  background: var(--tds-bg-base-surface);
+  color: var(--tds-text-high-emphasis);
+  border: 1px solid var(--tds-stroke-disabled);
+  cursor: pointer;
+  transition:
+    background-color var(--tds-duration-instant) var(--tds-ease-out),
+    border-color var(--tds-duration-instant) var(--tds-ease-out);
+}
+
+.tds-chip[data-kind="general"] {
+  min-height: 32px;
+  border-radius: var(--tds-radius-full);
+}
+
+.tds-chip[data-kind="description"] {
+  min-height: 52px;
+  border-radius: var(--tds-radius-xl);
+}
+
+.tds-chip__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tds-chip__description {
+  font-size: var(--tds-font-size-small);
+  line-height: var(--tds-line-height-small);
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-chip[data-state="active"] {
+  background: var(--tds-bg-low-blue);
+  border-color: var(--tds-stroke-active);
+  color: var(--tds-text-active);
+}
+
+.tds-chip[data-state="active"] .tds-chip__description {
+  color: var(--tds-text-active);
+}
+
+.tds-chip[data-state="error"] {
+  border-color: var(--tds-stroke-alert);
+}
+
+.tds-chip:disabled {
+  background: var(--tds-bg-disabled-surface);
+  border-color: transparent;
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}
+
+.tds-chip:disabled .tds-chip__description {
+  color: var(--tds-text-disabled);
+}
+
+/* --- Label ----------------------------------------------------------------- */
+
+.tds-label {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  gap: var(--tds-space-2);
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-small);
+  line-height: var(--tds-line-height-small);
+  font-weight: var(--tds-font-weight-regular);
+}
+
+.tds-label[data-kind="primary"] {
+  border-radius: var(--tds-radius-xs);
+}
+
+.tds-label[data-kind="primary"][data-size="medium"] {
+  min-height: 24px;
+  padding: var(--tds-space-4) var(--tds-space-8);
+}
+
+.tds-label[data-kind="primary"][data-size="small"] {
+  min-height: 20px;
+  padding: var(--tds-space-2) var(--tds-space-4);
+}
+
+/* Figma leaves Neutral's fill unbound, so it is the grey surface by inspection. */
+.tds-label[data-kind="primary"][data-tone="neutral"] { background: var(--tds-bg-sunken-surface); color: var(--tds-text-high-emphasis); }
+.tds-label[data-kind="primary"][data-tone="red"] { background: var(--tds-bg-low-red); color: var(--tds-text-alert); }
+.tds-label[data-kind="primary"][data-tone="blue"] { background: var(--tds-bg-low-blue); color: var(--tds-text-active); }
+.tds-label[data-kind="primary"][data-tone="green"] { background: var(--tds-bg-low-green); color: var(--tds-text-positive); }
+.tds-label[data-kind="primary"][data-tone="yellow"] { background: var(--tds-bg-low-yellow); color: var(--tds-text-high-emphasis); }
+.tds-label[data-kind="primary"][data-tone="magenta"] { background: var(--tds-bg-low-magenta); color: var(--tds-bg-high-magenta); }
+.tds-label[data-kind="primary"][data-tone="orange"] { background: var(--tds-bg-low-orange); color: var(--tds-text-analytic); }
+.tds-label[data-kind="primary"][data-tone="purple"] { background: var(--tds-bg-low-purple); color: var(--tds-text-cross-sell); }
+.tds-label[data-kind="primary"][data-tone="turquoise"] { background: var(--tds-bg-low-turquoise); color: var(--tds-text-usp); }
+
+/*
+ * Ribbon, Secondary and Multi are all a saturated fill with white text, so the tone is a
+ * pair of custom properties set once per tone and read by whichever element carries the
+ * fill — the label itself, or Multi's leading chip.
+ *
+ * Two of the five documented tones point at a value that only exists in the text ramp:
+ * Figma fills Red with the `red/r400` primitive rather than `background/high-red`, which
+ * is a darker red. `--tds-text-alert` is that primitive under a semantic name.
+ */
+.tds-label[data-tone="red"] { --tds-label-fill: var(--tds-text-alert); --tds-label-gradient: var(--tds-gradient-red); }
+.tds-label[data-tone="blue"] { --tds-label-fill: var(--tds-bg-high-blue); --tds-label-gradient: var(--tds-gradient-blue); }
+.tds-label[data-tone="green"] { --tds-label-fill: var(--tds-bg-high-green); --tds-label-gradient: var(--tds-gradient-green); }
+.tds-label[data-tone="yellow"] { --tds-label-fill: var(--tds-bg-high-yellow); --tds-label-gradient: var(--tds-gradient-orange); }
+.tds-label[data-tone="magenta"] { --tds-label-fill: var(--tds-bg-high-magenta); --tds-label-gradient: var(--tds-gradient-purple); }
+.tds-label[data-tone="orange"] { --tds-label-fill: var(--tds-text-analytic); --tds-label-gradient: var(--tds-gradient-orange); }
+.tds-label[data-tone="purple"] { --tds-label-fill: var(--tds-bg-high-purple); --tds-label-gradient: var(--tds-gradient-purple); }
+.tds-label[data-tone="turquoise"] { --tds-label-fill: var(--tds-bg-high-turquoise); --tds-label-gradient: var(--tds-gradient-tosca); }
+/* Gradient only: Figma ships no solid Violet, so the fill is the gradient. */
+.tds-label[data-tone="violet"] { --tds-label-fill: var(--tds-gradient-violet); --tds-label-gradient: var(--tds-gradient-violet); }
+.tds-label[data-tone="neutral"] { --tds-label-fill: var(--tds-bg-sunken-surface); }
+
+.tds-label[data-kind="ribbon"],
+.tds-label[data-kind="secondary"],
+.tds-label[data-kind="multi"] .tds-label__pill {
+  background: var(--tds-label-fill);
+  color: var(--tds-text-invert);
+}
+
+.tds-label[data-kind="ribbon"][data-gradient="true"],
+.tds-label[data-kind="secondary"][data-gradient="true"],
+.tds-label[data-kind="multi"][data-gradient="true"] .tds-label__pill {
+  background: var(--tds-label-gradient);
+}
+
+/*
+ * Ribbon: a flag with a notch cut out of the trailing edge. Padding is asymmetric
+ * (8px leading, 3px trailing) so the text stays clear of the notch.
+ */
+.tds-label[data-kind="ribbon"] {
+  min-height: 20px;
+  padding: var(--tds-space-2) 11px var(--tds-space-2) var(--tds-space-8);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 50%, 100% 100%, 0 100%);
+}
+
+/* --- Secondary and Multi ---------------------------------------------------- */
+
+.tds-label[data-kind="secondary"],
+.tds-label[data-kind="multi"] .tds-label__pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tds-space-4);
+  box-sizing: border-box;
+  min-height: 20px;
+  padding: var(--tds-space-2) var(--tds-space-8);
+  overflow: clip;
+  border-radius: var(--tds-radius-xs);
+}
+
+.tds-label__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+}
+
+/*
+ * Figma groups the icon with the text at 2px and sets the chip's own gap to 4, so the
+ * countdown stands apart from the pair. Pulling the icon 2px closer is the same spacing
+ * without a wrapper element between the label and its children.
+ */
+.tds-label[data-kind="secondary"] > .tds-label__icon,
+.tds-label[data-kind="multi"] .tds-label__pill > .tds-label__icon {
+  margin-right: -2px;
+}
+
+.tds-label__icon[data-size="12"] {
+  width: 12px;
+  height: 12px;
+}
+
+.tds-label__icon[data-size="16"] {
+  width: 16px;
+  height: 16px;
+}
+
+.tds-label__icon[data-size] > svg,
+.tds-label__icon[data-size] > img {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Multi is two chips, the leading one overlapping the trailing one by 8px so its rounded
+ * corner covers the trailing chip's square one. `isolation` keeps that stacking inside the
+ * label instead of competing with whatever it is pinned to.
+ */
+.tds-label[data-kind="multi"] {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 0;
+  isolation: isolate;
+  padding: 0;
+}
+
+.tds-label[data-kind="multi"] .tds-label__pill {
+  z-index: 2;
+  margin-right: -8px;
+}
+
+.tds-label[data-kind="multi"] .tds-label__extra {
+  display: inline-flex;
+  z-index: 1;
+  align-items: center;
+  gap: var(--tds-space-2);
+  box-sizing: border-box;
+  padding: var(--tds-space-2) var(--tds-space-4) var(--tds-space-2) var(--tds-space-12);
+  overflow: clip;
+  background: var(--tds-label-extra-bg, var(--tds-bg-sunken-surface));
+  border-radius: 0 var(--tds-radius-xs) var(--tds-radius-xs) 0;
+  color: var(--tds-label-extra-text, var(--tds-text-high-emphasis));
+}
+
+/*
+ * The trailing chip does not follow the tone: Red pairs with yellow and Orange with red,
+ * while Green and Blue stay in family. Read per tone from Figma rather than derived, and
+ * flagged in DESIGN-SYSTEM.md — the pairing looks deliberate but is not stated anywhere.
+ */
+.tds-label[data-kind="multi"][data-tone="red"] { --tds-label-extra-bg: var(--tds-bg-low-yellow); --tds-label-extra-text: var(--tds-text-alert); }
+.tds-label[data-kind="multi"][data-tone="green"] { --tds-label-extra-bg: var(--tds-bg-low-green); --tds-label-extra-text: var(--tds-text-positive); }
+.tds-label[data-kind="multi"][data-tone="blue"] { --tds-label-extra-bg: var(--tds-bg-low-blue); --tds-label-extra-text: var(--tds-text-high-emphasis); }
+.tds-label[data-kind="multi"][data-tone="orange"] { --tds-label-extra-bg: var(--tds-bg-low-red); --tds-label-extra-text: var(--tds-text-alert); }

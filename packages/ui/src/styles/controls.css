@@ -1,0 +1,355 @@
+/* Toggle, Radio and SegmentedControl. Figma: Control - 01 Selection, Control - 02 Segmented. */
+
+/* --- Toggle ---------------------------------------------------------------- */
+
+.tds-toggle {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.tds-toggle__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.tds-toggle__track {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: var(--tds-space-2);
+  background: var(--tds-color-neutral-n400);
+  border-radius: var(--tds-radius-full);
+  pointer-events: none;
+  transition: background-color var(--tds-duration-fast) var(--tds-ease-out);
+}
+
+.tds-toggle__handle {
+  display: block;
+  background: var(--tds-bg-static-white);
+  border-radius: var(--tds-radius-full);
+  transition: transform var(--tds-duration-fast) var(--tds-ease-spring);
+}
+
+.tds-toggle[data-size="large"] .tds-toggle__track { width: 48px; height: 30px; }
+.tds-toggle[data-size="large"] .tds-toggle__handle { width: 26px; height: 26px; }
+.tds-toggle[data-size="large"] .tds-toggle__input:checked + .tds-toggle__track .tds-toggle__handle { transform: translateX(18px); }
+
+.tds-toggle[data-size="small"] .tds-toggle__track { width: 38px; height: 24px; }
+.tds-toggle[data-size="small"] .tds-toggle__handle { width: 20px; height: 20px; }
+.tds-toggle[data-size="small"] .tds-toggle__input:checked + .tds-toggle__track .tds-toggle__handle { transform: translateX(14px); }
+
+.tds-toggle__input:checked + .tds-toggle__track {
+  background: var(--tds-bg-high-blue);
+}
+
+.tds-toggle__input:disabled {
+  cursor: not-allowed;
+}
+
+.tds-toggle__input:disabled + .tds-toggle__track {
+  background: var(--tds-bg-disabled-surface);
+}
+
+.tds-toggle__input:disabled + .tds-toggle__track .tds-toggle__handle {
+  background: var(--tds-bg-backdrop-surface);
+}
+
+.tds-toggle__input:checked:disabled + .tds-toggle__track {
+  background: var(--tds-color-blue-b200);
+}
+
+.tds-toggle__input:checked:disabled + .tds-toggle__track .tds-toggle__handle {
+  background: var(--tds-bg-static-white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tds-toggle__handle,
+  .tds-toggle__track {
+    transition: none;
+  }
+}
+
+/* --- Quantity editor -------------------------------------------------------- */
+
+.tds-quantity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-4);
+  min-width: 92px;
+  font-family: var(--tds-font-family);
+}
+
+.tds-quantity__step {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--tds-stroke-active);
+  border-radius: var(--tds-radius-full);
+  color: var(--tds-icon-active);
+  cursor: pointer;
+}
+
+.tds-quantity__step > svg {
+  width: 24px;
+  height: 24px;
+}
+
+/*
+ * Figma's spent button keeps its 1px ring and drops to the low-emphasis grey rather than
+ * the disabled grey — a step you can't take yet still has to read as a control.
+ */
+.tds-quantity__step:disabled {
+  border-color: var(--tds-stroke-light);
+  color: var(--tds-icon-low-emphasis);
+  cursor: not-allowed;
+}
+
+.tds-quantity__field {
+  flex: 1;
+  box-sizing: border-box;
+  min-width: 20px;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-family: inherit;
+  font-size: var(--tds-font-size-body3-bold);
+  line-height: var(--tds-line-height-body3-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+  text-align: center;
+}
+
+.tds-quantity__field:disabled {
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}
+
+/* --- Slider ---------------------------------------------------------------- */
+
+/*
+ * Geometry: a 22px thumb on a 4px track, so the thumb centre travels between 11px and
+ * (100% - 11px) — which is exactly where a native range thumb goes, and why the fill can
+ * be positioned off the same two numbers.
+ */
+.tds-slider {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 22px;
+}
+
+.tds-slider__rail,
+.tds-slider__fill {
+  position: absolute;
+  top: 50%;
+  height: 4px;
+  border-radius: var(--tds-radius-full);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.tds-slider__rail {
+  right: 0;
+  left: 0;
+  background: var(--tds-bg-disabled-surface);
+}
+
+.tds-slider__fill {
+  right: calc(11px + (100% - 22px) * (1 - var(--tds-slider-end)));
+  left: calc(11px + (100% - 22px) * var(--tds-slider-start));
+  background: var(--tds-bg-high-blue);
+}
+
+/*
+ * The two inputs are stacked on top of each other, so the input itself has to be
+ * transparent to pointers and only the thumb may take them — otherwise the upper input
+ * swallows every drag, including the ones meant for the thumb underneath it.
+ */
+.tds-slider__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: none;
+  appearance: none;
+  pointer-events: none;
+}
+
+.tds-slider[data-stacked="start"] .tds-slider__input[data-thumb="start"],
+.tds-slider[data-stacked="end"] .tds-slider__input[data-thumb="end"] {
+  z-index: 1;
+}
+
+.tds-slider__input::-webkit-slider-runnable-track {
+  height: 100%;
+  background: none;
+}
+
+.tds-slider__input::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  background: var(--tds-bg-base-surface);
+  border: 0;
+  border-radius: var(--tds-radius-full);
+  box-shadow: var(--tds-elevation-e01);
+  appearance: none;
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.tds-slider__input::-moz-range-track {
+  height: 100%;
+  background: none;
+}
+
+.tds-slider__input::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 22px;
+  height: 22px;
+  background: var(--tds-bg-base-surface);
+  border: 0;
+  border-radius: var(--tds-radius-full);
+  box-shadow: var(--tds-elevation-e01);
+  pointer-events: auto;
+  cursor: grab;
+}
+
+/* Figma's `Focussed` state: the ring goes on the thumb, so the shared focus outline in
+   base.css would land on the full-width input instead of where the eye is. */
+.tds-slider__input:focus-visible {
+  outline: none;
+}
+
+.tds-slider__input:focus-visible::-webkit-slider-thumb {
+  border: var(--tds-focus-ring-width) solid var(--tds-stroke-active);
+}
+
+.tds-slider__input:focus-visible::-moz-range-thumb {
+  border: var(--tds-focus-ring-width) solid var(--tds-stroke-active);
+}
+
+/* --- Radio ----------------------------------------------------------------- */
+
+.tds-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-high-emphasis);
+  cursor: pointer;
+}
+
+.tds-radio__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/*
+ * Figma draws selection as a thick ring rather than a nested dot, so border-width is
+ * what changes between states — 1px unselected, 6px selected.
+ */
+.tds-radio__control {
+  box-sizing: border-box;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background: var(--tds-bg-base-surface);
+  border: 1px solid var(--tds-stroke-light);
+  border-radius: var(--tds-radius-full);
+  transition: border var(--tds-duration-instant) var(--tds-ease-out);
+}
+
+.tds-radio__input:checked + .tds-radio__control {
+  border: 6px solid var(--tds-stroke-active);
+}
+
+.tds-radio[data-error="true"] .tds-radio__control {
+  border-color: var(--tds-stroke-alert);
+}
+
+.tds-radio__input:disabled + .tds-radio__control {
+  background: var(--tds-bg-disabled-surface);
+}
+
+.tds-radio__input:checked:disabled + .tds-radio__control {
+  background: var(--tds-bg-base-surface);
+  border-color: var(--tds-stroke-light);
+}
+
+.tds-radio:has(.tds-radio__input:disabled) {
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}
+
+/* --- Segmented control ----------------------------------------------------- */
+
+.tds-segmented {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--tds-space-4);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.tds-segmented[data-shape="squircle"] { border-radius: var(--tds-radius-sm); }
+.tds-segmented[data-shape="pill"] { border-radius: var(--tds-radius-full); }
+
+.tds-segmented[data-size="medium"] { gap: var(--tds-space-8); }
+.tds-segmented[data-size="small"] { gap: var(--tds-space-4); }
+
+.tds-segmented__item {
+  flex: 1;
+  box-sizing: border-box;
+  border: 0;
+  background: transparent;
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-low-emphasis);
+  cursor: pointer;
+  transition:
+    background-color var(--tds-duration-instant) var(--tds-ease-out),
+    color var(--tds-duration-instant) var(--tds-ease-out);
+}
+
+.tds-segmented[data-shape="squircle"] .tds-segmented__item { border-radius: var(--tds-radius-sm); }
+.tds-segmented[data-shape="pill"] .tds-segmented__item { border-radius: var(--tds-radius-full); }
+
+.tds-segmented[data-size="medium"] .tds-segmented__item {
+  min-height: 32px;
+  padding: var(--tds-space-6) var(--tds-space-8);
+}
+
+.tds-segmented[data-size="small"] .tds-segmented__item {
+  min-height: 28px;
+  padding: 5px var(--tds-space-8);
+}
+
+.tds-segmented__item[data-selected="true"] {
+  background: var(--tds-bg-base-surface);
+  color: var(--tds-text-high-emphasis);
+  font-weight: var(--tds-font-weight-bold);
+}
+
+.tds-segmented__item:disabled {
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}

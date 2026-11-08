@@ -1,0 +1,592 @@
+/*
+ * The portal's own style: everything outside a device frame (the side menu, side panels and the
+ * portal pages). A neutral dashboard look in the manner of a Tailwind admin theme: zinc greys, the
+ * system font, white cards with a hairline border. The Tiket design system (`--tds-*`, `@tiket-ds/ui`)
+ * is for the mockups only; portal CSS uses these instead.
+ */
+:root {
+  --portal-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Surfaces: the page and the menu sit on grey, content on white. */
+  --portal-bg: oklch(96.7% 0.001 286.375);
+  --portal-surface: #fff;
+  --portal-hover: oklch(92% 0.004 286.32 / 60%);
+  --portal-border: oklch(92% 0.004 286.32);
+  --portal-border-strong: oklch(87.1% 0.006 286.286);
+
+  /* Text */
+  --portal-text: oklch(14.1% 0.005 285.823);
+  --portal-text-muted: oklch(55.2% 0.016 285.938);
+
+  /* Accent and states */
+  --portal-primary: oklch(62.3% 0.214 259.815);
+  --portal-primary-hover: oklch(54.6% 0.245 262.881);
+  --portal-primary-soft: oklch(97% 0.014 254.604);
+  --portal-primary-soft-hover: oklch(93.2% 0.032 255.585);
+  --portal-success: oklch(62.7% 0.194 149.214);
+  --portal-success-soft: oklch(96.2% 0.044 156.743);
+  --portal-warning: oklch(64.6% 0.222 41.116);
+  --portal-warning-soft: oklch(95.4% 0.038 75.164);
+  --portal-danger: oklch(57.7% 0.245 27.325);
+  --portal-danger-soft: oklch(93.6% 0.032 17.717);
+
+  /* Type: 12 / 13 / 14 / 16 / 18 */
+  --portal-text-xs: 12px;
+  --portal-text-sm: 13px;
+  --portal-text-base: 14px;
+  --portal-text-lg: 16px;
+  --portal-text-xl: 18px;
+
+  --portal-radius-sm: 6px;
+  --portal-radius: 8px;
+  --portal-radius-lg: 12px;
+  --portal-shadow-xs: 0 1px 2px oklch(0% 0 0 / 5%);
+  --portal-shadow: 0 4px 12px oklch(0% 0 0 / 8%);
+}
+
+/* A portal page: its background behind everything, the mockups included. */
+:root[data-side-menu] body {
+  margin: 0;
+  background: var(--portal-bg);
+}
+
+.portal {
+  font-family: var(--portal-font);
+  font-size: var(--portal-text-base);
+  line-height: 1.43;
+  color: var(--portal-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.p-muted {
+  color: var(--portal-text-muted);
+}
+
+.p-text-xs {
+  font-size: var(--portal-text-xs);
+  line-height: 16px;
+}
+
+/* Buttons: primary (filled), soft (tinted) and outline. */
+.p-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: var(--portal-radius-sm);
+  background: var(--portal-primary);
+  color: #fff;
+  font: 500 var(--portal-text-sm) / 1 var(--portal-font);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.p-btn:hover {
+  background: var(--portal-primary-hover);
+}
+
+.p-btn--soft {
+  background: var(--portal-primary-soft);
+  color: var(--portal-primary);
+}
+
+.p-btn--soft:hover {
+  background: var(--portal-primary-soft-hover);
+}
+
+.p-btn--outline {
+  border-color: var(--portal-border);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  box-shadow: var(--portal-shadow-xs);
+}
+
+.p-btn--outline:hover {
+  background: var(--portal-bg);
+}
+
+.p-btn:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+.portal :is(h1, h2, h3, h4, p, dl, dd, figure) {
+  margin: 0;
+}
+
+.portal code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--portal-bg);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.86em;
+}
+
+/* Type: page title, card title, small title, big number; then secondary sizes and tones. */
+.p-h1 {
+  font-size: var(--portal-text-xl);
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.p-h2 {
+  font-size: var(--portal-text-lg);
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.p-h3 {
+  font-size: var(--portal-text-base);
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.p-strong {
+  font-weight: 600;
+}
+
+.p-num {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 34px;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+.p-sm {
+  font-size: var(--portal-text-sm);
+  line-height: 18px;
+}
+
+.p-link {
+  color: var(--portal-primary);
+}
+
+.p-success {
+  color: var(--portal-success);
+}
+
+.p-warning {
+  color: var(--portal-warning);
+}
+
+.p-danger {
+  color: var(--portal-danger);
+}
+
+.p-clamp2 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* A portal page's column, and the white cards in it. */
+.p-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.p-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-lg);
+  background: var(--portal-surface);
+}
+
+.p-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.p-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.p-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Status badges: a tinted pill. */
+.p-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 0 8px;
+  border-radius: var(--portal-radius-sm);
+  background: var(--portal-bg);
+  color: var(--portal-text-muted);
+  font-size: var(--portal-text-xs);
+  font-weight: 500;
+}
+
+.p-badge--success {
+  background: var(--portal-success-soft);
+  color: var(--portal-success);
+}
+
+.p-badge--warning {
+  background: var(--portal-warning-soft);
+  color: var(--portal-warning);
+}
+
+/* A label and value list, a row each. */
+.p-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.p-meta > div {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.p-meta > div + div {
+  border-top: 1px dashed var(--portal-border);
+}
+
+.p-meta dt {
+  color: var(--portal-text-muted);
+  font-size: var(--portal-text-sm);
+}
+
+.p-btn--danger {
+  background: var(--portal-danger);
+}
+
+.p-btn--danger:hover {
+  background: oklch(50.5% 0.213 27.518);
+}
+
+.p-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* Busy: the label stays, a spinner leads it. */
+.p-btn[aria-busy="true"]::before,
+.p-spinner {
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: p-spin 700ms linear infinite;
+  content: "";
+}
+
+@keyframes p-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* An icon button: square, quiet until hovered. */
+.p-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--portal-radius-sm);
+  background: none;
+  color: var(--portal-text-muted);
+  cursor: pointer;
+}
+
+.p-icon-btn:hover {
+  background: var(--portal-bg);
+  color: var(--portal-text);
+}
+
+.p-icon-btn--danger:hover {
+  background: var(--portal-danger-soft);
+  color: var(--portal-danger);
+}
+
+.p-icon-btn:focus-visible,
+.p-input:focus-visible,
+.p-seg button:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 1px;
+}
+
+/* Form fields: a label over the control, help or the error under it. */
+.p-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.p-field__label {
+  font-size: var(--portal-text-sm);
+  font-weight: 500;
+}
+
+.p-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-sm);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  font: var(--portal-text-base) / 1.43 var(--portal-font);
+  box-shadow: var(--portal-shadow-xs);
+}
+
+textarea.p-input {
+  padding: 8px 12px;
+}
+
+.p-input:disabled {
+  background: var(--portal-bg);
+  color: var(--portal-text-muted);
+  box-shadow: none;
+}
+
+.p-input::placeholder {
+  color: var(--portal-text-muted);
+}
+
+.p-field[data-error] .p-input {
+  border-color: var(--portal-danger);
+}
+
+.p-field__help {
+  color: var(--portal-text-muted);
+  font-size: var(--portal-text-xs);
+}
+
+.p-field[data-error] .p-field__help {
+  color: var(--portal-danger);
+}
+
+/* Segmented tabs: a grey track, the picked one raised in white. */
+.p-seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--portal-radius);
+  background: var(--portal-bg);
+}
+
+.p-seg button {
+  min-height: 28px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: var(--portal-radius-sm);
+  background: none;
+  color: var(--portal-text-muted);
+  font: 500 var(--portal-text-sm) / 1 var(--portal-font);
+  cursor: pointer;
+}
+
+.p-seg button:hover {
+  color: var(--portal-text);
+}
+
+.p-seg button[aria-pressed="true"] {
+  border-color: var(--portal-border);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  box-shadow: var(--portal-shadow-xs);
+}
+
+/* A radio list: a bordered list, a row per choice, the picked row tinted. */
+.p-radios {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  background: var(--portal-surface);
+  font: var(--portal-text-base) / 1.43 var(--portal-font);
+  color: var(--portal-text);
+}
+
+.p-radios__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.p-radios__row + .p-radios__row {
+  border-top: 1px solid var(--portal-border);
+}
+
+.p-radios__row:hover {
+  background: var(--portal-hover);
+}
+
+.p-radios__row:has(input:checked) {
+  background: var(--portal-primary-soft);
+  font-weight: 500;
+}
+
+.p-radios__label {
+  flex: 1;
+  min-width: 0;
+}
+
+.p-radios input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--portal-primary);
+}
+
+.p-radios input:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+/* A switch: the native checkbox, redrawn as a track and a knob. */
+.p-switch {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 18px;
+  margin: 0;
+  border-radius: 999px;
+  background: var(--portal-border-strong);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+
+.p-switch::before {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--portal-shadow-xs);
+  content: "";
+  transition: transform 150ms ease-out;
+}
+
+.p-switch:checked {
+  background: var(--portal-primary);
+}
+
+.p-switch:checked::before {
+  transform: translateX(14px);
+}
+
+.p-switch:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+/* A button that reads as a link: Reset, Remove. */
+.p-text-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--portal-primary);
+  font: 500 var(--portal-text-sm) / 18px var(--portal-font);
+  cursor: pointer;
+}
+
+.p-text-btn:hover {
+  text-decoration: underline;
+}
+
+.p-text-btn:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* A popup on the native <dialog>: centred, over a dimmed page. */
+.p-dialog {
+  box-sizing: border-box;
+  width: min(480px, 100% - 32px);
+  max-height: 90vh;
+  padding: 0;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-lg);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  box-shadow: 0 20px 48px oklch(0% 0 0 / 18%);
+}
+
+.p-dialog::backdrop {
+  background: oklch(14.1% 0.005 285.823 / 40%);
+}
+
+.p-dialog__inner {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.p-dialog__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--portal-border);
+}
+
+.p-dialog__body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.p-dialog__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--portal-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p-btn[aria-busy="true"]::before,
+  .p-spinner {
+    animation-duration: 2s;
+  }
+
+  .p-switch,
+  .p-switch::before {
+    transition: none;
+  }
+}

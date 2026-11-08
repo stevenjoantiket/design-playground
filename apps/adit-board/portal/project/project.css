@@ -1,0 +1,179 @@
+/* The Project page (App.tsx): the Jira tasks as a board, a column per status or per designer. */
+
+/* The board wants the whole width, not the portal's reading column. */
+.pj-main {
+  max-width: none;
+}
+
+.pj-board {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.pj-column {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 10px;
+  width: 272px;
+  padding: 12px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-lg);
+  background: var(--portal-surface);
+}
+
+/* The column's status and its count. */
+.pj-column__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0;
+  font-size: var(--portal-text-sm);
+  font-weight: 600;
+}
+
+.pj-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A task: its name, its designers, then its squad, priority and key; it opens the issue in Jira. */
+.pj-task {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  text-decoration: none;
+}
+
+.pj-task:hover {
+  border-color: var(--portal-border-strong);
+  box-shadow: var(--portal-shadow);
+}
+
+.pj-more summary {
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.pj-more[open] summary {
+  margin-bottom: 10px;
+}
+
+.pj-task:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+.pj-summary {
+  font-size: var(--portal-text-sm);
+  font-weight: 500;
+}
+
+.pj-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pj-priority[data-priority="Highest"],
+.pj-priority[data-priority="High"] {
+  background: var(--portal-danger-soft);
+  color: var(--portal-danger);
+}
+
+.pj-priority[data-priority="Medium"] {
+  background: var(--portal-warning-soft);
+  color: var(--portal-warning);
+}
+
+.pj-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: 6px;
+}
+
+.pj-squad {
+  border: 1px solid var(--portal-border);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+}
+
+.pj-status {
+  gap: 6px;
+  border: 1px solid var(--portal-border);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+}
+
+/* The status category as a dot: to do grey, in progress blue, done green. */
+.pj-status::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--portal-border-strong);
+  content: "";
+}
+
+.pj-status[data-category="indeterminate"]::before {
+  background: var(--portal-primary);
+}
+
+.pj-status[data-category="done"]::before {
+  background: var(--portal-success);
+}
+
+.pj-designer {
+  background: var(--portal-primary-soft);
+  color: var(--portal-primary);
+}
+
+/* --- Report per designer: a table, scrolling sideways on a phone ---------- */
+
+.pj-report {
+  overflow-x: auto;
+}
+
+.pj-report table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--portal-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.pj-report th,
+.pj-report td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--portal-border);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.pj-report th:first-child,
+.pj-report th:last-child,
+.pj-report td:last-child {
+  text-align: left;
+}
+
+.pj-report thead th {
+  color: var(--portal-text-muted);
+  font-weight: 400;
+}
+
+.pj-report tbody th {
+  font-weight: 500;
+}

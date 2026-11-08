@@ -1,0 +1,315 @@
+/* The prototype's side panel (panel.tsx, FigmaFiles.tsx, payment's UxPanel.tsx), in the portal's style. */
+
+/* A narrow column: cards a little tighter than the portal pages'. */
+.pn-card {
+  flex: none;
+  gap: 14px;
+  padding: 16px;
+}
+
+.pn-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Hide the panel: a quiet icon button, pulled into the title row's height. */
+.pn-hide {
+  width: 28px;
+  height: 28px;
+  margin: -4px -6px -4px 0;
+}
+
+/* Hidden: one button floating top right, over the page, that shows the panel again. */
+.pn-float {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 20;
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-sm);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  box-shadow: var(--portal-shadow);
+  cursor: pointer;
+}
+
+.pn-float:hover {
+  background: var(--portal-bg);
+}
+
+.pn-float:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+/* Minimized: only the title row stays. */
+.pn-card[data-collapsed] > :not(.pn-head) {
+  display: none;
+}
+
+.pn-fold {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.pn-fold svg {
+  color: var(--portal-text-muted);
+  transition: transform 150ms ease-out;
+}
+
+.pn-fold[aria-expanded="false"] svg {
+  transform: rotate(-90deg);
+}
+
+.pn-fold:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* A group inside a card, set apart from the next by a line. */
+.pn-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--portal-border);
+}
+
+/* --- Screen width: a tile per width, with an outline of the screen ------- */
+
+.pn-widths {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 6px;
+}
+
+.pn-width {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 2px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  color: var(--portal-text-muted);
+  font-size: var(--portal-text-xs);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pn-width:hover {
+  background: var(--portal-hover);
+}
+
+.pn-width[data-disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pn-width[data-disabled]:hover {
+  background: none;
+}
+
+.pn-width[data-disabled] input {
+  cursor: not-allowed;
+}
+
+.pn-width[data-selected] {
+  border-color: var(--portal-primary);
+  background: var(--portal-primary-soft);
+  color: var(--portal-primary);
+}
+
+/* The real radio covers the tile, so the whole tile is the target and keyboard focus still shows. */
+.pn-width input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pn-width:has(input:focus-visible) {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+.pn-width__box {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 20px;
+}
+
+/* Narrower for the phone, wider as the screen gets wider. */
+.pn-width__shape {
+  height: 16px;
+  box-sizing: border-box;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+}
+
+.pn-width__shape[data-size="412"] { width: 10px; }
+.pn-width__shape[data-size="839"] { width: 18px; }
+.pn-width__shape[data-size="840"] { width: 22px; }
+.pn-width__shape[data-size="1440"] { width: 30px; }
+
+/* --- UX case ------------------------------------------------------------- */
+
+/* A common case's Mixpanel share, at the end of its row; it opens the report. */
+.pn-share {
+  color: var(--portal-text-muted);
+  font-size: var(--portal-text-xs);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.p-radios__row:has(input:checked) .pn-share {
+  color: var(--portal-primary);
+}
+
+.pn-share:hover {
+  text-decoration: underline;
+}
+
+/* The Mixpanel line under the cases: opens the project's Mixpanel page. */
+.pn-mixpanel {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--portal-text-xs);
+  text-decoration: none;
+}
+
+.pn-mixpanel:hover .p-link {
+  text-decoration: underline;
+}
+
+/* The order case: a select-like button that opens the picker. */
+.pn-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.pn-select > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pn-select svg {
+  color: var(--portal-text-muted);
+}
+
+/* A switch row: the name and what it does, the switch on the right. */
+.pn-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.pn-row > span {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+/* --- Order case picker: a wide popup of real order cards ----------------- */
+
+.pn-cases {
+  width: min(1200px, 100% - 32px);
+}
+
+.pn-group {
+  margin: 0;
+  padding: 16px 20px 20px;
+  border: 0;
+}
+
+.pn-group + .pn-group {
+  border-top: 1px solid var(--portal-border);
+}
+
+.pn-group legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 0;
+  font-weight: 600;
+}
+
+.pn-group__grid {
+  clear: both;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+
+.pn-case {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+  cursor: pointer;
+}
+
+.pn-case:hover {
+  border-color: var(--portal-border-strong);
+}
+
+.pn-case:has(input:checked) {
+  border-color: var(--portal-primary);
+  box-shadow: 0 0 0 1px var(--portal-primary);
+}
+
+.pn-case__name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.pn-case input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--portal-primary);
+}
+
+/* The order card itself is a mockup piece, in the Tiket design system. */
+.pn-case__preview {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pn-fold svg {
+    transition: none;
+  }
+}

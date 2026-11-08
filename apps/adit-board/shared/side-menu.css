@@ -1,0 +1,388 @@
+/* The side menu, in the portal's style (`portal.css`): no Tiket design system here. */
+
+/* Room for the menu down the left (12px in, 240 wide, 12px gap); set on <html> by `SideMenu` (never in embed mode). */
+:root[data-side-menu="docked"] body {
+  padding-left: 264px;
+}
+
+/* A white card floating 12px in from the window's edges, like the right panel's cards. */
+.side-menu__body {
+  position: fixed;
+  inset: 12px auto 12px 12px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 240px;
+  box-sizing: border-box;
+  padding: 16px 12px;
+  overflow-y: auto;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius-lg);
+  background: var(--portal-surface);
+}
+
+.side-menu__home,
+.side-menu__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: var(--portal-radius-sm);
+  color: var(--portal-text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.side-menu__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.side-menu__brand {
+  font-size: var(--portal-text-lg);
+  font-weight: 600;
+}
+
+.side-menu__label {
+  font-size: var(--portal-text-base);
+  font-weight: 500;
+}
+
+/* A project's or page's emoji icon, a fixed width so the names line up. */
+.side-menu__emoji {
+  display: inline-block;
+  width: 20px;
+  margin-right: 8px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* An experiment's name: one line, cut short with an ellipsis. */
+.side-menu__ellipsis {
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--portal-text-sm);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-menu__chevron {
+  display: inline-flex;
+  color: var(--portal-text-muted);
+}
+
+.side-menu__minimize,
+.side-menu__float {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--portal-radius-sm);
+  background: transparent;
+  color: var(--portal-text-muted);
+  cursor: pointer;
+}
+
+/* Minimized: one button floating top left, over the page. */
+.side-menu__float {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 20;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--portal-border);
+  background: var(--portal-surface);
+  color: var(--portal-text);
+  box-shadow: var(--portal-shadow);
+}
+
+.side-menu__minimize:hover,
+.side-menu__float:hover {
+  background: var(--portal-hover);
+}
+
+.side-menu__minimize:focus-visible,
+.side-menu__float:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+/* The chevron replaces the browser's own marker and turns when the project opens. */
+.side-menu__row::-webkit-details-marker {
+  display: none;
+}
+
+summary.side-menu__row {
+  list-style: none;
+}
+
+summary.side-menu__row svg {
+  transition: transform 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.side-menu__project[open] > summary svg {
+  transform: rotate(180deg);
+}
+
+.side-menu__pages {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0 8px;
+  /* Under the project's name, past its emoji. */
+  padding: 0 0 0 28px;
+  list-style: none;
+}
+
+.side-menu__pages .side-menu__label {
+  font-weight: 400;
+}
+
+/* The experiments under Experimentation: one line each, hung off a guide line under its text. */
+.side-menu__subs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0 0 12px;
+  padding: 0 0 0 8px;
+  border-left: 1px solid var(--portal-border);
+  list-style: none;
+}
+
+.side-menu__sub {
+  justify-content: flex-start;
+  min-height: 30px;
+  padding: 0 8px;
+}
+
+.side-menu__count {
+  min-width: 20px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border: 1px solid var(--portal-border);
+  border-radius: 999px;
+  background: var(--portal-surface);
+  color: var(--portal-text-muted);
+  font-size: var(--portal-text-xs);
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* "Add new experiment", under Jobs & skills. */
+.side-menu__add {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.side-menu__home:hover,
+.side-menu__row:hover {
+  background: var(--portal-hover);
+}
+
+/* The page you're on: a grey pill on the white card. */
+.side-menu__row[aria-current="page"] {
+  background: var(--portal-bg);
+}
+
+.side-menu__row[aria-current="page"] .side-menu__label,
+.side-menu__row[aria-current="page"] .side-menu__ellipsis {
+  font-weight: 500;
+}
+
+.side-menu__home:focus-visible,
+.side-menu__row:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  summary.side-menu__row svg {
+    transition: none;
+  }
+}
+
+/* Pinned to the bottom of the menu: the plan's 5-hour and weekly limits. */
+.side-menu__usage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid var(--portal-border);
+  border-radius: var(--portal-radius);
+}
+
+/* The footer's title row minimizes and expands it; the chevron turns with it. */
+.side-menu__usage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: -4px;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--portal-radius-sm);
+  background: transparent;
+  color: var(--portal-text-muted);
+  font: 500 var(--portal-text-xs) / 16px var(--portal-font);
+  cursor: pointer;
+}
+
+.side-menu__usage-head:hover {
+  background: var(--portal-hover);
+}
+
+.side-menu__usage-head:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 0;
+}
+
+.side-menu__usage-head svg {
+  transform: rotate(180deg);
+  transition: transform 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.side-menu__usage[data-open] .side-menu__usage-head svg {
+  transform: none;
+}
+
+.side-menu__limits {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Minimized: the two limits side by side. */
+.side-menu__limits--compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.side-menu__limits--compact .side-menu__meter {
+  height: 4px;
+}
+
+.side-menu__limit {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.side-menu__limit-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.side-menu__percent {
+  font-size: var(--portal-text-sm);
+  font-weight: 600;
+  color: var(--portal-text-muted);
+}
+
+/* The meter: a track tinted the limit's colour, filled as far as it is used. */
+.side-menu__meter {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--portal-bg);
+}
+
+.side-menu__meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 400ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.side-menu__limit[data-level="positive"] .side-menu__percent {
+  color: var(--portal-success);
+}
+
+.side-menu__limit[data-level="positive"] .side-menu__meter {
+  background: var(--portal-success-soft);
+}
+
+.side-menu__limit[data-level="positive"] .side-menu__meter span {
+  background: var(--portal-success);
+}
+
+.side-menu__limit[data-level="analytic"] .side-menu__percent {
+  color: var(--portal-warning);
+}
+
+.side-menu__limit[data-level="analytic"] .side-menu__meter {
+  background: var(--portal-warning-soft);
+}
+
+.side-menu__limit[data-level="analytic"] .side-menu__meter span {
+  background: var(--portal-warning);
+}
+
+.side-menu__limit[data-level="alert"] .side-menu__percent {
+  color: var(--portal-danger);
+}
+
+.side-menu__limit[data-level="alert"] .side-menu__meter {
+  background: var(--portal-danger-soft);
+}
+
+.side-menu__limit[data-level="alert"] .side-menu__meter span {
+  background: var(--portal-danger);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .side-menu__meter span,
+  .side-menu__usage-head svg {
+    transition: none;
+  }
+}
+
+/* A phone has little room: the menu narrows and the page follows. */
+@media (max-width: 599px) {
+  :root[data-side-menu="docked"] body {
+    padding-left: 184px;
+  }
+
+  .side-menu__body {
+    width: 160px;
+  }
+}
+
+/* Below the projects, set apart from them by a line. */
+.side-menu__extra {
+  position: relative;
+  margin-top: 17px;
+}
+
+.side-menu__extra::before {
+  position: absolute;
+  top: -10px;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: var(--portal-border);
+  content: "";
+}
+
+/* Mixpanel, Research bank, Jobs & skills: one line above the group, not one each. */
+.side-menu__extra + .side-menu__extra {
+  margin-top: 0;
+}
+
+.side-menu__extra + .side-menu__extra::before {
+  content: none;
+}

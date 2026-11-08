@@ -1,0 +1,128 @@
+{
+  "source": "Mixpanel, tiket.com Production",
+  "from": "2025-10-28",
+  "to": "2026-10-27",
+  "syncedAt": "2026-10-28T15:19:44+07:00",
+  "payers": 2079248,
+  "payersNote": "Unique users who tapped Pay now (continuePayment)",
+  "cases": {
+    "returning": {
+      "users": 717123,
+      "summary": "34% of payers",
+      "how": "continuePayment with userType = Existing",
+      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#VSBHWRHiN7WH"
+    },
+    "new": {
+      "users": 1362125,
+      "summary": "66% of payers",
+      "how": "Payers never marked userType = Existing; includes guests and users whose type had not loaded",
+      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#VSBHWRHiN7WH"
+    },
+    "savings": {
+      "users": 358995,
+      "summary": "17% promo · 11% points",
+      "how": "continueWithPromo then continuePayment (358,995) and continueWithTiketPoints then continuePayment (219,864); the two overlap",
+      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#r8hfL631etzT"
+    }
+  },
+  "monthly": {
+    "note": "Unique users per calendar month. The first and last months are partial (the year runs 28 Oct to 27 Oct). Promo and points count people who continued with them, whether or not they then paid.",
+    "reports": {
+      "payers": "https://mixpanel.com/project/3965186/view/4460945/app/insights#Yeq4U2v6frUv",
+      "savings": "https://mixpanel.com/project/3965186/view/4460945/app/insights#AGuPEedEnMJq"
+    },
+    "rows": [
+      {
+        "month": "2025-10",
+        "payers": 27895,
+        "returning": 7921,
+        "promo": 22859,
+        "points": 10401
+      },
+      {
+        "month": "2025-11",
+        "payers": 321270,
+        "returning": 103479,
+        "promo": 145663,
+        "points": 66670
+      },
+      {
+        "month": "2025-12",
+        "payers": 378434,
+        "returning": 122274,
+        "promo": 166780,
+        "points": 77036
+      },
+      {
+        "month": "2026-01",
+        "payers": 323859,
+        "returning": 111330,
+        "promo": 135078,
+        "points": 67516
+      },
+      {
+        "month": "2026-02",
+        "payers": 286707,
+        "returning": 96241,
+        "promo": 125052,
+        "points": 61486
+      },
+      {
+        "month": "2026-03",
+        "payers": 349756,
+        "returning": 90764,
+        "promo": 165623,
+        "points": 106591
+      },
+      {
+        "month": "2026-04",
+        "payers": 262430,
+        "returning": 47375,
+        "promo": 128937,
+        "points": 89054
+      },
+      {
+        "month": "2026-05",
+        "payers": 302090,
+        "returning": 67787,
+        "promo": 131019,
+        "points": 74036
+      },
+      {
+        "month": "2026-06",
+        "payers": 341513,
+        "returning": 95499,
+        "promo": 135089,
+        "points": 73125
+      },
+      {
+        "month": "2026-07",
+        "payers": 263067,
+        "returning": 70960,
+        "promo": 149238,
+        "points": 92928
+      },
+      {
+        "month": "2026-08",
+        "payers": 178547,
+        "returning": 45656,
+        "promo": 149743,
+        "points": 97208
+      },
+      {
+        "month": "2026-09",
+        "payers": 190563,
+        "returning": 55539,
+        "promo": 126277,
+        "points": 78838
+      },
+      {
+        "month": "2026-10",
+        "payers": 208180,
+        "returning": 69929,
+        "promo": 119820,
+        "points": 71843
+      }
+    ]
+  }
+}

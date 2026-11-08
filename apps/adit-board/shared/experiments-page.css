@@ -1,0 +1,434 @@
+/* Experiments page of the payment project: each built experiment's case. Fills the stage column beside the sidebar. */
+
+.xp {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  font-family: var(--tds-font-family);
+  color: var(--tds-text-high-emphasis);
+}
+
+.xp h1,
+.xp h2,
+.xp p,
+.xp dl,
+.xp dd,
+.xp figure {
+  margin: 0;
+}
+
+/* One card, one line: the way back, then the experiments. */
+/* The experiment chips, on the same 1000px column as the cards below. */
+.xp-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-8);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--tds-space-16) var(--tds-space-16) 0;
+}
+
+.xp-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  /* Always the full column, so a tab with little in it is as wide as one with charts. */
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--tds-space-16);
+}
+
+.xp-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-24);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+/* Header: name and links on top; the story beside a panel of who, where and how it is measured. */
+.xp-head {
+  gap: var(--tds-space-24);
+}
+
+.xp-head__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--tds-space-16);
+}
+
+.xp-head__title {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+}
+
+.xp-head__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-8);
+}
+
+.xp-linkbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-4);
+  min-height: 36px;
+  padding: 0 var(--tds-space-12);
+  border: 1px solid var(--tds-stroke-active);
+  border-radius: var(--tds-radius-md);
+  text-decoration: none;
+}
+
+.xp-linkbtn:hover {
+  background: var(--tds-bg-low-blue);
+}
+
+.xp-linkbtn:focus-visible,
+.xp-meta a:focus-visible {
+  outline: 2px solid var(--tds-stroke-active);
+  outline-offset: 2px;
+}
+
+.xp-meta {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: var(--tds-space-4) var(--tds-space-16);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.xp-meta > div {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-12) 0;
+}
+
+.xp-meta > div + div {
+  border-top: 1px solid var(--tds-stroke-disabled);
+}
+
+.xp-meta dt {
+  font-size: var(--tds-font-size-small);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-low-emphasis);
+}
+
+.xp-meta dd {
+  margin: 0;
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-high-emphasis);
+}
+
+.xp-meta a {
+  color: var(--tds-text-active);
+  font-weight: var(--tds-font-weight-bold);
+  text-decoration: none;
+}
+
+.xp-meta a:hover {
+  text-decoration: underline;
+}
+
+.xp-meta__stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--tds-space-4);
+}
+
+.xp-meta__labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-4);
+}
+
+.xp-meta__unset {
+  color: var(--tds-text-low-emphasis);
+}
+
+/* The EDD's header table: a wider label column, since its labels are longer. */
+.xp-meta--wide > div {
+  grid-template-columns: 200px minmax(0, 1fr);
+}
+
+.xp-meta code,
+.xp-table code {
+  padding: 0 var(--tds-space-4);
+  border-radius: var(--tds-radius-sm);
+  background: var(--tds-bg-base-surface);
+  font-size: var(--tds-font-size-small);
+}
+
+.xp-ext,
+.xp-toc button {
+  color: var(--tds-text-active);
+  font-weight: var(--tds-font-weight-bold);
+  text-decoration: none;
+}
+
+.xp-ext:hover,
+.xp-toc button:hover {
+  text-decoration: underline;
+}
+
+.xp-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-4) var(--tds-space-16);
+}
+
+.xp-toc button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.xp-toc button:focus-visible,
+.xp-ext:focus-visible {
+  outline: 2px solid var(--tds-stroke-active);
+  outline-offset: 2px;
+}
+
+/* A part of the EDD (Experiment planning, Results, …) and the headings inside it. */
+.xp-card[id] {
+  scroll-margin-top: var(--tds-space-16);
+}
+
+.xp-part__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+}
+
+.xp-sub {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding-top: var(--tds-space-16);
+  border-top: 1px solid var(--tds-stroke-disabled);
+}
+
+.xp-sub p {
+  max-width: 72ch;
+}
+
+.xp-qa {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+}
+
+.xp-qa__a {
+  padding-left: var(--tds-space-16);
+}
+
+.xp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  margin: 0;
+  padding-left: var(--tds-space-20);
+}
+
+.xp-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  margin: 0;
+  padding-left: var(--tds-space-20);
+}
+
+/* "We hypothesize that … will increase … because …", the EDD's three-line form. */
+.xp-hypo {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: var(--tds-space-8) var(--tds-space-16);
+  margin: 0;
+  padding: var(--tds-space-16);
+  border-left: 4px solid var(--tds-stroke-active);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-low-blue);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+}
+
+.xp-hypo dt {
+  color: var(--tds-text-low-emphasis);
+}
+
+.xp-hypo dd {
+  margin: 0;
+}
+
+.xp-table-wrap {
+  overflow-x: auto;
+}
+
+.xp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  text-align: left;
+  vertical-align: top;
+}
+
+.xp-table th {
+  padding: var(--tds-space-8) var(--tds-space-12);
+  background: var(--tds-bg-sunken-surface);
+  color: var(--tds-text-low-emphasis);
+  font-size: var(--tds-font-size-small);
+  font-weight: var(--tds-font-weight-bold);
+}
+
+.xp-table td {
+  padding: var(--tds-space-12);
+  border-top: 1px solid var(--tds-stroke-disabled);
+  vertical-align: top;
+}
+
+/* Narrow: label above value, so long EDD labels don't squeeze the answer. */
+@media (max-width: 700px) {
+  .xp-meta--wide > div,
+  .xp-hypo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--tds-space-4);
+  }
+}
+
+/* Two live phones, each the prototype's 436 × 965 embed scaled to 80%. */
+.xp-compare {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--tds-space-32);
+}
+
+.xp-compare figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tds-space-12);
+  width: 349px;
+}
+
+.xp-compare figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  text-align: center;
+  color: var(--tds-text-low-emphasis);
+}
+
+.xp-phone {
+  width: 349px;
+  height: 772px;
+  overflow: hidden;
+}
+
+.xp-phone iframe {
+  width: 436px;
+  height: 965px;
+  border: 0;
+  transform: scale(0.8);
+  transform-origin: 0 0;
+}
+
+/* Desktop: the 1440 × 941 embed at 60%, before above after, since two side by side would be too small to read. */
+.xp-compare[data-desktop] {
+  flex-direction: column;
+  align-items: center;
+}
+
+.xp-compare[data-desktop] figure {
+  width: 864px;
+  max-width: 100%;
+}
+
+.xp-screen {
+  width: 864px;
+  max-width: 100%;
+  height: 565px;
+  overflow: hidden;
+  border-radius: var(--tds-radius-md);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+.xp-screen iframe {
+  width: 1440px;
+  height: 941px;
+  border: 0;
+  transform: scale(0.6);
+  transform-origin: 0 0;
+}
+
+.xp-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tds-space-12);
+}
+
+.xp-view {
+  width: 240px;
+}
+
+.xp-fact-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.xp-fact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  padding: var(--tds-space-12) 0;
+  border-top: 1px solid var(--tds-color-neutral-n200);
+}
+
+.xp-fact__claim {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--tds-space-12);
+}
+
+.xp-fact__claim > .tds-label {
+  flex: none;
+}
+
+/* The brief the author attached, as written, in a short scrolling box. */
+.xp-brief {
+  max-height: 360px;
+  margin: 0;
+  padding: var(--tds-space-12);
+  overflow: auto;
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-sunken-surface);
+  font-family: var(--tds-font-family);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.xp-unbuilt {
+  padding: var(--tds-space-12) var(--tds-space-16);
+  border: 1px dashed var(--tds-stroke-disabled);
+  border-radius: var(--tds-radius-md);
+}

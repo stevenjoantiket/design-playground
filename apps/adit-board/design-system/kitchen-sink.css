@@ -1,0 +1,460 @@
+/* Chrome for the preview app only. Nothing here belongs in the design system. */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--tds-font-family);
+  background: var(--tds-bg-backdrop-surface);
+  color: var(--tds-text-high-emphasis);
+}
+
+.ks-root {
+  min-height: 100vh;
+  background: var(--tds-bg-backdrop-surface);
+  color: var(--tds-text-high-emphasis);
+}
+
+.ks-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--tds-space-24) var(--tds-space-20) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-32);
+}
+
+.ks-section {
+  padding: var(--tds-space-20);
+  background: var(--tds-bg-base-surface);
+  border-radius: var(--tds-radius-md);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+.ks-section h2 {
+  margin: 0 0 var(--tds-space-4);
+  font-size: var(--tds-font-size-heading3);
+  line-height: var(--tds-line-height-heading3);
+  font-weight: var(--tds-font-weight-bold);
+}
+
+.ks-section > p:not(.ks-caption) {
+  margin: 0 0 var(--tds-space-20);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-low-emphasis);
+}
+
+.ks-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tds-space-12);
+  margin-bottom: var(--tds-space-16);
+}
+
+.ks-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-16);
+  max-width: 360px;
+}
+
+/*
+ * The navigation and view sets are drawn inside a 360px phone frame, and a bar that fills
+ * its container needs one to fill. The rule is the frame edge, not part of any component.
+ */
+.ks-phone {
+  width: 360px;
+  max-width: 100%;
+  overflow: clip;
+  background: var(--tds-bg-base-surface);
+  border: 1px solid var(--tds-bg-disabled-surface);
+  border-radius: var(--tds-radius-md);
+}
+
+/* A bare button for the slots Figma fills with a back icon or a text link. */
+.ks-linkbutton {
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+/*
+ * A stand-in for the hero photograph the transparent bars sit over. Not a real image: what
+ * has to be visible is that the bar has no surface of its own and the pills do.
+ */
+.ks-phone--hero {
+  min-height: 160px;
+  background: linear-gradient(160deg, var(--tds-bg-high-purple), var(--tds-bg-high-blue));
+  border-color: transparent;
+}
+
+/* A phone tall enough for a picker: a header, months that scroll, a bar at the foot. */
+.ks-phone--tall {
+  display: flex;
+  flex-direction: column;
+  height: 620px;
+}
+
+.ks-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-16);
+  margin-bottom: var(--tds-space-16);
+}
+
+.ks-app-bar {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ------------------------------------------------------------- hero motion --
+ * A landing page's hero, small enough to sit beside its controls: art in a
+ * clipping frame, with the title, tabs and search form over it.
+ */
+.ks-hero {
+  position: relative;
+  width: 320px;
+  height: 260px;
+  overflow: clip;
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-sunken-surface);
+}
+.ks-hero__art {
+  position: absolute;
+  inset: 0;
+}
+.ks-hero__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-20);
+}
+/* The pull tracks the finger, so only the release is animated. */
+.ks-hero[data-springing] .ks-hero__art,
+.ks-hero[data-springing] .ks-hero__body {
+  transition: transform var(--tds-hero-stretch-duration) var(--tds-hero-stretch-easing);
+}
+.ks-hero__tabs {
+  display: flex;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-4);
+  border-radius: var(--tds-radius-full);
+  background: var(--tds-color-alpha-aw40);
+}
+.ks-hero__tabs button {
+  flex: 1 0 0;
+  padding: var(--tds-space-6) var(--tds-space-8);
+  border: 0;
+  border-radius: var(--tds-radius-full);
+  background: none;
+  color: var(--tds-text-light-invert);
+  cursor: pointer;
+}
+.ks-hero__tabs button[aria-selected="true"] {
+  background: var(--tds-bg-base-surface);
+  color: var(--tds-text-high-emphasis);
+}
+
+.ks-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+}
+.ks-field__label {
+  display: flex;
+  gap: var(--tds-space-8);
+  justify-content: space-between;
+}
+.ks-field input[type="range"] {
+  width: 100%;
+  accent-color: var(--tds-bg-high-blue);
+}
+.ks-field select {
+  padding: var(--tds-space-6) var(--tds-space-8);
+  border: 1px solid var(--tds-stroke-disabled);
+  border-radius: var(--tds-radius-sm);
+  background: var(--tds-bg-base-surface);
+  color: var(--tds-text-high-emphasis);
+  font: inherit;
+}
+
+.ks-caption {
+  width: 100%;
+  margin: 0 0 var(--tds-space-4);
+  font-size: var(--tds-font-size-small);
+  line-height: var(--tds-line-height-small);
+  font-weight: var(--tds-font-weight-semibold);
+  color: var(--tds-text-low-emphasis);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---------------------------------------------------------------- anchors --
+ * Every specimen is addressable, so a link is enough to say which one you mean.
+ * `Section`, `Variant` and `Example` each contribute one path segment.
+ */
+
+/* The sticky category strip would otherwise sit on top of whatever we jump to. */
+[data-ks-anchor] {
+  scroll-margin-top: 84px;
+}
+
+.ks-anchored {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+}
+
+/* The caption is the flex item now, so it must not claim the whole row. */
+.ks-anchored > .ks-caption {
+  width: auto;
+  margin: 0;
+}
+
+/* Wide enough to hit without aiming, and a fixed width so swapping in "copied" does not
+   shove the heading beside it. */
+.ks-anchor {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 28px;
+  padding: 0 var(--tds-space-12);
+  border: 1px solid var(--tds-stroke-disabled);
+  border-radius: var(--tds-radius-full);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-active);
+  text-decoration: none;
+  opacity: 0.4;
+  transition:
+    opacity 120ms ease-out,
+    background-color 120ms ease-out;
+}
+
+/* Faint until the section is under the cursor, so 130 of them do not shout. */
+.ks-section:hover .ks-anchor,
+.ks-anchor:focus-visible {
+  opacity: 1;
+}
+
+.ks-anchor:hover {
+  opacity: 1;
+  background: var(--tds-bg-sunken-surface);
+}
+
+.ks-variant {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  margin-bottom: var(--tds-space-20);
+}
+
+.ks-variant:last-child {
+  margin-bottom: 0;
+}
+
+/* The wrapper owns the rhythm between a caption and its specimens now. */
+.ks-variant > .ks-row:last-child,
+.ks-variant > .ks-stack:last-child {
+  margin-bottom: 0;
+}
+
+.ks-example {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  min-width: 0;
+}
+
+.ks-example__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+}
+
+.ks-example__name {
+  font-size: var(--tds-font-size-extra-small);
+  line-height: var(--tds-line-height-extra-small);
+  color: var(--tds-text-low-emphasis);
+}
+
+/* A jumped-to target says so for a moment, which matters in a page this long. */
+[data-ks-hit] {
+  animation: ks-hit 2s ease-out;
+}
+
+@keyframes ks-hit {
+  from {
+    box-shadow: 0 0 0 3px var(--tds-bg-high-blue);
+  }
+  to {
+    box-shadow: 0 0 0 3px transparent;
+  }
+}
+
+.ks-toc {
+  padding: var(--tds-space-16) var(--tds-space-20);
+  background: var(--tds-bg-base-surface);
+  border-radius: var(--tds-radius-md);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+.ks-toc__jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--tds-space-8);
+}
+
+.ks-toc__chip {
+  padding: var(--tds-space-4) var(--tds-space-12);
+  border: 1px solid var(--tds-stroke-disabled);
+  border-radius: var(--tds-radius-full);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-high-emphasis);
+  text-decoration: none;
+}
+
+.ks-toc__chip:hover {
+  background: var(--tds-bg-sunken-surface);
+}
+
+.ks-toc__all {
+  margin-top: var(--tds-space-12);
+  font-size: var(--tds-font-size-body3);
+  line-height: var(--tds-line-height-body3);
+  color: var(--tds-text-low-emphasis);
+}
+
+.ks-toc__all summary {
+  cursor: pointer;
+}
+
+/* Two columns for the whole list rather than per row, so the labels line up however long
+   the longest path turns out to be. */
+.ks-toc__all ul {
+  margin: var(--tds-space-12) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--tds-space-4) var(--tds-space-20);
+}
+
+.ks-toc__all li {
+  display: contents;
+}
+
+/* The indent is the hierarchy: component, then variant, then specimen. It sits inside the
+   link's own box so the labels beside them stay in one column. */
+.ks-toc__all li[data-ks-kind="variant"] a {
+  padding-left: var(--tds-space-16);
+}
+
+.ks-toc__all li[data-ks-kind="example"] a {
+  padding-left: var(--tds-space-32);
+}
+
+.ks-toc__all a {
+  color: var(--tds-text-active);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-decoration: none;
+}
+
+.ks-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+  gap: var(--tds-space-8);
+}
+
+.ks-swatch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  font-size: var(--tds-font-size-extra-small);
+  line-height: var(--tds-line-height-extra-small);
+  color: var(--tds-text-low-emphasis);
+}
+
+.ks-swatch__chip {
+  height: 44px;
+  border-radius: var(--tds-radius-sm);
+  border: 1px solid var(--tds-stroke-disabled);
+}
+
+/* A list row inside the searchable-list sheet: Figma's `Lists - 04 Image + Action`, which
+   is its own component set and still a `todo`. Composed here so the sheet has something
+   real to scroll. */
+.ks-sheet-row {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-12);
+  padding: var(--tds-space-12) var(--tds-space-20);
+}
+
+.ks-dark-stage {
+  padding: var(--tds-space-20);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-base-surface);
+}
+
+.ks-icons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: var(--tds-space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ks-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--tds-space-4);
+  padding: var(--tds-space-8);
+  border-radius: var(--tds-radius-sm);
+}
+
+.ks-icon:hover {
+  background: var(--tds-bg-sunken-surface);
+}
+
+/* The SVGs carry the fill they were exported with, so the tile holds still at white
+   rather than following the surface into dark theme and swallowing them. */
+.ks-icon__tile {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--tds-stroke-disabled);
+  border-radius: var(--tds-radius-sm);
+  background: var(--tds-bg-static-white);
+}
+
+.ks-icon__name {
+  width: 100%;
+  font-size: var(--tds-font-size-extra-small);
+  line-height: var(--tds-line-height-extra-small);
+  color: var(--tds-text-low-emphasis);
+  text-align: center;
+  overflow-wrap: anywhere;
+}

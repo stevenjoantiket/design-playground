@@ -1,0 +1,495 @@
+/* The Mixpanel page (MixpanelPage.tsx), in the portal's style. */
+
+/* Chart series colours: one hue per series, in a fixed order, checked for colour-blind separation. */
+.portal {
+  --mp-blue: #007cff;
+  --mp-blue-dark: #004fa7;
+  --mp-blue-light: #5baaff;
+  --mp-blue-mid: #0064d2;
+  --mp-orange: #ff7200;
+  --mp-turquoise: #10a4af;
+  --mp-magenta: #c0218b;
+}
+
+/* The link box's button, level with the input under the field's label. */
+.mp-add__btn {
+  align-self: flex-end;
+  min-height: 36px;
+}
+
+/* A project's tab: an overview card, then a card per chart, as wide as the page's other cards. */
+.mp-project {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* A tab per product project, wide enough for each name. */
+.mp-tabs {
+  width: min(100%, 600px);
+}
+
+/* Headline numbers, a tile each; a case's tile opens its Mixpanel report. */
+.mp-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mp-stats > li {
+  display: flex;
+}
+
+.mp-stat {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: var(--portal-radius);
+  min-width: 0;
+  background: var(--portal-bg);
+  color: inherit;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+a.mp-stat:hover {
+  background: var(--portal-primary-soft);
+}
+
+a.mp-stat:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 2px;
+}
+
+.mp-bar {
+  height: 6px;
+  margin: 4px 0;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--portal-surface);
+}
+
+.mp-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--mp-blue);
+}
+
+/* Sync sits under the numbers it refreshes: text left, button right, its log full width below. */
+.mp-sync {
+  margin: 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--portal-border);
+  list-style: none;
+}
+
+.mp-sync .bs-step {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+.mp-sync .bs-step__dot {
+  display: none;
+}
+
+.mp-sync .bs-step__action {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+.mp-sync .bs-step__extra {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 700px) {
+  .mp-sync .bs-step {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mp-sync .bs-step__action {
+    grid-row: auto;
+    grid-column: 1;
+  }
+}
+
+.mp-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+}
+
+.mp-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-left: 8px;
+  border-radius: 2px;
+  vertical-align: baseline;
+}
+
+.mp-key:first-child {
+  margin-left: 0;
+}
+
+.mp-plot {
+  position: relative;
+}
+
+.mp-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.mp-chart__grid {
+  stroke: var(--portal-border);
+}
+
+.mp-chart__base {
+  stroke: var(--portal-border);
+}
+
+.mp-chart__cross {
+  stroke: var(--portal-text-muted);
+  stroke-dasharray: 3 3;
+}
+
+.mp-chart__label,
+.mp-chart__end {
+  fill: var(--portal-text-muted);
+  font-family: var(--portal-font);
+  font-size: 12px;
+}
+
+.mp-chart__end {
+  fill: var(--portal-text);
+  font-weight: 700;
+}
+
+/* The columns take the pointer; the bars under them only show it. */
+.mp-chart__hit {
+  fill: transparent;
+}
+
+.mp-chart [data-dim] rect,
+.mp-chart [data-dim] path {
+  opacity: 0.4;
+}
+
+.mp-key--returning,
+.mp-chart__returning {
+  background: var(--mp-blue-dark);
+  fill: var(--mp-blue-dark);
+}
+
+.mp-key--other,
+.mp-chart__other {
+  background: var(--mp-blue-light);
+  fill: var(--mp-blue-light);
+}
+
+.mp-key--promo {
+  background: var(--mp-blue);
+}
+
+.mp-key--points {
+  background: var(--mp-orange);
+}
+
+.mp-chart__promo,
+.mp-chart__points {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.mp-chart__promo {
+  stroke: var(--mp-blue);
+}
+
+.mp-chart__points {
+  stroke: var(--mp-orange);
+}
+
+/* Markers wear a ring of the card's surface, so where the lines cross both stay readable. */
+.mp-chart__promo-dot,
+.mp-chart__points-dot {
+  stroke: var(--portal-surface);
+  stroke-width: 2;
+}
+
+.mp-chart__promo-dot {
+  fill: var(--mp-blue);
+}
+
+.mp-chart__points-dot {
+  fill: var(--mp-orange);
+}
+
+.mp-tip {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 180px;
+  padding: 8px 12px;
+  border-radius: var(--portal-radius);
+  background: var(--portal-surface);
+  box-shadow: var(--portal-shadow);
+  pointer-events: none;
+}
+
+.mp-tip .mp-key {
+  margin: 0 2px 0 0;
+}
+
+.mp-table summary {
+  cursor: pointer;
+}
+
+.mp-table table,
+.mp-numbers {
+  width: 100%;
+  margin-top: 8px;
+  border-collapse: collapse;
+  font-family: var(--portal-font);
+  font-size: var(--portal-text-base);
+  font-variant-numeric: tabular-nums;
+}
+
+.mp-table th,
+.mp-table td,
+.mp-numbers th,
+.mp-numbers td {
+  padding: 8px;
+  border-bottom: 1px solid var(--portal-border);
+  text-align: right;
+}
+
+.mp-table th:first-child,
+.mp-numbers th:first-child {
+  text-align: left;
+}
+
+.mp-table thead th,
+.mp-numbers thead th {
+  color: var(--portal-text-muted);
+  font-weight: 400;
+}
+
+/* Added charts: the series colours in a fixed order (blue, orange, turquoise, magenta). */
+.mp-s0 {
+  --mp-series: var(--mp-blue-mid);
+}
+
+.mp-s1 {
+  --mp-series: var(--mp-orange);
+}
+
+.mp-s2 {
+  --mp-series: var(--mp-turquoise);
+}
+
+.mp-s3 {
+  --mp-series: var(--mp-magenta);
+}
+
+.mp-key[class*="mp-s"] {
+  background: var(--mp-series);
+}
+
+.mp-chart__line {
+  fill: none;
+  stroke: var(--mp-series);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.mp-chart__dot {
+  fill: var(--mp-series);
+  stroke: var(--portal-surface);
+  stroke-width: 2;
+}
+
+.mp-chart__bar {
+  fill: var(--mp-series);
+}
+
+/* Stacked line: each series' band, faint, under its line. */
+.mp-chart__area {
+  fill: var(--mp-series);
+  opacity: 0.16;
+}
+
+/* The chart type picker: Mixpanel's chart menu as a row of icon buttons. */
+.mp-types {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--portal-radius);
+  background: var(--portal-bg);
+}
+
+.mp-types__btn {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--portal-radius-sm);
+  background: none;
+  color: var(--portal-text-muted);
+  cursor: pointer;
+}
+
+.mp-types__btn:hover {
+  color: var(--portal-text);
+}
+
+/* The picked type: raised in white, like the project tabs, its icon in the accent. */
+.mp-types__btn[aria-pressed="true"] {
+  border-color: var(--portal-border);
+  background: var(--portal-surface);
+  color: var(--portal-primary);
+  box-shadow: var(--portal-shadow-xs);
+}
+
+.mp-types__btn:focus-visible {
+  outline: 2px solid var(--portal-primary);
+  outline-offset: 1px;
+}
+
+.mp-type-icon {
+  display: inline-flex;
+}
+
+.mp-type-icon[data-sideways] {
+  transform: rotate(90deg);
+}
+
+/* Bar and Stacked bar: a row per label, the bars running right from a shared start. */
+.mp-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mp-rows > li {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  align-items: center;
+  gap: 2px 12px;
+}
+
+.mp-rows__row {
+  display: flex;
+  grid-column: 2;
+  align-items: center;
+  gap: 8px;
+}
+
+.mp-rows__track {
+  display: flex;
+  flex: 1;
+  gap: 2px;
+}
+
+.mp-rows__bar {
+  height: 12px;
+  background: var(--mp-series);
+}
+
+/* The bar's end is rounded, its start square on the shared baseline. */
+.mp-rows__bar:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+/* Pie: the ring beside its numbers. */
+.mp-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+}
+
+.mp-pie svg {
+  width: 180px;
+  height: 180px;
+}
+
+.mp-pie__slice {
+  fill: none;
+  stroke: var(--mp-series);
+  stroke-width: 32;
+}
+
+.mp-pie__legend {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mp-pie__legend > li {
+  display: contents;
+}
+
+.mp-pie__legend .mp-key {
+  margin: 0;
+}
+
+.mp-legend__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mp-legend__item .mp-key {
+  margin-left: 0;
+}
+
+.mp-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mp-retry {
+  align-self: flex-start;
+}
+
+/* The link box: dashed, like a drop zone; field and button on one row. */
+.mp-add {
+  border-style: dashed;
+  border-color: var(--portal-border-strong);
+}
+
+.mp-add__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.mp-add__row > :first-child {
+  flex: 1 1 320px;
+}
+
+

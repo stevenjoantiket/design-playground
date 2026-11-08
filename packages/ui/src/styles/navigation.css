@@ -1,0 +1,636 @@
+/*
+ * Pagination, ProgressStep, TopBar, BottomNav, BottomAppBar and Inset.
+ * Figma: Pagination, Progress Step - Horizontal, Navigation - 01/02/04, Inset.
+ */
+
+/* --- Inset ----------------------------------------------------------------- */
+
+/*
+ * Figma specifies the handle as the N800 primitive, which would be invisible on a dark
+ * surface. The high-emphasis text token is that same value in light theme and inverts,
+ * which is what the indicator does on a real device.
+ */
+.tds-inset {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 19px 110px var(--tds-space-8);
+  background: var(--tds-bg-base-surface);
+}
+
+.tds-inset[data-transparent="true"] {
+  background: none;
+}
+
+.tds-inset__handle {
+  width: 140px;
+  height: 5px;
+  background: var(--tds-text-high-emphasis);
+  border-radius: var(--tds-radius-lg);
+}
+
+/* --- Status bar ------------------------------------------------------------ */
+
+/*
+ * Device chrome. Every measurement here is Apple's or Android's rather than the library's,
+ * so the odd numbers — 19px beside the clock, 5px between the right-hand glyphs, the
+ * fractional glyph widths — are the export's and not a missing token.
+ */
+.tds-status-bar {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 839px;
+  min-width: 320px;
+  font-family: var(--tds-font-family);
+  /*
+   * Figma names the light glyphs as neutral primitives, which would disappear on a dark
+   * surface. High-emphasis text is those same values and inverts with the theme — the same
+   * substitution `Inset` makes for the home indicator.
+   */
+  color: var(--tds-text-high-emphasis);
+}
+
+.tds-status-bar[data-platform="ios"] {
+  gap: var(--tds-space-32);
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--tds-space-8) var(--tds-space-20);
+}
+
+/*
+ * Clock and glyphs both take a half, which is what keeps the island centred on the device
+ * and not on the space left over beside it.
+ */
+.tds-status-bar__time,
+.tds-status-bar__stats {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/*
+ * Figma renders Apple's SF Pro at a 11.09px cap height, which is a ~15px type size the
+ * scale does not have. Body 3 bold in Odyssey is the nearest, and it is the DS typeface
+ * either way — a status bar in a mock-up should not be the one place SF Pro appears.
+ */
+/*
+ * As on the device, the clock is centred in the space left of the island and the glyphs in
+ * the space right of it. Horizontal padding on only one side would push the island off centre.
+ */
+.tds-status-bar__time {
+  padding: var(--tds-space-8) 0;
+  font-size: var(--tds-font-size-body3-bold);
+  line-height: var(--tds-line-height-body3-bold);
+  font-weight: var(--tds-font-weight-semibold);
+  white-space: nowrap;
+}
+
+/* Apple's Dynamic Island: a 126 × 37pt pill, not a rounded rectangle. */
+.tds-status-bar__island {
+  flex: none;
+  width: 126px;
+  height: 37px;
+  background: var(--tds-bg-static-black);
+  border-radius: var(--tds-radius-full);
+}
+
+.tds-status-bar__stats {
+  gap: 5px;
+  padding: var(--tds-space-4) 0;
+}
+
+.tds-status-bar__signal {
+  flex: none;
+  width: 17px;
+  height: 10.667px;
+}
+
+.tds-status-bar__wifi {
+  flex: none;
+  width: 15.272px;
+  height: 10.966px;
+}
+
+.tds-status-bar__battery {
+  flex: none;
+  width: 24.328px;
+  height: 11.333px;
+}
+
+/* Android's three navigation shapes, and no clock. */
+.tds-status-bar[data-platform="android"] {
+  justify-content: flex-end;
+  overflow: clip;
+  padding: 7px var(--tds-space-20);
+}
+
+.tds-status-bar__android {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+}
+
+.tds-status-bar__square,
+.tds-status-bar__circle {
+  width: 10px;
+  height: 10px;
+  background: currentcolor;
+}
+
+.tds-status-bar__circle {
+  border-radius: var(--tds-radius-full);
+}
+
+.tds-status-bar__triangle {
+  width: 12px;
+  height: 10px;
+  transform: scaleY(-1);
+}
+
+/*
+ * Last, so it beats both platform rules. Figma: Theme = Dark, which is a photograph behind
+ * the bar rather than the library's dark theme — hence the static token.
+ */
+.tds-status-bar[data-invert="true"] {
+  color: var(--tds-icon-static-white);
+}
+
+/* --- Top bar --------------------------------------------------------------- */
+
+.tds-top-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 839px;
+  min-width: 320px;
+  padding: var(--tds-space-12) 0;
+  background: var(--tds-bg-base-surface);
+  font-family: var(--tds-font-family);
+}
+
+/*
+ * Transparent until it has something underneath it. Figma ships the Scrolling state of the
+ * transparent sets on a solid surface, so scrolling wins.
+ */
+.tds-top-bar[data-transparent="true"] {
+  background: none;
+}
+
+.tds-top-bar[data-scrolling="true"] {
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+/* The status bar brings its own 8px of padding, so the bar drops its top half. */
+.tds-top-bar[data-status-bar="true"] {
+  padding-top: 0;
+}
+
+.tds-top-bar__row,
+.tds-top-bar__extension {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-16);
+  box-sizing: border-box;
+  padding: 0 var(--tds-space-20);
+  overflow: clip;
+}
+
+.tds-top-bar__leading,
+.tds-top-bar__media {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+}
+
+.tds-top-bar__leading > svg,
+.tds-top-bar__leading > button {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--tds-icon-high-emphasis);
+  cursor: pointer;
+}
+
+.tds-top-bar__media {
+  width: 32px;
+  height: 32px;
+  overflow: clip;
+  border-radius: var(--tds-radius-xs);
+}
+
+.tds-top-bar__media > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tds-top-bar__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* One line, clipped. The title is the page you are on, not a place for a sentence. */
+.tds-top-bar__title {
+  overflow: hidden;
+  font-size: var(--tds-font-size-body1-bold);
+  line-height: var(--tds-line-height-body1-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tds-top-bar__subtitle {
+  overflow: hidden;
+  font-size: var(--tds-font-size-small-regular);
+  line-height: var(--tds-line-height-small-regular);
+  font-weight: var(--tds-font-weight-regular);
+  color: var(--tds-text-low-emphasis);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tds-top-bar__search {
+  flex: 1;
+  min-width: 0;
+}
+
+.tds-top-bar__actions {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--tds-space-20);
+  margin-left: auto;
+  color: var(--tds-icon-high-emphasis);
+}
+
+/* --- Top bar, transparent -------------------------------------------------- */
+
+/*
+ * Figma: `08 Transparant Icons` (408:18050) and `09 Transparant Searchbox`, State = Initial.
+ * With no surface under them the icons would be a dark glyph on an unknown photograph, so
+ * each one gets a white pill and Elevation 01 to lift it off the picture. The two sets
+ * differ only in what sits between the pills — nothing, or a search box.
+ *
+ * The pill is sized by its padding (408:18053: 8px on all four sides around a 20px icon)
+ * rather than by a fixed box, so a slot that is handed a different glyph still gets a pill
+ * that fits it.
+ *
+ * None of this survives the scroll: the Scrolling state is an ordinary opaque bar, and the
+ * rules below are scoped so it stays one.
+ */
+.tds-top-bar[data-transparent="true"]:not([data-scrolling="true"]) .tds-top-bar__actions {
+  gap: var(--tds-space-12);
+}
+
+.tds-top-bar[data-transparent="true"]:not([data-scrolling="true"]) .tds-top-bar__leading > *,
+.tds-top-bar[data-transparent="true"]:not([data-scrolling="true"]) .tds-top-bar__actions > * {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: content-box;
+  padding: var(--tds-space-8);
+  background: var(--tds-bg-base-surface);
+  border-radius: var(--tds-radius-full);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+/*
+ * Wins over the 24px the leading slot sizes a bare icon or button at: in a pill the glyph
+ * is 20px like every other one, and the padding decides how big the pill ends up.
+ */
+.tds-top-bar[data-transparent="true"]:not([data-scrolling="true"]) .tds-top-bar__leading > svg,
+.tds-top-bar[data-transparent="true"]:not([data-scrolling="true"]) .tds-top-bar__leading > button {
+  width: 20px;
+  height: 20px;
+}
+
+/*
+ * White rather than sunken, and lifted the same amount. Figma calls this one `Search Box -
+ * White`; it is the grey box on a surface it cannot rely on.
+ */
+.tds-top-bar[data-transparent="true"]:not([data-scrolling="true"]) .tds-search-box {
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+}
+
+/* --- Bottom navigation ----------------------------------------------------- */
+
+.tds-bottom-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 839px;
+  min-width: 320px;
+  overflow: clip;
+  background: var(--tds-bg-base-surface);
+  box-shadow: var(--tds-elevation-e01);
+  font-family: var(--tds-font-family);
+}
+
+.tds-bottom-nav__list {
+  display: flex;
+  gap: var(--tds-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tds-bottom-nav__item {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.tds-bottom-nav__link {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--tds-space-4);
+  box-sizing: border-box;
+  min-width: 0;
+  height: 64px;
+  padding: var(--tds-space-12) var(--tds-space-4) var(--tds-space-8);
+  overflow: clip;
+  background: none;
+  border: 0;
+  font-family: inherit;
+  color: var(--tds-text-low-emphasis);
+  cursor: pointer;
+}
+
+.tds-bottom-nav__link[data-current="true"] {
+  color: var(--tds-text-active);
+}
+
+.tds-bottom-nav__icon {
+  display: inline-flex;
+  flex: none;
+  width: 24px;
+  height: 24px;
+}
+
+.tds-bottom-nav__icon > svg,
+.tds-bottom-nav__icon > img {
+  width: 100%;
+  height: 100%;
+}
+
+.tds-bottom-nav__label {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--tds-font-size-small-regular);
+  line-height: var(--tds-line-height-small-regular);
+  font-weight: var(--tds-font-weight-regular);
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* --- Bottom app bar -------------------------------------------------------- */
+
+.tds-bottom-app-bar {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 839px;
+  min-width: 320px;
+  font-family: var(--tds-font-family);
+}
+
+.tds-bottom-app-bar[data-scrolling="true"] {
+  box-shadow: var(--tds-elevation-e01);
+}
+
+/* Outside the bar's surface: Figma's top slot carries its own background. */
+.tds-bottom-app-bar__top {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+}
+
+.tds-bottom-app-bar__content {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: var(--tds-space-16) var(--tds-space-20);
+  background: var(--tds-bg-base-surface);
+}
+
+.tds-bottom-app-bar__content > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/* --- Pagination ------------------------------------------------------------ */
+
+/* --- Pagination ------------------------------------------------------------ */
+
+.tds-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  font-family: var(--tds-font-family);
+}
+
+.tds-pagination__arrow,
+.tds-pagination__page,
+.tds-pagination__more {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-family: inherit;
+  font-size: var(--tds-font-size-small-bold);
+  line-height: var(--tds-line-height-small-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+}
+
+.tds-pagination__arrow {
+  border-radius: var(--tds-radius-md);
+  color: var(--tds-icon-high-emphasis);
+  cursor: pointer;
+}
+
+.tds-pagination__arrow > svg {
+  width: 24px;
+  height: 24px;
+}
+
+.tds-pagination__page {
+  border-radius: var(--tds-radius-xs);
+  cursor: pointer;
+}
+
+.tds-pagination__page[data-current="true"] {
+  background: var(--tds-bg-low-blue);
+  color: var(--tds-text-active);
+}
+
+.tds-pagination__more {
+  border-radius: var(--tds-radius-full);
+}
+
+/*
+ * Figma's Disabled variant greys the numbers but keeps the current page's blue tint, which
+ * is how you can still tell where you are in a list that is loading.
+ */
+.tds-pagination__page:disabled,
+.tds-pagination__arrow:disabled {
+  color: var(--tds-text-disabled);
+  cursor: not-allowed;
+}
+
+.tds-pagination__arrow:disabled {
+  color: var(--tds-icon-disabled);
+}
+
+/* --- Progress step --------------------------------------------------------- */
+
+.tds-progress {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 839px;
+  background: var(--tds-bg-base-surface);
+  font-family: var(--tds-font-family);
+}
+
+/*
+ * The fades over both edges, so a step that is half scrolled out reads as continuing
+ * rather than as cut off. Figma draws them in white; base-surface is that value and
+ * follows the theme.
+ */
+.tds-progress::before,
+.tds-progress::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  width: var(--tds-space-20);
+  pointer-events: none;
+}
+
+.tds-progress::before {
+  left: 0;
+  background: linear-gradient(to right, var(--tds-bg-base-surface), transparent);
+}
+
+.tds-progress::after {
+  right: 0;
+  background: linear-gradient(to left, var(--tds-bg-base-surface), transparent);
+}
+
+.tds-progress__strip {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  margin: 0;
+  padding: var(--tds-space-8) var(--tds-space-20);
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.tds-progress__strip::-webkit-scrollbar {
+  display: none;
+}
+
+.tds-progress__step {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--tds-space-8);
+}
+
+/*
+ * The rule between steps. Figma places a `Divider - Horizontal` instance and overrides its
+ * colour per state, so it is drawn here rather than with the `Divider` component: the
+ * component's own colour is the lighter n200.
+ */
+.tds-progress__step:not(:last-child)::after {
+  content: "";
+  width: 16px;
+  height: 1px;
+  background: var(--tds-stroke-light);
+}
+
+.tds-progress__step[data-state="complete"]:not(:last-child)::after {
+  background: var(--tds-bg-high-blue);
+}
+
+.tds-progress__indicator {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--tds-stroke-light);
+  border-radius: var(--tds-radius-full);
+  font-size: var(--tds-font-size-small-bold);
+  line-height: var(--tds-line-height-small-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-progress__indicator > svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tds-progress__step[data-state="complete"] .tds-progress__indicator {
+  background: var(--tds-bg-low-blue);
+  border-color: transparent;
+  color: var(--tds-icon-active);
+}
+
+.tds-progress__step[data-state="current"] .tds-progress__indicator {
+  background: var(--tds-bg-high-blue);
+  border-color: transparent;
+  color: var(--tds-text-static-white);
+}
+
+.tds-progress__label {
+  font-size: var(--tds-font-size-small-regular);
+  line-height: var(--tds-line-height-small-regular);
+  font-weight: var(--tds-font-weight-regular);
+  color: var(--tds-text-low-emphasis);
+  white-space: nowrap;
+}
+
+.tds-progress__step[data-state="current"] .tds-progress__label {
+  color: var(--tds-text-high-emphasis);
+}

@@ -1,0 +1,464 @@
+/*
+ * Calendar — `.Calendar - Date` and `.Calendar - Month` (55549:3362), and
+ * `.Calendar - BottomBar` (55549:3388).
+ *
+ * Figma lays a month out as seven 44px cells spread across the 320px content box with
+ * `justify-between`, which leaves 2.67px between them. Here the row is a seven-column grid
+ * of equal columns instead, and the 44px square is centred inside its column: the same
+ * picture, and the range wash can then fill whole columns and meet across the gaps the way
+ * Figma's separate `.Calendar - Selection` rectangles do.
+ */
+
+.tds-calendar {
+  /* The screen margin the grid is inset by, and the distance the range wash bleeds into. */
+  --tds-calendar-inset: var(--tds-space-20);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 0;
+  width: 100%;
+  background: var(--tds-bg-base-surface);
+  font-family: var(--tds-font-family);
+}
+
+.tds-calendar__scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.tds-calendar__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding-bottom: var(--tds-space-8);
+}
+
+.tds-calendar[data-precision="month"] .tds-calendar__section {
+  gap: var(--tds-space-12);
+  padding-bottom: var(--tds-space-20);
+}
+
+/*
+ * Figma draws this twice: as the block heading inside the month, and as
+ * `.Calendar - Attributes / Mini Title Scrollig` — 14/20 bold under an Elevation/01 shadow —
+ * for the moment it is pinned to the top of a scroll. Pinning it is CSS; knowing that it is
+ * pinned is not, so the heading keeps its block styling the whole way up.
+ */
+.tds-calendar__title {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0;
+  padding: var(--tds-space-20) var(--tds-calendar-inset) 0;
+  background: var(--tds-bg-base-surface);
+  font-size: var(--tds-font-size-body2-bold);
+  line-height: var(--tds-line-height-body2-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+}
+
+/*
+ * The 6px on top is headroom for the "Today" caption, which hangs above its cell: without it
+ * the caption on a day in the first row would slide under the sticky heading.
+ */
+.tds-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: var(--tds-space-8);
+  padding: var(--tds-space-6) var(--tds-calendar-inset) 0;
+}
+
+.tds-calendar__months {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--tds-space-8);
+  padding: 0 var(--tds-calendar-inset);
+}
+
+/* --- Cells ----------------------------------------------------------------- */
+
+.tds-calendar__cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 44px;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* The leading blanks of a month are spans, and they are not to look clickable. */
+button.tds-calendar__cell:enabled {
+  cursor: pointer;
+}
+
+.tds-calendar__cell--day {
+  padding: 0 var(--tds-space-2);
+}
+
+/*
+ * Figma fills the resting month cell with the `color/neutral/n50` primitive. That value has a
+ * semantic name — `background/sunken-surface` — and the semantic one is used here, because it
+ * is the one that darkens with the theme; the primitive would stay near-white on a dark page.
+ */
+.tds-calendar__cell--month {
+  padding: var(--tds-space-4) var(--tds-space-8);
+  border-radius: var(--tds-radius-md);
+  background: var(--tds-bg-sunken-surface);
+}
+
+/* The range wash. On the cell rather than on the 44px square, so it meets across columns. */
+.tds-calendar__cell--day[data-in-range] {
+  background: var(--tds-bg-low-blue);
+}
+
+/*
+ * Carries the wash through the screen margin on the side the range continues towards, which
+ * is what Figma's row-wide `.Calendar - Selection` rectangles do: the row a range starts on
+ * runs to the right edge, the row below it starts at the left one, and neither end of the
+ * range itself bleeds.
+ */
+.tds-calendar__cell--day[data-bleed-start]::before,
+.tds-calendar__cell--day[data-bleed-end]::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--tds-calendar-inset);
+  background: var(--tds-bg-low-blue);
+}
+
+.tds-calendar__cell--day[data-bleed-start]::before {
+  right: 100%;
+}
+
+.tds-calendar__cell--day[data-bleed-end]::after {
+  left: 100%;
+}
+
+/*
+ * A month cell carries its own fill, so a selected month and the months between two selected
+ * ones are both solid blue — Figma's month grids have no light wash at all.
+ */
+.tds-calendar__cell--month[data-cheapest] {
+  background: var(--tds-bg-low-green);
+}
+
+.tds-calendar__cell--month[data-in-range],
+.tds-calendar__cell--month[data-selected] {
+  background: var(--tds-bg-high-blue);
+}
+
+.tds-calendar__cell--month:disabled {
+  background: var(--tds-bg-disabled-surface);
+}
+
+/* The 44px square behind a day: the green wash of a cheap day, the blue of a chosen one. */
+.tds-calendar__pill {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-calendar-pill);
+}
+
+.tds-calendar__cell[data-cheapest] {
+  --tds-calendar-pill: var(--tds-bg-low-green);
+}
+
+.tds-calendar__cell[data-selected] {
+  --tds-calendar-pill: var(--tds-bg-high-blue);
+}
+
+.tds-calendar__value {
+  position: relative;
+  font-size: var(--tds-font-size-body3-bold);
+  line-height: var(--tds-line-height-body3-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+}
+
+/* Sundays and holidays, the two things Figma's red number means. */
+.tds-calendar__cell[data-alert] .tds-calendar__value {
+  color: var(--tds-text-alert);
+}
+
+.tds-calendar__cell:disabled .tds-calendar__value {
+  color: var(--tds-text-disabled);
+}
+
+.tds-calendar__cell[data-sold-out] .tds-calendar__value {
+  text-decoration: line-through;
+}
+
+/*
+ * A month between the two chosen months is filled as solidly as the chosen ones, so it takes
+ * the same inverted text. A day between them keeps its own colour: the wash behind it is pale.
+ */
+.tds-calendar__cell[data-selected] .tds-calendar__value,
+.tds-calendar__cell--month[data-in-range]:not(:disabled) .tds-calendar__value {
+  color: var(--tds-text-invert);
+}
+
+.tds-calendar__price {
+  position: relative;
+  width: 32px;
+  /* Holds the line open when there is no price to put in it — an empty flex item is 0 high. */
+  min-height: var(--tds-line-height-small-regular);
+  font-size: var(--tds-font-size-small-regular);
+  line-height: var(--tds-line-height-small-regular);
+  font-weight: var(--tds-font-weight-regular);
+  color: var(--tds-text-low-emphasis);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.tds-calendar__cell--month .tds-calendar__price {
+  width: 40px;
+}
+
+.tds-calendar__cell[data-cheapest] .tds-calendar__price {
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-positive);
+}
+
+.tds-calendar__cell:disabled .tds-calendar__price {
+  color: var(--tds-text-disabled);
+}
+
+/* The selected cell's price drops back to regular weight — it is on blue, it has contrast. */
+.tds-calendar__cell[data-selected] .tds-calendar__price,
+.tds-calendar__cell--month[data-in-range]:not(:disabled) .tds-calendar__price {
+  font-weight: var(--tds-font-weight-regular);
+  color: var(--tds-text-invert);
+}
+
+/*
+ * The dot form of the price: cheap or not, no figure. Hidden rather than removed on the
+ * ordinary days, as Figma's `Show Detail=False, Cheaper=False` cell is — a cell that lost
+ * its second line would sit 16px shorter than its neighbours.
+ */
+.tds-calendar__dot {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  /* Figma binds `size/2` here; there is no 2px radius token. */
+  border-radius: var(--tds-space-2);
+  margin: var(--tds-space-4) 0;
+  background: var(--tds-bg-high-green);
+  visibility: hidden;
+}
+
+.tds-calendar__dot[data-on] {
+  visibility: visible;
+}
+
+/*
+ * "Today" / "Current month", sitting entirely above its cell as Figma places it. It reaches
+ * into the 8px between the rows and, on the top row, into the space under the month heading;
+ * nothing along that path is clipped, so it stays legible.
+ */
+.tds-calendar__marker {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: var(--tds-font-size-extra-small-semibold);
+  line-height: var(--tds-line-height-extra-small-semibold);
+  font-weight: var(--tds-font-weight-semibold);
+  color: var(--tds-text-active);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* --- Weekday header ------------------------------------------------------- */
+
+.tds-calendar-weekdays {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-12);
+  box-sizing: border-box;
+  width: 100%;
+  padding-top: var(--tds-space-12);
+  background: var(--tds-bg-base-surface);
+  font-family: var(--tds-font-family);
+}
+
+.tds-calendar-weekdays__row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 var(--tds-space-20);
+}
+
+.tds-calendar-weekdays__day {
+  overflow: hidden;
+  font-size: var(--tds-font-size-small-bold);
+  line-height: var(--tds-line-height-small-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tds-calendar-weekdays__day[data-sunday] {
+  color: var(--tds-text-alert);
+}
+
+.tds-calendar-weekdays__rule {
+  height: 1px;
+  background: var(--tds-bg-disabled-surface);
+}
+
+/* --- Legend and holidays -------------------------------------------------- */
+
+.tds-calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--tds-space-4) var(--tds-space-20);
+  background: var(--tds-bg-sunken-surface);
+  font-family: var(--tds-font-family);
+}
+
+.tds-calendar-legend__swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--tds-space-2);
+  background: var(--tds-bg-high-green);
+}
+
+.tds-calendar-legend__label {
+  font-size: var(--tds-font-size-small-regular);
+  line-height: var(--tds-line-height-small-regular);
+  font-weight: var(--tds-font-weight-regular);
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-calendar-holidays {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-4) var(--tds-space-20);
+  overflow-x: auto;
+  font-size: var(--tds-font-size-small-regular);
+  line-height: var(--tds-line-height-small-regular);
+  color: var(--tds-text-low-emphasis);
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.tds-calendar-holidays::-webkit-scrollbar {
+  display: none;
+}
+
+.tds-calendar-holidays__item {
+  flex: none;
+}
+
+.tds-calendar-holidays__item:not(:first-child)::before {
+  content: "•";
+  margin-right: var(--tds-space-8);
+  color: var(--tds-text-disabled);
+}
+
+.tds-calendar-holidays__day {
+  color: var(--tds-text-alert);
+}
+
+/* --- Bottom bar ----------------------------------------------------------- */
+
+.tds-calendar-bottom-bar {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  background: var(--tds-bg-base-surface);
+  font-family: var(--tds-font-family);
+}
+
+.tds-calendar-bottom-bar__top {
+  padding: var(--tds-space-12) var(--tds-space-20);
+}
+
+.tds-calendar-bottom-bar__summary {
+  padding: var(--tds-space-12) var(--tds-space-20) 0;
+}
+
+.tds-calendar-bottom-bar__action {
+  padding: var(--tds-space-16) var(--tds-space-20);
+}
+
+.tds-calendar-summary {
+  display: flex;
+  gap: var(--tds-space-24);
+}
+
+.tds-calendar-summary__item {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--tds-space-4);
+  min-width: 0;
+}
+
+.tds-calendar-summary__item[data-align="end"] {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Figma's Time type reads value-then-label, the other three label-then-value. */
+.tds-calendar-summary__item[data-label-placement="bottom"] {
+  flex-direction: column-reverse;
+}
+
+.tds-calendar-summary__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--tds-space-4);
+  font-size: var(--tds-font-size-small-bold);
+  line-height: var(--tds-line-height-small-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-low-emphasis);
+}
+
+.tds-calendar-summary__value {
+  font-size: var(--tds-font-size-body2-bold);
+  line-height: var(--tds-line-height-body2-bold);
+  font-weight: var(--tds-font-weight-bold);
+  color: var(--tds-text-high-emphasis);
+}
+
+.tds-calendar-summary__value[data-active] {
+  color: var(--tds-text-active);
+}
+
+.tds-calendar-summary__dismiss {
+  display: inline-flex;
+  flex: none;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--tds-icon-high-emphasis);
+  cursor: pointer;
+  appearance: none;
+}
+
+.tds-calendar-summary__dismiss > svg {
+  width: 16px;
+  height: 16px;
+}

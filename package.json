@@ -1,0 +1,32 @@
+{
+  "name": "tiket-design-system",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.13.1",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @tiket-ds/adit-board dev",
+    "build": "pnpm -r --filter \"./packages/**\" build",
+    "build:site": "pnpm --filter @tiket-ds/adit-board build --outDir ../../dist --emptyOutDir",
+    "typecheck": "tsc --build --force && pnpm --filter @tiket-ds/ui exec tsc -p tsconfig.figma.json",
+    "lint": "eslint .",
+    "check:tokens": "node scripts/check-tokens.mjs",
+    "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm check:tokens",
+    "tokens:build": "pnpm --filter @tiket-ds/tokens build",
+    "fonts:build": "pnpm --filter @tiket-ds/fonts build",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.31.1",
+    "@eslint/js": "^9.39.5",
+    "@types/node": "^22.19.2",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.65.0"
+  }
+}
