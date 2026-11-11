@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment: Before / After</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 32px; background: #1e1e1e; font-family: Inter, system-ui, sans-serif; }
+  h1.page { margin: 0 0 24px; font-size: 28px; color: #fff; }
+  .row { display: flex; gap: 32px; align-items: flex-start; overflow-x: auto; padding-bottom: 16px; }
+
+  .panel { flex: none; padding: 40px; border-radius: 8px; display: flex; flex-direction: column; gap: 28px;
+    background: var(--panel); color: var(--text); }
+  .panel[data-theme="light"] {
+    --panel: #eef1f6; --text: #0f1b2d; --sub: #4a566a; --screen: #fff; --bg: #f6f8fb; --card: #fff;
+    --line: #e4e8ef; --edge: #d5dbe5; --brand: #0b63e5; --btn: #0b63e5; --field: #8793a6;
+    --off-bg: #e3e7ee; --off-text: #6b7587; --chip-bg: #dde3ec; --chip-text: #3a4658; --draft-bg: #fff1c2; --draft-text: #5c4300;
+  }
+  .panel[data-theme="dark"] {
+    --panel: #0b1018; --text: #f2f5fa; --sub: #a3aec0; --screen: #121a26; --bg: #0e141e; --card: #18212f;
+    --line: #2a3547; --edge: #2a3547; --brand: #5a9bff; --btn: #2f6fe0; --field: #6f7c91;
+    --off-bg: #263041; --off-text: #8a96a9; --chip-bg: #263041; --chip-text: #c3cddc; --draft-bg: #3a2f0a; --draft-text: #ffd866;
+  }
+  .head { display: flex; flex-direction: column; gap: 6px; max-width: 760px; }
+  .title { display: flex; align-items: center; gap: 10px; }
+  .title h2 { margin: 0; font-size: 22px; font-weight: 700; }
+  .chip { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--chip-bg); color: var(--chip-text); }
+  .chip.draft { background: var(--draft-bg); color: var(--draft-text); }
+  .head p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--sub); }
+  .phones { display: flex; gap: 40px; justify-content: center; align-items: flex-start; }
+  .state { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+  .state > span { font-size: 13px; font-weight: 600; color: var(--sub); }
+
+  .phone { width: 390px; height: 780px; background: var(--screen); border: 1px solid var(--edge); border-radius: 28px;
+    overflow: hidden; display: flex; flex-direction: column; }
+  .bar { display: flex; align-items: center; gap: 12px; padding: 18px 16px; border-bottom: 1px solid var(--line); font-size: 17px; font-weight: 600; }
+  .bar svg { stroke: var(--text); }
+  .body { flex: 1; overflow: hidden; padding: 16px; display: flex; flex-direction: column; gap: 16px; background: var(--bg); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .order { display: flex; flex-direction: column; gap: 6px; }
+  .order small { font-size: 12px; font-weight: 600; color: var(--sub); }
+  .order b { font-size: 15px; font-weight: 600; }
+  .order span { font-size: 13px; color: var(--sub); }
+  .sec { font-size: 15px; font-weight: 700; padding-top: 4px; }
+  .method { display: flex; align-items: center; gap: 12px; }
+  .method.sel { border: 2px solid var(--brand); flex-direction: column; align-items: stretch; gap: 14px; }
+  .method .row1 { display: flex; align-items: center; gap: 12px; }
+  .radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--field); flex: none; }
+  .sel .radio { border: 6px solid var(--brand); background: var(--card); }
+  .method b { font-size: 14px; font-weight: 600; display: block; }
+  .method small { font-size: 13px; color: var(--sub); }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 600; color: var(--sub); }
+  .field input { height: 44px; border: 1px solid var(--field); border-radius: 8px; padding: 0 12px; font: 400 14px Inter, system-ui, sans-serif;
+    color: var(--text); background: var(--card); }
+  .foot { padding: 14px 16px 18px; background: var(--screen); border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+  .btns { display: flex; gap: 10px; }
+  .pay { flex: 1; min-height: 56px; border: 0; border-radius: 10px; background: var(--btn); color: #fff; font: inherit;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px; }
+  .pay b { font-size: 14px; font-weight: 700; }
+  .pay span { font-size: 12px; }
+  .pay:disabled { background: var(--off-bg); color: var(--off-text); }
+  .hint { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; color: var(--sub); }
+  .hint svg { stroke: var(--sub); }
+</style>
+</head>
+<body>
+<h1 class="page">Payment: both pay buttons wait for the CVV</h1>
+<div class="row" id="row"></div>
+
+<script>
+  // Sample figures: 2,000,000 + 10% refund upgrade = 2,200,000; 25% upfront = 550,000.
+  const BACK = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>';
+  const INFO = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>';
+  let n = 0;
+
+  /** One phone. upfrontOff / fullOff grey a button; hint shows the helper line. */
+  function phone({ typed, upfrontOff, fullOff, hint }) {
+    const id = "cvv" + n++;
+    return `
+    <div class="phone">
+      <div class="bar">${BACK}<span>Payment</span></div>
+      <div class="body">
+        <div class="card order"><small>Flight · Sample order</small><b>Jakarta (CGK) → Bali (DPS)</b><span>1 adult · One way</span></div>
+        <div class="sec">Choose payment method</div>
+        <div class="card method sel">
+          <div class="row1"><span class="radio"></span><div><b>Saved credit card</b><small>Visa •••• 4242</small></div></div>
+          <div class="field"><label for="${id}">CVV/CVC</label>
+            <input id="${id}" type="text" ${typed ? 'value="•••"' : 'placeholder="3 digits"'}></div>
+        </div>
+        <div class="card method"><span class="radio"></span><b>BCA Virtual Account</b></div>
+      </div>
+      <div class="foot">
+        <div class="btns">
+          <button class="pay" type="button" ${upfrontOff ? "disabled" : ""}><b>Pay 25% upfront</b><span>IDR 550,000</span></button>
+          <button class="pay" type="button" ${fullOff ? "disabled" : ""}><b>Pay in full</b><span>IDR 2,200,000</span></button>
+        </div>
+        ${hint ? `<div class="hint" role="status">${INFO}<span>Enter your card’s CVV to pay</span></div>` : ""}
+      </div>
+    </div>`;
+  }
+
+  const state = (label, opts) => `<div class="state"><span>${label}</span>${phone(opts)}</div>`;
+  const after = { upfrontOff: true, fullOff: true, hint: true };
+
+  const panels = [
+    { theme: "light", title: "Before - Control", chip: ["Production today", ""],
+      text: "Card chosen, CVV empty. Pay in full is greyed out, so Pay 25% upfront looks like the only way to pay.",
+      states: [state("CVV empty", { fullOff: true })] },
+    { theme: "light", title: "After - Version I · Light", chip: ["Draft · Experiment", "draft"],
+      text: "Both buttons use the disabled state until a 3-digit CVV is typed, and a line under them says what is missing. Hypothesis: when neither button looks like the one allowed choice, people stop reading Pay 25% upfront as the only way to pay. Metric: Payment conversion.",
+      states: [state("CVV empty", after), state("CVV typed", { typed: true })] },
+    { theme: "dark", title: "After - Version I · Dark", chip: ["Draft · Experiment", "draft"],
+      text: "Same change in the dark theme: both buttons disabled until a 3-digit CVV is typed, with the missing step named under them. Metric: Payment conversion.",
+      states: [state("CVV empty", after), state("CVV typed", { typed: true })] },
+  ];
+
+  document.getElementById("row").innerHTML = panels.map((p) => `
+    <section class="panel" data-theme="${p.theme}">
+      <div class="head">
+        <div class="title"><h2>${p.title}</h2><span class="chip ${p.chip[1]}">${p.chip[0]}</span></div>
+        <p>${p.text}</p>
+      </div>
+      <div class="phones">${p.states.join("")}</div>
+    </section>`).join("");
+</script>
+</body>
+</html>
