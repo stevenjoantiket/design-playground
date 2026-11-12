@@ -14,6 +14,7 @@ const HERE_PAGES = (HERE?.pages ?? []).map((page) => page.value);
 const STORE_KEY = "adit-board:side-menu";
 /** The pages below the projects, each its own Vite page. */
 const EXTRAS = [
+  { path: "projects/payment/before-after/", label: "Before / After", emoji: "🔀" },
 ] as { path?: string; href?: string; label: string; emoji: string }[];
 
 /**

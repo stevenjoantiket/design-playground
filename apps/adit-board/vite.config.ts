@@ -10,7 +10,7 @@ export default defineConfig({
   server: { port: 5274 },
   optimizeDeps: { entries: ["projects/payment/index.html"] },
   build: {
-    rolldownOptions: { input: { main: page("index.html"), payment: page("projects/payment/index.html") } },
+    rolldownOptions: { input: { main: page("index.html"), payment: page("projects/payment/index.html"), beforeAfter: page("projects/payment/before-after/index.html") } },
     assetsInlineLimit: 0,
   },
 });
