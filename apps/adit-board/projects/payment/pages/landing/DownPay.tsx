@@ -119,6 +119,7 @@ export function DpPayButtons({
   stacked = false,
   ribbon,
   onUpfront,
+  onFull,
   cardIncomplete,
   alt = "A",
 }: {
@@ -136,6 +137,8 @@ export function DpPayButtons({
   /** Version B's stock ribbon: it sits on the top-right corner of "Pay in full", as it does on "Pay now". */
   ribbon?: ReactNode;
   onUpfront: () => void;
+  /** Version J: "Pay in full" is tapped; with the CVV missing it points at the field instead of paying. */
+  onFull?: () => void;
 }) {
   const upfrontDisabled = disabled || cardIncomplete === "disable-both";
   const color = upfrontDisabled ? "disabled" : "staticWhite";
@@ -157,6 +160,7 @@ export function DpPayButtons({
           size="large"
           fullWidth
           disabled={fullDisabled}
+          onClick={onFull}
         >
           Pay in full
         </Button>

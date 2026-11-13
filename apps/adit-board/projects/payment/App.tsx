@@ -207,6 +207,11 @@ export function App() {
     const a = new URLSearchParams(location.search).get("alt");
     return a === "B" || a === "C" ? a : "A";
   });
+  // Version J: both buttons stay active; tapping one with the card's CVV empty puts the CVV field in its error state, says what is missing, and focuses it.
+  const cvvField = builtOn(versions, active.id, "J");
+  const cvvEmpty = method === "bca-cc" && ux.savedCard && cvv.length < 3;
+  const [cvvTried, setCvvTried] = useState(0);
+  const cvvError = cvvField && cvvEmpty && cvvTried > 0 ? "Enter your card’s CVV to pay" : undefined;
   const cvvMissing = cvvWait && method === "bca-cc" && ux.savedCard && cvv.length < 3;
   // Version H: the prototype's flight stands in for the cheapest search result, so flight orders get the banner.
   const cheapestFare = builtOn(versions, active.id, "H") && isFlightOrder(ux.orderCase);
@@ -376,7 +381,7 @@ export function App() {
                               id="bca-cc"
                               selected={method}
                               onSelect={setMethod}
-                              below={<CardFields total={total} tenor={cardTenor} onTenor={setCardTenor} cvv={cvv} onCvv={setCvv} highlight={cvvMissing && cvvAlt === "C"} />}
+                              below={<CardFields total={total} tenor={cardTenor} onTenor={setCardTenor} cvv={cvv} onCvv={setCvv} highlight={cvvMissing && cvvAlt === "C"} error={cvvError} focusSignal={cvvTried} />}
                               logo={<Logo src={mastercardSrc} inset="14.29% 26.83%" />}
                             >
                               <span className="pay-row pay-row--start pay-gap-4">
@@ -534,9 +539,10 @@ export function App() {
                             amounts={downPay}
                             disabled={ux.expired}
                             alt={cvvAlt}
-                            cardIncomplete={method === "bca-cc" && ux.savedCard && cvv.length < 3 ? (cvvWait ? "disable-both" : "disable") : null}
+                            cardIncomplete={cvvEmpty && !cvvField ? (cvvWait ? "disable-both" : "disable") : null}
                             ribbon={stockRibbon ? <StockRibbon orderCase={ux.orderCase} /> : null}
-                            onUpfront={() => setDpScreen("page")}
+                            onUpfront={() => (cvvField && cvvEmpty ? setCvvTried((n) => n + 1) : setDpScreen("page"))}
+                            onFull={() => (cvvField && cvvEmpty ? setCvvTried((n) => n + 1) : undefined)}
                           />
                           {cvvWait ? (
                             <>

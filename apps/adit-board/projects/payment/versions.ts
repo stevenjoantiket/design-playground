@@ -68,6 +68,33 @@ export const BUILT_VERSIONS: Version[] = [
       },
     },
   },
+  {
+    id: "J",
+    label: "J",
+    ux: { ...DEFAULT_CASE, tiketDP: true },
+    from: { label: "Control", ux: DEFAULT_CASE },
+    experiment: {
+      name: "Pay buttons stay active, the CVV field says what's missing",
+      hypothesis:
+        "Keeping both pay buttons active and pointing at the CVV field when it is empty, instead of greying a button out, shows what is missing right where it is fixed, so people stop reading a single active button as the only way to pay.",
+      request:
+        "On a tiketDP flight with a card chosen and the CVV empty, keep Pay 25% upfront and Pay in full active. Tapping either one does not continue: the CVV field takes focus, turns to its error state and says “Enter your card’s CVV to pay”. The error clears as soon as a 3-digit CVV is typed, and both buttons then work.",
+      metric: "Payment conversion",
+      detail: {
+        why: "In Control, Pay in full is greyed out while the CVV is empty and Pay 25% upfront stays active, so the customer takes DP to be the only option. Version I greys out both. This one removes the disabled look altogether: both buttons stay inviting and the form field itself explains what to fix.",
+        before: "With a card chosen and the CVV empty, Pay in full is greyed out and Pay 25% upfront looks like the only way to pay.",
+        after:
+          "Both buttons stay active. Tapping either with the CVV empty focuses the CVV field, shows its error state and the message “Enter your card’s CVV to pay”. To see it: turn on tiketDP and Saved credit card, pick the saved card, leave the CVV empty and tap a pay button.",
+        facts: [
+          {
+            claim: "A button that looks inactive is read as “not available”, even when the reason is a missing field.",
+            status: "needs-data",
+            evidence: "Hypothesis from the same post behind Version I. Compare drop-off between I and J on card orders with an empty CVV.",
+          },
+        ],
+      },
+    },
+  },
 ];
 
 /** Payment's brief: the shared skeleton, with the payment switches as the starting point. */

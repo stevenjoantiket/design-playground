@@ -15,6 +15,8 @@ export function CardFields({
   cvv,
   onCvv,
   highlight = false,
+  error,
+  focusSignal = 0,
 }: {
   /** What the order costs; the tenors split it. */
   total: number;
@@ -24,11 +26,18 @@ export function CardFields({
   onCvv: (cvv: string) => void;
   /** Alternative C: whenever the CVV is required, focus the field so it is highlighted. */
   highlight?: boolean;
+  /** Version J: the field says what is missing (its error state plus this helper text). */
+  error?: string;
+  /** Version J: each time this changes (a pay button was tapped without a CVV) the field takes focus. */
+  focusSignal?: number;
 }) {
   const wrap = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (highlight) wrap.current?.querySelector("input")?.focus({ preventScroll: false });
   }, [highlight]);
+  useEffect(() => {
+    if (focusSignal > 0) wrap.current?.querySelector("input")?.focus();
+  }, [focusSignal]);
   return (
     <>
       <Dropdown label="Full payment/Installment" value={String(tenor)} onChange={(e) => onTenor(Number(e.target.value) as Tenor)}>
@@ -45,6 +54,8 @@ export function CardFields({
         inputMode="numeric"
         autoComplete="cc-csc"
         maxLength={3}
+        error={!!error}
+        helperText={error}
         value={cvv}
         onChange={(e) => onCvv(e.target.value.replace(/\D/g, ""))}
         endIcon={
