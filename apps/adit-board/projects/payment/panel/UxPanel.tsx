@@ -31,7 +31,7 @@ const PRESETS = [
   {
     id: "returning",
     label: "Returning",
-    value: { promo: true, points: false, nudge: true, savedCard: true, lpg: true, expired: false },
+    value: { promo: true, points: false, nudge: false, savedCard: true, lpg: true, expired: false },
   },
   {
     id: "new",

@@ -137,7 +137,7 @@ export function DpPayButtons({
   /** Version B's stock ribbon: it sits on the top-right corner of "Pay in full", as it does on "Pay now". */
   ribbon?: ReactNode;
   onUpfront: () => void;
-  /** Version J: "Pay in full" is tapped; with the CVV missing it points at the field instead of paying. */
+  /** Version M checks the selected method on "Pay in full" too. */
   onFull?: () => void;
 }) {
   const upfrontDisabled = disabled || cardIncomplete === "disable-both";

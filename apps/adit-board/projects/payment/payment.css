@@ -1222,6 +1222,11 @@ body {
   background: var(--tds-color-red-r600);
 }
 
+/* Alternative B2: the blue ribbon (fill blue/b400), its tail two steps darker as red's is. */
+.tds-label.pay-ribbon[data-kind="ribbon"][data-tone="blue"]::after {
+  background: var(--tds-color-blue-b600);
+}
+
 /* Mobile: the row pulls the price row up by the bar's gap plus half a ribbon, so the ribbon straddles the button's top edge. */
 .pay-ribbon-row {
   display: flex;
@@ -2148,8 +2153,8 @@ body:has(.pay-layout[data-embed]) {
   width: 100%;
 }
 
-/* Version I, Alternative B: a grey strip slides up from behind the bottom bar while the card's CVV is missing. */
-.pay-bar { z-index: 2; }
+/* Version L, Alternative B: a grey strip slides up from behind the bottom bar while the card's CVV is missing. */
+.pay-bar:has(.pay-cvv-nudge) { z-index: 2; }
 .pay-cvv-nudge { position: absolute; left: 0; right: 0; bottom: 100%; overflow: hidden; pointer-events: none; }
 .pay-cvv-nudge__strip {
   display: flex; align-items: center; justify-content: center; gap: var(--tds-space-4);
@@ -2170,6 +2175,152 @@ body:has(.pay-layout[data-embed]) {
 .alt-toggle__btn[aria-pressed="true"] { background: #0770e3; border-color: #0770e3; color: #fff; }
 .alt-toggle__note { flex-basis: 100%; font-size: 12px; color: #6b7280; }
 
-/* The iPhone frame is always 412 × 917; a short window scales it (see --pay-scale in App.tsx) instead of squeezing its height. */
-.pay-frame[data-device="iphone"] { zoom: var(--pay-scale, 1); }
-.pay-frame[data-device="iphone"] > .pay { height: 917px; }
+/* Version I, "Split Payment": Blipay pays what its balance covers, the picked method the rest. */
+.blipay {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-8);
+  padding: var(--tds-space-12);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.blipay[data-desktop] {
+  padding: 0 var(--tds-space-12);
+  background: none;
+}
+
+.blipay__row {
+  display: flex;
+  align-items: center;
+  gap: var(--tds-space-12);
+}
+
+/* Picked: a one-line note that the balance falls short. */
+.blipay__note {
+  padding: var(--tds-space-4) var(--tds-space-8);
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-low-yellow);
+}
+
+/* Then the methods to combine it with, set apart from Blipay. */
+.blipay__divider {
+  width: 100%;
+  margin: var(--tds-space-4) 0;
+  border: 0;
+  border-top: 1px solid var(--tds-color-neutral-n200);
+}
+
+.blipay__combine {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Experiment "Turqois color nudge" (version K) --------------------------- */
+
+/* Every nudge moves to turquoise: the refund strip and its card border, the switch-method
+   nudge, the method sheet's switch flag, and desktop's Lowest Price Guarantee label. */
+/* The refund strip takes the soft variant, as TDS's primary turquoise label: T100 fill, USP text, and no card outline. */
+[data-nudge="turquoise"] .pay-nudge {
+  background: var(--tds-bg-low-turquoise);
+}
+
+[data-nudge="turquoise"] .pay-nudge .tds-text {
+  color: var(--tds-text-usp);
+}
+
+[data-nudge="turquoise"] .pay-card--refund {
+  border-color: transparent;
+}
+
+[data-nudge="turquoise"] .pay-switch {
+  background: var(--tds-bg-low-turquoise);
+}
+
+[data-nudge="turquoise"] .pay-switch .pay-benefit.tds-text {
+  color: var(--tds-text-usp);
+}
+
+[data-nudge="turquoise"] .pay-switchcard__ribbon,
+[data-nudge="turquoise"] .pay-switchcard__ribbon::after {
+  background: var(--tds-bg-high-turquoise);
+}
+
+[data-nudge="turquoise"] .pay-switchcard__ribbon::before {
+  background: var(--tds-color-turquoise-t600);
+}
+
+[data-nudge="turquoise"] .payd-lpg {
+  background: var(--tds-bg-high-turquoise);
+}
+
+/*
+ * A real phone ("Open on phone" QR): the screen fills it, no mockup bezel around it. Coarse pointer, so the
+ * Experiments page's 436px iframes on a computer keep their mockup.
+ */
+@media (pointer: coarse) and (max-width: 500px) {
+  .pay-layout[data-embed] .pay-stage {
+    padding: 0;
+  }
+
+  .pay-layout[data-embed] .pay-frame {
+    width: 100% !important;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .pay-layout[data-embed] .pay-frame::before,
+  .pay-layout[data-embed] .pay-frame::after {
+    display: none;
+  }
+
+  .pay-layout[data-embed] .pay {
+    height: 100dvh;
+    border-radius: 0;
+  }
+}
+
+/* Version M (PayCheck.tsx): the methods with their fields under the picked one. The row's border is
+   always there, transparent, so the error state (Figma 24184:116821, "Selected - unfilled") only
+   recolours it and nothing moves. */
+.pay-check {
+  border: 1px solid transparent;
+  border-radius: var(--tds-radius-xs);
+  background: var(--tds-bg-sunken-surface);
+}
+
+.pay-check > .pay-method {
+  background: transparent;
+}
+
+.pay-check[data-error="true"] {
+  border-color: var(--tds-stroke-alert);
+}
+
+.pay-check__below {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tds-space-10);
+  padding: 0 var(--tds-space-12) var(--tds-space-12);
+}
+
+.pay-check__helper {
+  padding: 0 var(--tds-space-12) var(--tds-space-12);
+}
+
+/* Desktop: rows sit on white with the radio first; fields and helper line up under the logo
+   (the radio's 24 plus the row's 20 gap). */
+.pay-check[data-desktop] {
+  background: none;
+}
+
+.pay-check[data-desktop] > .payd-method {
+  padding: var(--tds-space-8) var(--tds-space-12);
+}
+
+.pay-check[data-desktop] > .pay-check__below,
+.pay-check[data-desktop] > .pay-check__helper {
+  padding-left: calc(var(--tds-space-12) + var(--tds-space-24) + var(--tds-space-20));
+  max-width: 480px;
+}

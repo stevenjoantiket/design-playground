@@ -29,9 +29,12 @@ import { CardFields } from "./pages/landing/CardFields.js";
 import { CvvNudge, DpBanner, DpPayButtons, type CvvAlt, DpScreens, dpAmounts, type DpMethod, type DpScreen, type Tenor } from "./pages/landing/DownPay.js";
 import { BUILT_VERSIONS, CONTROL, METRICS, buildBrief, type Version } from "./versions.js";
 import { MethodSheet } from "./pages/landing/MethodSheet.js";
+import { CHECK_METHODS, CheckMethods, checkDpMethod, usePayCheck, type CheckMethodId } from "./pages/landing/PayCheck.js";
 import { OrderTrip, RefundNudge, isFlightOrder } from "./pages/landing/OrderCases.js";
+import { Instruction } from "./pages/instruction/Instruction.js";
 import { StockRibbon } from "./pages/landing/StockRibbon.js";
 import { BLIBLI_CARDS, ImportCta, ImportSheet, type BlibliCardId } from "./pages/landing/BlibliCards.js";
+import { BlipaySplit } from "./pages/landing/BlipaySplit.js";
 import { DEFAULT_CASE, OPTIONS, UxPanel, type UxCase } from "./panel/UxPanel.js";
 import pointSrc from "../../../../tds library/tds icon/tds_ic_bt_point_fullcolor.svg";
 // Not in `tds library/tds icon`; downloaded from the payment Figma file (11957:6868).
@@ -146,17 +149,6 @@ export function App() {
     revive: (v) => ({ ...v, ux: fresh(v.ux), from: v.from && { ...v.from, ux: fresh(v.from.ux) } }),
     fork: (anchor, label, experiment) => ({ id: label, label, experiment, ux: { ...anchor.ux }, from: { label: anchor.label, ux: anchor.ux } }),
   });
-  // The phone keeps its real 412 × 917 proportions: a short window scales it down (CSS `zoom` via --pay-scale) rather than squeezing its height.
-  useEffect(() => {
-    const fit = () => {
-      const room = window.innerHeight - 24 - 24; // stage padding + the frame's own margin
-      const scale = Math.max(0.5, Math.min(1, room / (917 + 24))); // 917 screen + 24 bezel
-      document.documentElement.style.setProperty("--pay-scale", String(scale));
-    };
-    fit();
-    window.addEventListener("resize", fit);
-    return () => window.removeEventListener("resize", fit);
-  }, []);
   const ux = active.ux;
   const setUx = (next: UxCase) => update((v) => ({ ...v, ux: next }));
   const [deadline, setDeadline] = useState(() => Date.now() + PAYMENT_WINDOW_MS);
@@ -190,31 +182,42 @@ export function App() {
     select(id);
     restartClock();
     setBlibliCards(false);
+    setBlipayOn(false);
     if (method.startsWith("blibli")) setMethod("mandiri");
   };
-  // Built versions: B adds the ribbon, C adds the banner shimmer. Each reaches only the
-  // versions built on top of it, so C (built on Control) has no ribbon.
-  const stockRibbon = builtOn(versions, active.id, "B");
+  // Built versions: B adds the ribbon (B2, its alternative, in blue), C adds the banner shimmer.
+  // Each reaches only the versions built on top of it, so C (built on Control) has no ribbon.
+  const stockRibbon = builtOn(versions, active.id, "B2") ? "blue" : builtOn(versions, active.id, "B") ? "red" : null;
   const bannerShimmer = builtOn(versions, active.id, "C");
   const savingsAtPay = builtOn(versions, active.id, "D");
   const blibliImport = builtOn(versions, active.id, "E");
   const ctaShimmer = builtOn(versions, active.id, "F");
   const ctaGradient = builtOn(versions, active.id, "G");
-  // Version I: with the card's CVV empty both pay buttons are greyed out and a line says the CVV is missing.
-  const cvvWait = builtOn(versions, active.id, "I");
-  // Version I's alternatives: A (the helper line), B (a nudge slides up), C (the CVV field is highlighted). `?alt=B` opens one directly.
+  // Version L: with the card's CVV empty both pay buttons are greyed out and a line says the CVV is missing.
+  const cvvWait = builtOn(versions, active.id, "L");
+  // Version L's alternatives: A (the helper line), B (a nudge slides up), C (the CVV field is highlighted). `?alt=B` opens one directly.
   const [cvvAlt, setCvvAlt] = useState<CvvAlt>(() => {
     const a = new URLSearchParams(location.search).get("alt");
     return a === "B" || a === "C" ? a : "A";
   });
-  // Version J: both buttons stay active; tapping one with the card's CVV empty puts the CVV field in its error state, says what is missing, and focuses it.
-  const cvvField = builtOn(versions, active.id, "J");
-  const cvvEmpty = method === "bca-cc" && ux.savedCard && cvv.length < 3;
-  const [cvvTried, setCvvTried] = useState(0);
-  const cvvError = cvvField && cvvEmpty && cvvTried > 0 ? "Enter your card’s CVV to pay" : undefined;
   const cvvMissing = cvvWait && method === "bca-cc" && ux.savedCard && cvv.length < 3;
+  // Version M: both pay buttons stay active; a tap checks the selected method and anchors to what it
+  // still needs (PayCheck.tsx). The panel's "Pre-selected" picks the method the page opens on; `?check=ovo` opens one directly.
+  const payCheck = builtOn(versions, active.id, "M");
+  const [checkPreset, setCheckPreset] = useState<CheckMethodId>(() => {
+    const c = new URLSearchParams(location.search).get("check");
+    return CHECK_METHODS.find((m) => m.id === c)?.id ?? "card";
+  });
+  const check = usePayCheck(checkPreset);
   // Version H: the prototype's flight stands in for the cheapest search result, so flight orders get the banner.
   const cheapestFare = builtOn(versions, active.id, "H") && isFlightOrder(ux.orderCase);
+  // Version I: Blipay pays part of the total, the picked method the rest; off again on a version switch.
+  const blipaySplit = builtOn(versions, active.id, "I");
+  // Version J: no order summary (the trip card), only the countdown.
+  const hideOrder = builtOn(versions, active.id, "J");
+  // Version K: every nudge in turquoise (payment.css, `[data-nudge="turquoise"]`).
+  const turquoiseNudges = builtOn(versions, active.id, "K");
+  const [blipayOn, setBlipayOn] = useState(false);
   // Version E: the Blibli cards, once imported; forgotten on a version switch so each visit starts fresh.
   const [blibliCards, setBlibliCards] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
@@ -239,21 +242,23 @@ export function App() {
       ]
     : [];
   const blibliCard = BLIBLI_CARDS.find((c) => c.id === method);
-  const dpMethod: DpMethod = blibliCard
-    ? {
-        logo: <Logo src={blibliCard.logo} inset={blibliCard.inset} />,
-        name: <Text variant="body3Bold">{`${blibliCard.bank} •••• ${blibliCard.last4}`}</Text>,
-        card: true,
-      }
+  const methodName = blibliCard
+    ? `${blibliCard.bank} •••• ${blibliCard.last4}`
     : method === "bca-cc" && ux.savedCard
-      ? {
-          logo: <Logo src={mastercardSrc} inset="14.29% 26.83%" />,
-          name: <Text variant="body3Bold">BCA •••• 1098</Text>,
-          card: true,
-        }
+      ? "BCA •••• 1098"
       : method === "bca-va"
-        ? { logo: <Logo src={bcaSrc} inset="25% 12.2% 25% 9.76%" />, name: <Text variant="body3Bold">BCA Virtual Account</Text> }
-        : { logo: <Logo src={mandiriSrc} inset="28.57% 14.63% 28.57% 17.07%" />, name: <Text variant="body3Bold">Mandiri Transfer</Text> };
+        ? "BCA Virtual Account"
+        : "Mandiri Transfer";
+  const dpMethod: DpMethod = payCheck ? checkDpMethod(check, false) : {
+    name: <Text variant="body3Bold">{methodName}</Text>,
+    ...(blibliCard
+      ? { logo: <Logo src={blibliCard.logo} inset={blibliCard.inset} />, card: true }
+      : method === "bca-cc" && ux.savedCard
+        ? { logo: <Logo src={mastercardSrc} inset="14.29% 26.83%" />, card: true }
+        : method === "bca-va"
+          ? { logo: <Logo src={bcaSrc} inset="25% 12.2% 25% 9.76%" /> }
+          : { logo: <Logo src={mandiriSrc} inset="28.57% 14.63% 28.57% 17.07%" /> }),
+  };
   const time = hhmmss(ux.expired ? 0 : Math.max(0, Math.ceil((deadline - now) / 1000)));
   const [sheetOpen, setSheetOpen] = useState(false);
   const [page] = useHashPage(PAGE_IDS);
@@ -291,6 +296,7 @@ export function App() {
         <div
           className="pay-frame"
           data-device={width === "412" ? "iphone" : undefined}
+          data-nudge={turquoiseNudges ? "turquoise" : undefined}
           style={{ width: `min(${width}px, 100%)` }}
           onScrollCapture={(event) => {
             const target = event.target as HTMLElement;
@@ -298,7 +304,11 @@ export function App() {
           }}
         >
           <TiketProvider theme="light" platform={desktop ? "desktop" : "mobile"} className="pay">
-            {page !== "landing" ? (
+            {page === "instruction" ? (
+              <PageFrame project="payment" page={page} label={pageLabel}>
+                <Instruction time={time} />
+              </PageFrame>
+            ) : page !== "landing" ? (
               <PageFrame project="payment" page={page} label={pageLabel} />
             ) : (
               // An upload can stand in for the built Landing (its Page code card's Replace), for Control only:
@@ -313,6 +323,9 @@ export function App() {
                     ctaShimmer={ctaShimmer}
                     ctaGradient={ctaGradient}
                     blibli={blibliImport ? { imported: blibliCards, onOpen: () => setImportOpen(true) } : null}
+                    blipayTotal={blipaySplit ? DESKTOP_TOTAL : null}
+                    hideOrder={hideOrder}
+                    check={payCheck ? check : null}
                     downPay={desktopDownPay}
                     onDp={(screen, picked) => {
                       setDesktopMethod(picked);
@@ -342,12 +355,18 @@ export function App() {
                             <Text variant="body3Bold">Complete payment in</Text>
                             <Countdown time={time} />
                           </div>
-                          <OrderTrip id={ux.orderCase} />
+                          {hideOrder ? null : <OrderTrip id={ux.orderCase} />}
                         </Card>
                       </div>
 
                       <Card title="Payment Method">
+                        {payCheck ? (
+                          <CheckMethods check={check} total={total} />
+                        ) : (
                         <div className="pay-methods">
+                          {blipaySplit ? (
+                            <BlipaySplit on={blipayOn} onChange={setBlipayOn} total={total} />
+                          ) : null}
                           <div className="pay-recommended">
                             <MethodRow
                               id="mandiri"
@@ -381,7 +400,7 @@ export function App() {
                               id="bca-cc"
                               selected={method}
                               onSelect={setMethod}
-                              below={<CardFields total={total} tenor={cardTenor} onTenor={setCardTenor} cvv={cvv} onCvv={setCvv} highlight={cvvMissing && cvvAlt === "C"} error={cvvError} focusSignal={cvvTried} />}
+                              below={<CardFields total={total} tenor={cardTenor} onTenor={setCardTenor} cvv={cvv} onCvv={setCvv} highlight={cvvMissing && cvvAlt === "C"} />}
                               logo={<Logo src={mastercardSrc} inset="14.29% 26.83%" />}
                             >
                               <span className="pay-row pay-row--start pay-gap-4">
@@ -432,15 +451,19 @@ export function App() {
                               ))
                             : null}
 
-                          <MethodRow
-                            id="bca-va"
-                            selected={method}
-                            onSelect={setMethod}
-                            logo={<Logo src={bcaSrc} inset="25% 12.2% 25% 9.76%" />}
-                          >
-                            <Text variant="body3Bold">BCA Virtual Account</Text>
-                          </MethodRow>
+                          {/* Version I lists three methods in all, Blipay first: the saved card pushes VA to See all. */}
+                          {blipaySplit && ux.savedCard ? null : (
+                            <MethodRow
+                              id="bca-va"
+                              selected={method}
+                              onSelect={setMethod}
+                              logo={<Logo src={bcaSrc} inset="25% 12.2% 25% 9.76%" />}
+                            >
+                              <Text variant="body3Bold">BCA Virtual Account</Text>
+                            </MethodRow>
+                          )}
                         </div>
+                        )}
 
                         {blibliImport && !blibliCards ? <ImportCta onOpen={() => setImportOpen(true)} /> : null}
 
@@ -498,7 +521,7 @@ export function App() {
                       >
                         {stockRibbon && !downPay ? (
                           <div className="pay-ribbon-row">
-                            <StockRibbon orderCase={ux.orderCase} />
+                            <StockRibbon orderCase={ux.orderCase} tone={stockRibbon} />
                           </div>
                         ) : null}
                         <div className="pay-row">
@@ -527,7 +550,13 @@ export function App() {
                             </button>
                           )}
                           {downPay ? null : (
-                            <Button variant="primary" size="large" className="pay-now" disabled={ux.expired}>
+                            <Button
+                              variant="primary"
+                              size="large"
+                              className="pay-now"
+                              disabled={ux.expired}
+                              onClick={payCheck ? () => check.attempt("full") : undefined}
+                            >
                               Pay now
                             </Button>
                           )}
@@ -539,10 +568,14 @@ export function App() {
                             amounts={downPay}
                             disabled={ux.expired}
                             alt={cvvAlt}
-                            cardIncomplete={cvvEmpty && !cvvField ? (cvvWait ? "disable-both" : "disable") : null}
-                            ribbon={stockRibbon ? <StockRibbon orderCase={ux.orderCase} /> : null}
-                            onUpfront={() => (cvvField && cvvEmpty ? setCvvTried((n) => n + 1) : setDpScreen("page"))}
-                            onFull={() => (cvvField && cvvEmpty ? setCvvTried((n) => n + 1) : undefined)}
+                            cardIncomplete={
+                              payCheck ? null : method === "bca-cc" && ux.savedCard && cvv.length < 3 ? (cvvWait ? "disable-both" : "disable") : null
+                            }
+                            ribbon={stockRibbon ? <StockRibbon orderCase={ux.orderCase} tone={stockRibbon} /> : null}
+                            onUpfront={() => {
+                              if (!payCheck || check.attempt("upfront")) setDpScreen("page");
+                            }}
+                            onFull={payCheck ? () => check.attempt("full") : undefined}
                           />
                           {cvvWait ? (
                             <>
@@ -608,6 +641,17 @@ export function App() {
               </span>
             </div>
           ) : null}
+          {payCheck ? (
+            <div className="alt-toggle" role="group" aria-label="Pre-selected method">
+              <span className="alt-toggle__label">Pre-selected</span>
+              {CHECK_METHODS.map((m) => (
+                <button key={m.id} type="button" className="alt-toggle__btn" aria-pressed={checkPreset === m.id} onClick={() => setCheckPreset(m.id)}>
+                  {m.label}
+                </button>
+              ))}
+              <span className="alt-toggle__note">{CHECK_METHODS.find((m) => m.id === checkPreset)?.note}</span>
+            </div>
+          ) : null}
           <ExperimentCard
             version={active}
             brief={buildBrief(active, OPTIONS)}
@@ -619,7 +663,7 @@ export function App() {
             onRemove={remove}
             codeIds={BUILT_VERSIONS.map((v) => v.id)}
           />
-          <PageCodeCard project="payment" page={page} label={pageLabel} built={page === "landing"} />
+          <PageCodeCard project="payment" page={page} label={pageLabel} built={page === "landing" || page === "instruction"} />
           <FigmaFiles pages={PAGES} links={links} onSave={saveLinks} />
         </UxPanel>
       </PanelColumn>

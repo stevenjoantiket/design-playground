@@ -1,50 +1,43 @@
 {
   "source": "Mixpanel, tiket.com Production",
-  "from": "2025-10-28",
-  "to": "2026-10-27",
-  "syncedAt": "2026-10-28T15:19:44+07:00",
-  "payers": 2079248,
+  "from": "2025-11-09",
+  "to": "2026-11-08",
+  "syncedAt": "2026-11-09T15:40:47+07:00",
+  "payers": 2098557,
   "payersNote": "Unique users who tapped Pay now (continuePayment)",
   "cases": {
     "returning": {
-      "users": 717123,
-      "summary": "34% of payers",
+      "users": 729611,
+      "summary": "35% of payers",
       "how": "continuePayment with userType = Existing",
-      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#VSBHWRHiN7WH"
+      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#Xk6Gh2wCXudM"
     },
     "new": {
-      "users": 1362125,
-      "summary": "66% of payers",
+      "users": 1368946,
+      "summary": "65% of payers",
       "how": "Payers never marked userType = Existing; includes guests and users whose type had not loaded",
-      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#VSBHWRHiN7WH"
+      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#Xk6Gh2wCXudM"
     },
     "savings": {
-      "users": 358995,
+      "users": 362540,
       "summary": "17% promo · 11% points",
-      "how": "continueWithPromo then continuePayment (358,995) and continueWithTiketPoints then continuePayment (219,864); the two overlap",
-      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#r8hfL631etzT"
+      "how": "continueWithPromo then continuePayment (362,540) and continueWithTiketPoints then continuePayment (222,940); the two overlap",
+      "report": "https://mixpanel.com/project/3965186/view/4460945/app/insights#jgreMRYd7zBJ"
     }
   },
   "monthly": {
-    "note": "Unique users per calendar month. The first and last months are partial (the year runs 28 Oct to 27 Oct). Promo and points count people who continued with them, whether or not they then paid.",
+    "note": "Unique users per calendar month. The first and last months are partial (the year runs 9 Nov to 8 Nov). Promo and points count people who continued with them, whether or not they then paid.",
     "reports": {
-      "payers": "https://mixpanel.com/project/3965186/view/4460945/app/insights#Yeq4U2v6frUv",
-      "savings": "https://mixpanel.com/project/3965186/view/4460945/app/insights#AGuPEedEnMJq"
+      "payers": "https://mixpanel.com/project/3965186/view/4460945/app/insights#JRH3og5LPAFM",
+      "savings": "https://mixpanel.com/project/3965186/view/4460945/app/insights#NqEymncBxtQy"
     },
     "rows": [
       {
-        "month": "2025-10",
-        "payers": 27895,
-        "returning": 7921,
-        "promo": 22859,
-        "points": 10401
-      },
-      {
         "month": "2025-11",
-        "payers": 321270,
-        "returning": 103479,
-        "promo": 145663,
-        "points": 66670
+        "payers": 258272,
+        "returning": 82575,
+        "promo": 106814,
+        "points": 49087
       },
       {
         "month": "2025-12",
@@ -69,7 +62,7 @@
       },
       {
         "month": "2026-03",
-        "payers": 349756,
+        "payers": 349755,
         "returning": 90764,
         "promo": 165623,
         "points": 106591
@@ -104,24 +97,31 @@
       },
       {
         "month": "2026-08",
-        "payers": 178547,
+        "payers": 178546,
         "returning": 45656,
         "promo": 149743,
         "points": 97208
       },
       {
         "month": "2026-09",
-        "payers": 190563,
-        "returning": 55539,
+        "payers": 190562,
+        "returning": 55538,
         "promo": 126277,
         "points": 78838
       },
       {
         "month": "2026-10",
-        "payers": 208180,
-        "returning": 69929,
-        "promo": 119820,
-        "points": 71843
+        "payers": 250197,
+        "returning": 85625,
+        "promo": 140929,
+        "points": 84770
+      },
+      {
+        "month": "2026-11",
+        "payers": 98872,
+        "returning": 36059,
+        "promo": 45600,
+        "points": 26217
       }
     ]
   }

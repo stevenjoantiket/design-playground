@@ -102,9 +102,14 @@
 
 /* --- Dropdown -------------------------------------------------------------- */
 
+/* The select runs on under the chevron to the box's right edge, so clicking the arrow opens it too. */
 .tds-field--select .tds-field__input {
   appearance: none;
   cursor: pointer;
+  box-sizing: border-box;
+  width: calc(100% + 20px + var(--tds-space-12) + var(--tds-space-16));
+  margin-right: calc(-20px - var(--tds-space-12) - var(--tds-space-16));
+  padding-right: calc(20px + var(--tds-space-12) + var(--tds-space-16));
 }
 
 /* `tds_ic_chevron_down`, drawn by `ChevronDownIcon`. The glyph is 24px in the drop and
@@ -112,6 +117,7 @@
 .tds-field__chevron {
   display: inline-flex;
   flex: none;
+  pointer-events: none;
   width: 20px;
   height: 20px;
   color: var(--tds-icon-high-emphasis);

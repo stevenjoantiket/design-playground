@@ -1,0 +1,21 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="102" height="204" viewBox="0 0 102 204" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="tds_sg_medium_green">
+<mask id="mask0_0_67" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="102" height="204">
+<rect id="Mask" width="102" height="204" fill="white"/>
+</mask>
+<g mask="url(#mask0_0_67)">
+<path id="Bottom" fill-rule="evenodd" clip-rule="evenodd" d="M160 158.039C130.718 187.32 83.2435 187.32 53.9606 158.039C24.6798 128.758 24.6798 81.2819 53.9606 52L160 158.039Z" fill="url(#paint0_linear_0_67)" fill-opacity="0.32"/>
+<path id="Top" fill-rule="evenodd" clip-rule="evenodd" d="M106.039 104C135.32 74.7183 135.32 27.2429 106.039 -2.03874C76.7571 -31.3204 29.2827 -31.3204 0 -2.03874L106.039 104Z" fill="url(#paint1_linear_0_67)" fill-opacity="0.32"/>
+</g>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_67" x1="2.93873" y1="112.593" x2="78.2014" y2="185.456" gradientUnits="userSpaceOnUse">
+<stop stop-color="#3CCC7D"/>
+<stop offset="1" stop-color="#E2FBED"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_67" x1="-6.74516" y1="45.7884" x2="76.8436" y2="123.826" gradientUnits="userSpaceOnUse">
+<stop stop-color="#E2FBED"/>
+<stop offset="1" stop-color="#3CCC7D"/>
+</linearGradient>
+</defs>
+</svg>

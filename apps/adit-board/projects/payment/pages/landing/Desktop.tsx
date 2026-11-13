@@ -5,8 +5,10 @@ import { LibraryIcon } from "../../../../design-system/icons.js";
 import { Countdown } from "./Countdown.js";
 import { DpBanner, DpPayButtons, type DpAmounts, type DpMethod, type DpScreen } from "./DownPay.js";
 import { OrderTrip } from "./OrderCases.js";
-import { StockRibbon } from "./StockRibbon.js";
+import { StockRibbon, type RibbonTone } from "./StockRibbon.js";
 import { BLIBLI_CARDS, ImportCta, type BlibliCardId } from "./BlibliCards.js";
+import { BlipaySplit } from "./BlipaySplit.js";
+import { CheckMethods, checkDpMethod, type PayCheck } from "./PayCheck.js";
 import type { UxCase } from "../../panel/UxPanel.js";
 import pointSrc from "../../../../../../tds library/tds icon/tds_ic_bt_point_fullcolor.svg";
 import creditCardSrc from "../../../../../../tds library/tds icon/tds_ic_credit_card.svg";
@@ -67,20 +69,29 @@ export function Desktop({
   ctaShimmer,
   ctaGradient,
   blibli,
+  blipayTotal,
+  hideOrder,
+  check = null,
   downPay,
   onDp,
 }: {
   ux: UxCase;
   setUx: (next: UxCase) => void;
   time: string;
-  /** Experiment "Button ribbon" (version B). */
-  stockRibbon: boolean;
+  /** Experiment "Button ribbon": red on version B, blue on its alternative B2. */
+  stockRibbon: RibbonTone | null;
   /** Experiment "Animated CTA button" (version F). */
   ctaShimmer: boolean;
   /** Experiment "Change button color" (version G). */
   ctaGradient: boolean;
   /** Experiment "Import blibli card" (version E): null when off. */
   blibli: { imported: boolean; onOpen: () => void } | null;
+  /** Experiment "Split Payment" (version I): the total Blipay splits, null when off. */
+  blipayTotal: number | null;
+  /** Experiment "Hide order summary" (version J): no order ID or trip card at the top of the summary. */
+  hideOrder: boolean;
+  /** Version M: the methods and the pay-tap check (PayCheck.tsx), shared with mobile; null when off. */
+  check?: PayCheck | null;
   /** tiketDP amounts on a flight-only order with tiketDP on, else null. */
   downPay: DpAmounts | null;
   /** Opens a tiketDP screen (or the price details), with the method picked here. */
@@ -94,18 +105,25 @@ export function Desktop({
     setWasImported(imported);
     setMethod(imported ? BLIBLI_CARDS[0].id : "ovo");
   }
+  const [blipayOn, setBlipayOn] = useState(false);
   const blibliCard = BLIBLI_CARDS.find((c) => c.id === method);
-  const dpMethod: DpMethod = blibliCard
-    ? {
-        logo: <OutlineLogo src={blibliCard.logo} inset={blibliCard.inset} />,
-        name: <Text variant="body3Bold">{`${blibliCard.bank} •••• ${blibliCard.last4}`}</Text>,
-        card: true,
-      }
+  const methodName = blibliCard
+    ? `${blibliCard.bank} •••• ${blibliCard.last4}`
     : method === "card"
-      ? { logo: <OutlineLogo src={creditCardSrc} inset="14.29% 32.14%" />, name: <Text variant="body3Bold">Credit/Debit Card</Text>, card: true }
+      ? "Credit/Debit Card"
       : method === "mandiri"
-        ? { logo: <OutlineLogo src={mandiriSrc} inset="28.57% 16.07%" />, name: <Text variant="body3Bold">Mandiri Transfer</Text> }
-        : { logo: <OutlineLogo src={ovoSrc} inset="6px 11px 7px 10px" />, name: <Text variant="body3Bold">OVO</Text> };
+        ? "Mandiri Transfer"
+        : "OVO";
+  const dpMethod: DpMethod = check ? checkDpMethod(check, true) : {
+    name: <Text variant="body3Bold">{methodName}</Text>,
+    ...(blibliCard
+      ? { logo: <OutlineLogo src={blibliCard.logo} inset={blibliCard.inset} />, card: true }
+      : method === "card"
+        ? { logo: <OutlineLogo src={creditCardSrc} inset="14.29% 32.14%" />, card: true }
+        : method === "mandiri"
+          ? { logo: <OutlineLogo src={mandiriSrc} inset="28.57% 16.07%" /> }
+          : { logo: <OutlineLogo src={ovoSrc} inset="6px 11px 7px 10px" /> }),
+  };
   const open = (screen: DpScreen) => onDp(screen, dpMethod);
 
   const payNow = downPay ? (
@@ -113,11 +131,20 @@ export function Desktop({
       amounts={downPay}
       disabled={ux.expired}
       stacked
-      ribbon={stockRibbon ? <StockRibbon orderCase={ux.orderCase} /> : null}
-      onUpfront={() => open("page")}
+      ribbon={stockRibbon ? <StockRibbon orderCase={ux.orderCase} tone={stockRibbon} /> : null}
+      onUpfront={() => {
+        if (!check || check.attempt("upfront")) open("page");
+      }}
+      onFull={check ? () => check.attempt("full") : undefined}
     />
   ) : (
-    <Button variant="primary" size="large" className="payd-pay" disabled={ux.expired}>
+    <Button
+      variant="primary"
+      size="large"
+      className="payd-pay"
+      disabled={ux.expired}
+      onClick={check ? () => check.attempt("full") : undefined}
+    >
       Pay now
     </Button>
   );
@@ -144,7 +171,13 @@ export function Desktop({
               <img src={securitySrc} alt="100% security guarantee" width={69} height={16} />
             </div>
 
+            {check ? (
+              <CheckMethods check={check} total={downPay?.before ?? 120_000_000} desktop />
+            ) : (
             <div className="payd-methods">
+              {blipayTotal ? (
+                <BlipaySplit desktop on={blipayOn} onChange={setBlipayOn} total={blipayTotal} />
+              ) : null}
               <Method
                 id="mandiri"
                 selected={method}
@@ -169,16 +202,19 @@ export function Desktop({
                   (OVO Cash: IDR 4,000,000)
                 </Text>
               </Method>
-              <Method
-                id="card"
-                selected={method}
-                onSelect={setMethod}
-                logo={<OutlineLogo src={creditCardSrc} inset="14.29% 32.14%" />}
-              >
-                <Text variant="body1" color="lowEmphasis">
-                  Credit/Debit Card
-                </Text>
-              </Method>
+              {/* Version I lists three methods in all, Blipay first: the card moves to See all. */}
+              {blipayTotal ? null : (
+                <Method
+                  id="card"
+                  selected={method}
+                  onSelect={setMethod}
+                  logo={<OutlineLogo src={creditCardSrc} inset="14.29% 32.14%" />}
+                >
+                  <Text variant="body1" color="lowEmphasis">
+                    Credit/Debit Card
+                  </Text>
+                </Method>
+              )}
               {imported
                 ? BLIBLI_CARDS.map((card) => (
                     <Method
@@ -198,6 +234,7 @@ export function Desktop({
                   ))
                 : null}
             </div>
+            )}
             {blibli && !imported ? <ImportCta desktop onOpen={blibli.onOpen} /> : null}
 
             <hr className="pay-dash payd-dash" />
@@ -211,12 +248,16 @@ export function Desktop({
         </div>
 
         <aside className="payd-card payd-order">
-          <Text variant="body3Bold" color="lowEmphasis">
-            Order ID: 1847987
-          </Text>
-          <OrderTrip id={ux.orderCase} desktop />
+          {hideOrder ? null : (
+            <>
+              <Text variant="body3Bold" color="lowEmphasis">
+                Order ID: 1847987
+              </Text>
+              <OrderTrip id={ux.orderCase} desktop />
 
-          <hr className="pay-dash payd-dash" />
+              <hr className="pay-dash payd-dash" />
+            </>
+          )}
           <Text as="h2" variant="body2Bold" color="lowEmphasis">
             You Can Save More!
           </Text>
@@ -267,7 +308,7 @@ export function Desktop({
             </div>
             {stockRibbon && !downPay ? (
               <div className="payd-pay-col">
-                <StockRibbon orderCase={ux.orderCase} />
+                <StockRibbon orderCase={ux.orderCase} tone={stockRibbon} />
                 {payNow}
               </div>
             ) : (
