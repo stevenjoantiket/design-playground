@@ -29,7 +29,7 @@ import { CardFields } from "./pages/landing/CardFields.js";
 import { CvvNudge, DpBanner, DpPayButtons, type CvvAlt, DpScreens, dpAmounts, type DpMethod, type DpScreen, type Tenor } from "./pages/landing/DownPay.js";
 import { BUILT_VERSIONS, CONTROL, METRICS, buildBrief, type Version } from "./versions.js";
 import { MethodSheet } from "./pages/landing/MethodSheet.js";
-import { CHECK_METHODS, CheckMethods, checkDpMethod, usePayCheck, type CheckMethodId } from "./pages/landing/PayCheck.js";
+import { CHECK_METHODS, CheckMethods, MethodSnack, checkDpMethod, usePayCheck, type CheckMethodId } from "./pages/landing/PayCheck.js";
 import { OrderTrip, RefundNudge, isFlightOrder } from "./pages/landing/OrderCases.js";
 import { Instruction } from "./pages/instruction/Instruction.js";
 import { StockRibbon } from "./pages/landing/StockRibbon.js";
@@ -514,6 +514,7 @@ export function App() {
 
                     <BottomAppBar scrolling homeIndicator className="pay-bar">
                       <CvvNudge show={cvvMissing && cvvAlt === "B" && !!downPay} />
+                      {payCheck ? <MethodSnack check={check} /> : null}
                       <div
                         className="pay-bar__inner"
                         data-cta-shimmer={ctaShimmer || undefined}

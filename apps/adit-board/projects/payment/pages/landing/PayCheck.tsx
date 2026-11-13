@@ -286,7 +286,7 @@ function Detail({ id, desktop }: { id: CheckMethodId; desktop: boolean }) {
 /**
  * Version M's three payment methods, mobile or desktop: each row opens its fields once picked. With
  * nothing picked, a pay tap gives every row the error border and says to select one under the list
- * (Figma 24184:116821, "Unselected Error"), in place of that frame's bottom-bar message.
+ * (Figma 24184:116821, "Unselected Error"); on mobile the message is the snackbar above the bar.
  */
 export function CheckMethods({ check, total, desktop = false }: { check: PayCheck; total: number; desktop?: boolean }) {
   const balanceError = check.error("balance");
@@ -342,11 +342,25 @@ export function CheckMethods({ check, total, desktop = false }: { check: PayChec
           </div>
         );
       })}
-      {methodError ? (
-        <Text as="p" variant={desktop ? "body3" : "smallRegular"} color="alert" role="alert">
+      {/* Desktop has no bottom bar, so its message stays under the list; on mobile it is the snackbar (`MethodSnack`). */}
+      {methodError && desktop ? (
+        <Text as="p" variant="body3" color="alert" role="alert">
           {methodError}
         </Text>
       ) : null}
+    </div>
+  );
+}
+
+/** Mobile: the "nothing picked" message as a red snackbar above the bottom bar (Figma 24184:116821). */
+export function MethodSnack({ check }: { check: PayCheck }) {
+  const message = check.error("method");
+  if (!message) return null;
+  return (
+    <div className="pay-snack" role="alert">
+      <Text variant="body2" color="staticWhite">
+        {message}
+      </Text>
     </div>
   );
 }

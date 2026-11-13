@@ -2324,3 +2324,13 @@ body:has(.pay-layout[data-embed]) {
   padding-left: calc(var(--tds-space-12) + var(--tds-space-24) + var(--tds-space-20));
   max-width: 480px;
 }
+
+/* Version M, mobile: "Select a payment method to continue." as a snackbar sitting on the bottom bar. */
+.pay-bar:has(.pay-snack) { z-index: 2; }
+.pay-snack {
+  position: absolute; left: var(--tds-space-16); right: var(--tds-space-16); bottom: calc(100% + var(--tds-space-8));
+  padding: var(--tds-space-12) var(--tds-space-16); border-radius: var(--tds-radius-md);
+  background: var(--tds-stroke-alert); box-shadow: var(--tds-elevation-e02);
+  animation: pay-snack-up 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes pay-snack-up { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
